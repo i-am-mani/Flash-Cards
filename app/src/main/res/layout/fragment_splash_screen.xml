@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SplashScreen">
+
+    <Button
+        android:id="@+id/button_create"
+        android:layout_width="234dp"
+        android:layout_height="64dp"
+        android:layout_marginTop="36dp"
+        android:text="@string/splash_screen_option_create"
+        app:layout_constraintEnd_toEndOf="@+id/button_check_out"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/button_check_out"
+        app:layout_constraintTop_toBottomOf="@+id/button_check_out" />
+
+    <Button
+        android:id="@+id/button_check_out"
+        android:layout_width="234dp"
+        android:layout_height="64dp"
+        android:layout_marginStart="88dp"
+        android:layout_marginTop="220dp"
+        android:text="@string/splash_screen_option_check_out"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/button_options"
+        android:layout_width="234dp"
+        android:layout_height="64dp"
+        android:layout_marginTop="36dp"
+        android:text="@string/splash_screen_option_options"
+        app:layout_constraintEnd_toEndOf="@+id/button_create"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/button_create"
+        app:layout_constraintTop_toBottomOf="@+id/button_create" />
+
+    <TextView
+        android:id="@+id/text_splash_screen_title"
+        android:layout_width="86dp"
+        android:layout_height="31dp"
+        android:layout_marginStart="146dp"
+        android:layout_marginTop="57dp"
+        android:text="@string/splash_screen_title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</android.support.constraint.ConstraintLayout>

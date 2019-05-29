@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Omega Flash Card</string>
+    <string name="splash_screen_title">Flash Screen</string>
+    <string name="splash_screen_option_create">Create</string>
+    <string name="splash_screen_option_check_out">Check Out</string>
+    <string name="splash_screen_option_options">Options</string>
+    <string name="checkout_date">Date</string>
+    <string name="checkout_group">Group</string>
+    <string name="create_flash_card_group_heading">Create groups</string>
+    <string name="create_flash_card_group_name">Enter groups name</string>
+    <string name="create_flash_card_heading">Create Flash Card</string>
+    <string name="create_flash_card_name">Enter Title</string>
+    <string name="create_flash_card_message">Message</string>
+    <string name="dialog_create_group_hint">Enter Group Name</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
