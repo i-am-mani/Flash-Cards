@@ -14,6 +14,7 @@ public class FlashCardRepository {
     private GroupDao groupDao;
 
     private LiveData<List<FlashCards>> allFlashCards;
+
     private LiveData<List<Groups>> allGroups;
 
     public FlashCardRepository(Application application) {
@@ -31,8 +32,26 @@ public class FlashCardRepository {
         return allFlashCards;
     }
 
+
+    public LiveData<List<Groups>> getAllGroups() {
+        return allGroups;
+    }
+
+
     public void insertFlashCard(FlashCards flashCard) {
         new InsertFlashCardAsyncTask(flashCardDao).execute(flashCard);
+    }
+
+    public void insertGroup(Groups group) {
+        new InsertGroupAsyncTask(groupDao).execute(group);
+    }
+
+    public void updateGroup(Groups group){
+        new UpdateGroupAsynTask(groupDao).execute(group);
+    }
+
+    public void updateFlashCards(FlashCards flashCards) {
+        new UpdateFlashCardsAsynTask(flashCardDao).execute(flashCards);
     }
 
 
@@ -51,10 +70,10 @@ public class FlashCardRepository {
 
     }
 
-    private static class InsertGroupAsynTask extends AsyncTask<Groups,Void,Void>{
+    private static class InsertGroupAsyncTask extends AsyncTask<Groups,Void,Void>{
         GroupDao dao;
 
-        InsertGroupAsynTask(GroupDao dao){
+        InsertGroupAsyncTask(GroupDao dao){
             this.dao = dao;
         }
 
@@ -64,6 +83,38 @@ public class FlashCardRepository {
             return null;
         }
     }
+
+
+    private static class UpdateGroupAsynTask extends AsyncTask<Groups, Void, Void> {
+        GroupDao dao;
+
+        UpdateGroupAsynTask(GroupDao groupDao) {
+            dao = groupDao;
+        }
+
+
+        @Override
+        protected Void doInBackground(Groups... groups) {
+            dao.updateGroup(groups[0]);
+            return null;
+        }
+    }
+
+    private static class UpdateFlashCardsAsynTask extends AsyncTask<FlashCards, Void, Void> {
+        FlashCardsDao dao;
+
+        UpdateFlashCardsAsynTask(FlashCardsDao flashCardsDao) {
+            dao = flashCardsDao;
+        }
+
+
+        @Override
+        protected Void doInBackground(FlashCards... flashCards) {
+            dao.updateFlashCard(flashCards[0]);
+            return null;
+        }
+    }
+
 
 
 }
