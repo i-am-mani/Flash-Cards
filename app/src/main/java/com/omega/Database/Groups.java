@@ -15,6 +15,22 @@ public class Groups {
     @ColumnInfo(name = "name")
     private String groupName;
 
+    @ColumnInfo(name = "description")
+    private String groupDescription;
+
+    public Groups(String name,String description){
+        groupName = name;
+        groupDescription = description;
+    }
+
+    public String getGroupDescription() {
+        return groupDescription;
+    }
+
+    public void setGroupDescription(String groupDescription) {
+        this.groupDescription = groupDescription;
+    }
+
 
     public String getCreatedAt() {
         return createdAt;
