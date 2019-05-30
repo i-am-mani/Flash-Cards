@@ -6,7 +6,7 @@ import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "Flashcards",
-        foreignKeys = {@ForeignKey(entity = FlashCards.class,parentColumns = "name",childColumns = "group_name")})
+        foreignKeys = {@ForeignKey(entity = Groups.class,parentColumns = "name",childColumns = "group_name")})
 public class FlashCards {
 
     @PrimaryKey(autoGenerate = true)
@@ -21,13 +21,9 @@ public class FlashCards {
     @ColumnInfo(name = "group_name")
     private String groupName;
 
-
-
-    public String getGroupName() {
-        return groupName;
-    }
-
-    public void setGroupName(String groupName) {
+    public FlashCards(String title, String content, String groupName) {
+        this.title = title;
+        this.content = content;
         this.groupName = groupName;
     }
 
@@ -37,6 +33,14 @@ public class FlashCards {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getGroupName() {
+        return groupName;
+    }
+
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
     }
 
     public String getTitle() {
