@@ -6,7 +6,7 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-@Database(entities = {FlashCards.class, Groups.class},version = 1)
+@Database(entities = {FlashCards.class, Groups.class},version = 2)
 public abstract class FlashCardDatabase extends RoomDatabase {
 
     public abstract FlashCardsDao flashCardDao();
@@ -19,12 +19,11 @@ public abstract class FlashCardDatabase extends RoomDatabase {
             synchronized (FlashCardDatabase.class) {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                            FlashCardDatabase.class, "db_flash_cards").build();
+                            FlashCardDatabase.class, "db_flash_cards").fallbackToDestructiveMigration().build();
                 }
             }
         }
         return INSTANCE;
-
     }
 
 
