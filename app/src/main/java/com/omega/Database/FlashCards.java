@@ -1,17 +1,20 @@
 package com.omega.Database;
 
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Ignore;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "Flashcards",
+        indices = {@Index("group_name")},
         foreignKeys = {@ForeignKey(entity = Groups.class,parentColumns = "name",childColumns = "group_name")})
 public class FlashCards {
 
-    @PrimaryKey(autoGenerate = true)
-    private int id;
-
+    @PrimaryKey
+    @NonNull
     @ColumnInfo(name = "title")
     private String title;
 
@@ -25,14 +28,6 @@ public class FlashCards {
         this.title = title;
         this.content = content;
         this.groupName = groupName;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getGroupName() {

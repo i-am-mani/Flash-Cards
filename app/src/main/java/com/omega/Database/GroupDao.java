@@ -6,15 +6,17 @@ import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
 
+import java.util.List;
+
 @Dao
 public interface GroupDao {
 
     @Insert
-    public int insertGroup(Groups groups);
+    public long insertGroup(Groups groups);
 
     @Update
     public void updateGroup(Groups group);
 
     @Query("SELECT * FROM Groups")
-    public LiveData<Groups> getAllGroups();
+    public LiveData<List<Groups>> getAllGroups();
 }

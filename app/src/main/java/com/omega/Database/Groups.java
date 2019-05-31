@@ -1,8 +1,10 @@
 package com.omega.Database;
 
 
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "Groups")
@@ -12,15 +14,16 @@ public class Groups {
     private String createdAt;
 
     @PrimaryKey
+    @NonNull
     @ColumnInfo(name = "name")
     private String groupName;
 
     @ColumnInfo(name = "description")
     private String groupDescription;
 
-    public Groups(String name,String description){
-        groupName = name;
-        groupDescription = description;
+    public Groups(String groupName,String groupDescription){
+        this.groupName = groupName;
+        this.groupDescription = groupDescription;
     }
 
     public String getGroupDescription() {
