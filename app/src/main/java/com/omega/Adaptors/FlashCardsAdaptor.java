@@ -1,14 +1,10 @@
 package com.omega.Adaptors;
 
-
-import android.app.Application;
 import android.content.Context;
-import android.transition.TransitionManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
