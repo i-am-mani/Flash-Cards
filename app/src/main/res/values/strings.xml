@@ -15,4 +15,6 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="et_hint_group_name">Group Name</string>
+    <string name="tv_search">Search</string>
 </resources>
