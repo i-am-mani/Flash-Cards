@@ -5,6 +5,10 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
 
+import com.omega.Fragments.CheckoutFlashCardFragment;
+import com.omega.Fragments.CreateFlashCardFragment;
+import com.omega.Fragments.SplashScreen;
+
 public class MainActivity extends AppCompatActivity implements SplashScreen.SplashScreenCallbacks {
 
 

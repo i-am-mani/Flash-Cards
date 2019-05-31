@@ -1,6 +1,7 @@
-package com.omega;
+package com.omega.Util;
 import android.app.Application;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 
@@ -24,14 +25,13 @@ public class FlashCardRepository {
         groupDao = flashCardDatabase.groupDao();
 
         allFlashCards = flashCardDao.getAllFlashCards();
-        groupDao.getAllGroups();
+        allGroups = groupDao.getAllGroups();
     }
 
 
     public LiveData<List<FlashCards>> getAllFlashCards() {
         return allFlashCards;
     }
-
 
     public LiveData<List<Groups>> getAllGroups() {
         return allGroups;
@@ -47,11 +47,11 @@ public class FlashCardRepository {
     }
 
     public void updateGroup(Groups group){
-        new UpdateGroupAsynTask(groupDao).execute(group);
+        new UpdateGroupAsyncTask(groupDao).execute(group);
     }
 
     public void updateFlashCards(FlashCards flashCards) {
-        new UpdateFlashCardsAsynTask(flashCardDao).execute(flashCards);
+        new UpdateFlashCardsAsyncTask(flashCardDao).execute(flashCards);
     }
 
 
@@ -79,16 +79,18 @@ public class FlashCardRepository {
 
         @Override
         protected Void doInBackground(Groups... groups) {
+            Log.d("Repository", "doInBackground: Inside Do in Background");
             dao.insertGroup(groups[0]);
+            Log.d("Repository", "doInBackground: Added new group");
             return null;
         }
     }
 
 
-    private static class UpdateGroupAsynTask extends AsyncTask<Groups, Void, Void> {
+    private static class UpdateGroupAsyncTask extends AsyncTask<Groups, Void, Void> {
         GroupDao dao;
 
-        UpdateGroupAsynTask(GroupDao groupDao) {
+        UpdateGroupAsyncTask(GroupDao groupDao) {
             dao = groupDao;
         }
 
@@ -100,10 +102,10 @@ public class FlashCardRepository {
         }
     }
 
-    private static class UpdateFlashCardsAsynTask extends AsyncTask<FlashCards, Void, Void> {
+    private static class UpdateFlashCardsAsyncTask extends AsyncTask<FlashCards, Void, Void> {
         FlashCardsDao dao;
 
-        UpdateFlashCardsAsynTask(FlashCardsDao flashCardsDao) {
+        UpdateFlashCardsAsyncTask(FlashCardsDao flashCardsDao) {
             dao = flashCardsDao;
         }
 
@@ -114,7 +116,4 @@ public class FlashCardRepository {
             return null;
         }
     }
-
-
-
 }

@@ -1,4 +1,4 @@
-package com.omega;
+package com.omega.Fragments;
 
 
 import android.content.Context;
@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+
+import com.omega.R;
 
 public class SplashScreen extends Fragment {
 
