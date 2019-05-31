@@ -53,6 +53,7 @@
         android:scrollbars="vertical" />
 
     <Button
+        android:id="@+id/button_create_flash_card"
         android:layout_width="94dp"
         android:layout_height="53dp"
         android:layout_gravity="center_horizontal|end"
