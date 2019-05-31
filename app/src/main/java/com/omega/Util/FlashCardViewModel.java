@@ -25,15 +25,12 @@ public class FlashCardViewModel extends AndroidViewModel {
         allGroups = flashCardRepository.getAllGroups();
     }
 
-    public List<FlashCards> getAllFlashCardsAsList(){
-        return (List<FlashCards>)allFlashCard;
-    }
-
-
-
-
     public LiveData<List<FlashCards>> getAllFlashCard() {
         return allFlashCard;
+    }
+
+    public LiveData<List<FlashCards>> getAllFlashCardsOfGroup(String groupName) {
+        return flashCardRepository.getAllFlashCardsOfGroup(groupName);
     }
 
     public LiveData<List<Groups>> getAllGroups() {

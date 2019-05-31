@@ -33,6 +33,11 @@ public class FlashCardRepository {
         return allFlashCards;
     }
 
+    public LiveData<List<FlashCards>> getAllFlashCardsOfGroup(String groupName) {
+        LiveData<List<FlashCards>> allFlashCardsOfGroup = flashCardDao.getAllFlashCardsOfGroup(groupName);
+        return allFlashCardsOfGroup;
+    }
+
     public LiveData<List<Groups>> getAllGroups() {
         return allGroups;
     }

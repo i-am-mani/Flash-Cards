@@ -4,10 +4,11 @@ import android.app.Dialog;
 import android.graphics.Rect;
 import android.os.Bundle;
 
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,13 +22,13 @@ import android.widget.EditText;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.omega.Adaptors.FlashCardsAdaptor;
+import com.omega.Database.Groups;
 import com.omega.Util.FlashCardViewModel;
 import com.omega.R;
-import com.omega.dialogs.SingleEditTextDialog;
 
 public class CreateFlashCardFragment extends Fragment {
 
-    private String GROUP_NAME = null;
+    private MutableLiveData<Groups> GROUP_NAME = new MutableLiveData(null);
     private FlashCardsAdaptor adaptor;
 
     private FloatingActionButton addFlashCard;
@@ -41,13 +42,10 @@ public class CreateFlashCardFragment extends Fragment {
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+    public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         flashCardViewModel = ViewModelProviders.of(this).get(FlashCardViewModel.class);
-        flashCardViewModel.getAllFlashCard().observe(this, flashCards -> {
-            adaptor.setDataset(flashCards);
-            Log.d(TAG, "onActivityCreated: Dataset changed");
-        });
+
     }
 
     @Override
@@ -56,11 +54,22 @@ public class CreateFlashCardFragment extends Fragment {
         getActivity().setTitle("Create New Flash Card");
         initializeInstanceVariables(viewGroup);
         initializeCallbacks(viewGroup);
-        initializeDialog();
+        GROUP_NAME.observe(this,s -> {
+            if (s != null) {
+                Log.d(TAG, "onCreateView: inside group ovserver");
+                flashCardViewModel.createGroup(s.getGroupName(),s.getGroupDescription());
+
+                flashCardViewModel.getAllFlashCardsOfGroup(s.getGroupName()).observe(this, flashCards -> {
+                    adaptor.setDataset(flashCards);
+                    Log.d(TAG, "onActivityCreated: Dataset changed");
+                });
+            }
+
+        });
         return viewGroup;
     }
 
-    private void initializeDialog() {
+    private void initializeGroupDialog() {
         Dialog dialog = new Dialog(getActivity());
         dialog.setContentView(R.layout.dialog_create_group);
         Button btnCreateGroup = dialog.findViewById(R.id.button_create_group);
@@ -73,10 +82,30 @@ public class CreateFlashCardFragment extends Fragment {
                 String group = ((EditText) dialog.findViewById(R.id.edit_text_group_name)).getText().toString();
                 if (!desc.equals("") && !group.equals("")) {
                     Log.d(TAG, "initializeDialog: creating new group");
-                    flashCardViewModel.createGroup(group,desc);
-                    GROUP_NAME = group;
+                    GROUP_NAME.setValue(new Groups(group, desc));
                     dialog.dismiss();
                 }
+            });
+        });
+
+        dialog.show();
+    }
+
+    public void initializeFlashCardDialog(){
+        Dialog dialog = new Dialog(getActivity());
+        dialog.setTitle("Create new Flash Card");
+        dialog.requestWindowFeature(Window.FEATURE_SWIPE_TO_DISMISS);
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.setContentView(R.layout.dailog_create_flash_card);
+
+        dialog.setOnShowListener(dialog1 -> {
+            Button btnCreateFlashCard = dialog.findViewById(R.id.button_create_flash_card);
+            btnCreateFlashCard.setOnClickListener(v1 -> {
+                String title =((EditText) dialog.findViewById(R.id.edit_text_title)).getText().toString();
+                String content = ((EditText) dialog.findViewById(R.id.edit_text_message)).getText().toString();
+                Log.d(TAG, "initializeCallbacks: creating new flash card");
+                flashCardViewModel.createFlashCard(title,content,GROUP_NAME.getValue().getGroupName());
+                dialog.dismiss();
             });
         });
 
@@ -87,24 +116,12 @@ public class CreateFlashCardFragment extends Fragment {
         Log.d(TAG, "initializeCallbacks: Creating new dialog");
         addFlashCard = viewGroup.findViewById(R.id.fab_create_flash_card);
         addFlashCard.setOnClickListener(v -> {
-            Dialog dialog = new Dialog(getActivity());
-            dialog.setTitle("Create new Flash Card");
-            dialog.requestWindowFeature(Window.FEATURE_SWIPE_TO_DISMISS);
-            dialog.setCanceledOnTouchOutside(true);
-            dialog.setContentView(R.layout.dailog_create_flash_card);
-
-            dialog.setOnShowListener(dialog1 -> {
-                Button btnCreateFlashCard = dialog.findViewById(R.id.button_create_flash_card);
-                btnCreateFlashCard.setOnClickListener(v1 -> {
-                    String title =((EditText) dialog.findViewById(R.id.edit_text_title)).getText().toString();
-                    String content = ((EditText) dialog.findViewById(R.id.edit_text_message)).getText().toString();
-                    Log.d(TAG, "initializeCallbacks: creating new flash card");
-                    flashCardViewModel.createFlashCard(title,content,GROUP_NAME);
-                    dialog.dismiss();
-                });
-            });
-
-            dialog.show();
+            if (GROUP_NAME.getValue() == null) {
+                initializeGroupDialog();
+            }
+            else{
+                initializeFlashCardDialog();
+            }
         });
     }
 
