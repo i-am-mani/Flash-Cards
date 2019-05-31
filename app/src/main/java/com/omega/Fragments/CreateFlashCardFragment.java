@@ -35,8 +35,8 @@ public class CreateFlashCardFragment extends Fragment {
 
     final String TAG = "CreateFlashCardFragment";
     private FlashCardViewModel flashCardViewModel;
-    public CreateFlashCardFragment(){
-
+    public CreateFlashCardFragment(Groups group){
+        GROUP_NAME.setValue(group);
     }
 
     @Override
