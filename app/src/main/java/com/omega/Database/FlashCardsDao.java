@@ -23,4 +23,7 @@ public interface FlashCardsDao {
 
     @Query("SELECT * FROM Flashcards")
     public LiveData<List<FlashCards>> getAllFlashCards();
+
+    @Query("SELECT * FROM Flashcards WHERE group_name = :group_name")
+    public LiveData<List<FlashCards>> getAllFlashCardsOfGroup(String group_name);
 }
