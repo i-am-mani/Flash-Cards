@@ -1,13 +1,10 @@
 package com.omega.Fragments;
 
 import android.app.Dialog;
-import android.graphics.Rect;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,6 +20,7 @@ import android.widget.EditText;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.omega.Adaptors.FlashCardsAdaptor;
 import com.omega.Database.Groups;
+import com.omega.Util.EqualSpaceItemDecoration;
 import com.omega.Util.FlashCardViewModel;
 import com.omega.R;
 
@@ -132,25 +130,7 @@ public class CreateFlashCardFragment extends Fragment {
         rvFlashCards.setLayoutManager(layoutManager);
         rvFlashCards.setAdapter(adaptor);
 
-        rvFlashCards.addItemDecoration(new EqualSpaceItemDecoration(10));
-    }
-
-    public class EqualSpaceItemDecoration extends RecyclerView.ItemDecoration {
-
-        private final int mSpaceHeight;
-
-        public EqualSpaceItemDecoration(int mSpaceHeight) {
-            this.mSpaceHeight = mSpaceHeight;
-        }
-
-        @Override
-        public void getItemOffsets(Rect outRect, View view, RecyclerView parent,
-                                   RecyclerView.State state) {
-            outRect.bottom = mSpaceHeight;
-            outRect.top = mSpaceHeight;
-            outRect.left = mSpaceHeight;
-            outRect.right = mSpaceHeight;
-        }
+        rvFlashCards.addItemDecoration(new EqualSpaceItemDecoration(40));
     }
 
     @Override
