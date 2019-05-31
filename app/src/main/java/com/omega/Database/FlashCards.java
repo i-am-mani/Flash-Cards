@@ -10,10 +10,10 @@ import androidx.room.PrimaryKey;
 
 @Entity(tableName = "Flashcards",
         indices = {@Index("group_name")},
-        foreignKeys = {@ForeignKey(entity = Groups.class,parentColumns = "name",childColumns = "group_name")})
+        primaryKeys = {"title","group_name"},
+        foreignKeys= {@ForeignKey(entity = Groups.class, parentColumns = "name", childColumns = "group_name")})
 public class FlashCards {
 
-    @PrimaryKey
     @NonNull
     @ColumnInfo(name = "title")
     private String title;
@@ -21,6 +21,7 @@ public class FlashCards {
     @ColumnInfo(name = "content")
     private String content;
 
+    @NonNull
     @ColumnInfo(name = "group_name")
     private String groupName;
 
