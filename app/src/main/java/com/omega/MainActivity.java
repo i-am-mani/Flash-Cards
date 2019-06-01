@@ -28,8 +28,8 @@ public class MainActivity extends AppCompatActivity implements ISwitchToFragment
 
 
     @Override
-    public void switchToCreateFlashCard(Groups group) {
-        CreateFlashCardFragment createFlashCard = new CreateFlashCardFragment(group);
+    public void switchToCreateFlashCard(String groupName) {
+        CreateFlashCardFragment createFlashCard = new CreateFlashCardFragment(groupName);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.frame_main_area,createFlashCard);
         transaction.addToBackStack(null);

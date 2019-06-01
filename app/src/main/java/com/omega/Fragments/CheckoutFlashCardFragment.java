@@ -66,8 +66,8 @@ public class CheckoutFlashCardFragment extends Fragment {
 
     class GroupsItemImpl implements GroupsAdaptor.GroupsAdaptorListenerInterface {
         @Override
-        public void onItemClick(View view,String groupName,String groupDescription) {
-            switchToFragment.switchToCreateFlashCard(new Groups(groupName,groupDescription));
+        public void onItemClick(View view,String groupName) {
+            switchToFragment.switchToCreateFlashCard(groupName);
         }
     }
 }

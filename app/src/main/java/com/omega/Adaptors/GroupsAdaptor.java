@@ -69,7 +69,7 @@ public class GroupsAdaptor extends RecyclerView.Adapter<GroupsAdaptor.GroupsView
         @Override
         public void onClick(View v) {
             Log.d(TAG, "onClick: " + getAdapterPosition());
-            itemListener.onItemClick(v,tvGroupName.getText().toString(),tvGroupDescription.getText().toString());
+            itemListener.onItemClick(v,tvGroupName.getText().toString());
 
         }
     }
@@ -80,7 +80,7 @@ public class GroupsAdaptor extends RecyclerView.Adapter<GroupsAdaptor.GroupsView
     }
 
     public interface GroupsAdaptorListenerInterface{
-        public void onItemClick(View view,String groupName,String groupDescription);
+        public void onItemClick(View view,String groupName);
     }
 
 }
