@@ -47,4 +47,8 @@ public class FlashCardViewModel extends AndroidViewModel {
         flashCardRepository.insertGroup(groups);
 
     }
+
+    public void deleteGroup(Groups group) {
+        flashCardRepository.deleteGroup(group);
+    }
 }

@@ -2,26 +2,32 @@ package com.omega.Fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.omega.Adaptors.GroupsAdaptor;
+import com.omega.Database.Groups;
 import com.omega.R;
 import com.omega.Util.EqualSpaceItemDecoration;
 import com.omega.Util.FlashCardViewModel;
 import com.omega.Util.ISwitchToFragment;
+import com.omega.Util.SwipeCallback;
 
 public class CheckoutFlashCardFragment extends Fragment {
 
     FlashCardViewModel flashCardViewModel;
     GroupsAdaptor groupsAdaptor;
     ISwitchToFragment switchToFragment;
+
+    String TAG = CheckoutFlashCardFragment.class.getSimpleName();
 
     public CheckoutFlashCardFragment(){
 
@@ -58,6 +64,9 @@ public class CheckoutFlashCardFragment extends Fragment {
         rvGroups.setLayoutManager(linearLayoutManager);
         rvGroups.setAdapter(groupsAdaptor);
         rvGroups.addItemDecoration(new EqualSpaceItemDecoration(40));
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeCallback(new OnSwipeDeleteItem()));
+        itemTouchHelper.attachToRecyclerView(rvGroups);
     }
 
 
@@ -67,5 +76,16 @@ public class CheckoutFlashCardFragment extends Fragment {
             switchToFragment.switchToCreateFlashCard(groupName);
         }
     }
+
+    class OnSwipeDeleteItem implements SwipeCallback.OnSwiped {
+
+        @Override
+        public void deleteItem(int adapterPosition) {
+            Groups group = groupsAdaptor.deleteRowFromDataSet(adapterPosition);
+            flashCardViewModel.deleteGroup(group);
+            Log.d(TAG, "deleteItem: Row Deleted");
+        }
+    }
+
 }
 

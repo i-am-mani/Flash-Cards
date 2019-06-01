@@ -62,6 +62,10 @@ public class FlashCardRepository {
         new UpdateFlashCardsAsyncTask(flashCardDao).execute(flashCards);
     }
 
+    public void deleteGroup(Groups group) {
+        new DeleteRowAsyncTask(groupsDao).execute(group);
+    }
+
 
     private static class InsertFlashCardAsyncTask extends AsyncTask<FlashCards, Void, Void> {
         FlashCardsDao dao;
@@ -124,4 +128,19 @@ public class FlashCardRepository {
             return null;
         }
     }
+
+    private static class DeleteRowAsyncTask extends AsyncTask<Groups, Void, Void> {
+        GroupsDao doa;
+
+        DeleteRowAsyncTask(GroupsDao groupsDao) {
+            doa = groupsDao;
+        }
+
+        @Override
+        protected Void doInBackground(Groups... groups) {
+            doa.deleteGroup(groups[0]);
+            return null;
+        }
+    }
+
 }
