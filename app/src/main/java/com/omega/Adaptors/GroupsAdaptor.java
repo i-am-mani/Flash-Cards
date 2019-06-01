@@ -37,8 +37,10 @@ public class GroupsAdaptor extends RecyclerView.Adapter<GroupsAdaptor.GroupsView
     @Override
     public void onBindViewHolder(GroupsViewHolder holder, int position) {
         if (groupsList != null) {
-            holder.tvGroupName.setText(groupsList.get(position).getGroupName());
-            holder.tvGroupDescription.setText(groupsList.get(position).getGroupDescription());
+            String name = groupsList.get(position).getGroupName();
+            String description = groupsList.get(position).getGroupDescription();
+            holder.tvGroupName.setText(name);
+            holder.tvGroupDescription.setText(description);
         }
         else{
             holder.tvGroupDescription.setText("No Group Found!");
@@ -55,9 +57,19 @@ public class GroupsAdaptor extends RecyclerView.Adapter<GroupsAdaptor.GroupsView
         }
     }
 
+    public void setDataSet(List<Groups> dataSet) {
+        groupsList = dataSet;
+        notifyDataSetChanged();
+    }
+
+    public interface GroupsAdaptorListenerInterface {
+        void onItemClick(View view, String groupName);
+    }
+
     public class GroupsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView tvGroupName;
         TextView tvGroupDescription;
+
         public GroupsViewHolder(View itemView) {
             super(itemView);
             tvGroupName = itemView.findViewById(R.id.text_checkout_group_name);
@@ -72,15 +84,6 @@ public class GroupsAdaptor extends RecyclerView.Adapter<GroupsAdaptor.GroupsView
             itemListener.onItemClick(v,tvGroupName.getText().toString());
 
         }
-    }
-
-    public void setDataSet(List<Groups> dataSet) {
-        groupsList = dataSet;
-        notifyDataSetChanged();
-    }
-
-    public interface GroupsAdaptorListenerInterface{
-        public void onItemClick(View view,String groupName);
     }
 
 }
