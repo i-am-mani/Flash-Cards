@@ -6,10 +6,12 @@ import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Index;
 
+import static androidx.room.ForeignKey.CASCADE;
+
 @Entity(tableName = "Flashcards",
         indices = {@Index("group_name")},
         primaryKeys = {"title","group_name"},
-        foreignKeys= {@ForeignKey(entity = Groups.class, parentColumns = "name", childColumns = "group_name")})
+        foreignKeys = {@ForeignKey(entity = Groups.class, parentColumns = "name", childColumns = "group_name", onDelete = CASCADE)})
 public class FlashCards {
 
     @NonNull

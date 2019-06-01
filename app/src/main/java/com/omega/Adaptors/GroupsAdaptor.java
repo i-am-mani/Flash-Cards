@@ -62,6 +62,13 @@ public class GroupsAdaptor extends RecyclerView.Adapter<GroupsAdaptor.GroupsView
         notifyDataSetChanged();
     }
 
+    public Groups deleteRowFromDataSet(int pos) {
+        Groups group = groupsList.get(pos);
+        groupsList.remove(pos);
+        notifyItemRemoved(pos);
+        return group;
+    }
+
     public interface GroupsAdaptorListenerInterface {
         void onItemClick(View view, String groupName);
     }
