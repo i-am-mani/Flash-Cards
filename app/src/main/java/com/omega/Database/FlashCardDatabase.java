@@ -10,7 +10,8 @@ import androidx.room.RoomDatabase;
 public abstract class FlashCardDatabase extends RoomDatabase {
 
     public abstract FlashCardsDao flashCardDao();
-    public abstract GroupDao groupDao();
+
+    public abstract GroupsDao groupDao();
 
     private static volatile FlashCardDatabase INSTANCE;
 

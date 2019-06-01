@@ -19,7 +19,6 @@ public class FlashCardsAdaptor extends RecyclerView.Adapter<FlashCardsAdaptor.Fl
 
     private final Context context;
     private List<FlashCards> flashCardsList = null;
-    private int expandedPosition = -1;
 
     public FlashCardsAdaptor(Context context){
             this.context = context;
@@ -38,23 +37,10 @@ public class FlashCardsAdaptor extends RecyclerView.Adapter<FlashCardsAdaptor.Fl
     @Override
     public void onBindViewHolder(FlashCardViewHolder holder, int position) {
 
-//        final boolean isExpanded = position==expandedPosition;
-//        holder.tvContent.setVisibility(isExpanded?View.VISIBLE:View.GONE);
-//        holder.itemView.setActivated(isExpanded);
-//        holder.itemView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                expandedPosition = isExpanded ? -1:position;
-////                TransitionManager.beginDelayedTransition(recyclerView);
-//                notifyDataSetChanged();
-//            }
-//        });
-
         if (flashCardsList != null) {
             holder.tvContent.setText(flashCardsList.get(position).getContent());
             holder.tvTitle.setText(flashCardsList.get(position).getTitle());
             Log.d("Adaptor", "onBindViewHolder: " + flashCardsList.size());
-            Log.d("Adaptor", "onBindViewHolder: " + flashCardsList.get(position).getContent());
         }
         else {
             holder.tvTitle.setText("No More Flash cards");
@@ -72,7 +58,7 @@ public class FlashCardsAdaptor extends RecyclerView.Adapter<FlashCardsAdaptor.Fl
     }
 
 
-    public void setDataset(List<FlashCards> dataset) {
+    public void setDataSet(List<FlashCards> dataset) {
 
         flashCardsList = dataset;
         notifyDataSetChanged();

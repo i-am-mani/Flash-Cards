@@ -3,20 +3,19 @@ package com.omega.Fragments;
 
 import android.content.Context;
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.omega.Database.Groups;
+import androidx.fragment.app.Fragment;
+
 import com.omega.R;
 import com.omega.Util.ISwitchToFragment;
 
 public class SplashScreen extends Fragment {
 
-    ISwitchToFragment mISwitchToFragment;
+    ISwitchToFragment ImplSwitchToFragment;
 
     public SplashScreen() {
         // Required empty public constructor
@@ -33,7 +32,7 @@ public class SplashScreen extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         try {
-            mISwitchToFragment = (ISwitchToFragment) context;
+            ImplSwitchToFragment = (ISwitchToFragment) context;
         } catch (ClassCastException c ) {
             throw new ClassCastException();
         }
@@ -62,9 +61,9 @@ public class SplashScreen extends Fragment {
         Button checkoutFlashCard = viewGroup.findViewById(R.id.button_check_out);
         Button options = viewGroup.findViewById(R.id.button_options);
 
-        createFlashCard.setOnClickListener(v ->  mISwitchToFragment.switchToCreateFlashCard(null) );
-        checkoutFlashCard.setOnClickListener(v -> mISwitchToFragment.switchToCheckoutFlashCard());
-        options.setOnClickListener(v -> mISwitchToFragment.switchToOptions());
+        createFlashCard.setOnClickListener(v -> ImplSwitchToFragment.switchToCreateFlashCard(null));
+        checkoutFlashCard.setOnClickListener(v -> ImplSwitchToFragment.switchToCheckoutFlashCard());
+        options.setOnClickListener(v -> ImplSwitchToFragment.switchToOptions());
     }
 
 }

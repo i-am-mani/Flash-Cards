@@ -126,6 +126,6 @@ public class CreateFlashCardFragment extends Fragment {
     }
 
     private void attachObserver() {
-        flashCardViewModel.getAllFlashCardsOfGroup(GROUP_NAME).observe(this, flashCards -> rvAdaptor.setDataset(flashCards));
+        flashCardViewModel.getAllFlashCardsOfGroup(GROUP_NAME).observe(this, flashCards -> rvAdaptor.setDataSet(flashCards));
     }
 }

@@ -1,18 +1,23 @@
 package com.omega.Util;
+
 import android.app.Application;
 import android.os.AsyncTask;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 
-import com.omega.Database.*;
+import com.omega.Database.FlashCardDatabase;
+import com.omega.Database.FlashCards;
+import com.omega.Database.FlashCardsDao;
+import com.omega.Database.Groups;
+import com.omega.Database.GroupsDao;
 
 import java.util.List;
 
 public class FlashCardRepository {
 
     private FlashCardsDao flashCardDao;
-    private GroupDao groupDao;
+    private GroupsDao groupsDao;
 
     private LiveData<List<FlashCards>> allFlashCards;
 
@@ -20,16 +25,13 @@ public class FlashCardRepository {
 
     public FlashCardRepository(Application application) {
         FlashCardDatabase flashCardDatabase = FlashCardDatabase.getDatabase(application);
-
         flashCardDao = flashCardDatabase.flashCardDao();
-        groupDao = flashCardDatabase.groupDao();
-
-        allFlashCards = flashCardDao.getAllFlashCards();
-        allGroups = groupDao.getAllGroups();
+        groupsDao = flashCardDatabase.groupDao();
     }
 
 
     public LiveData<List<FlashCards>> getAllFlashCards() {
+        allFlashCards = flashCardDao.getAllFlashCards();
         return allFlashCards;
     }
 
@@ -39,6 +41,7 @@ public class FlashCardRepository {
     }
 
     public LiveData<List<Groups>> getAllGroups() {
+        allGroups = groupsDao.getAllGroups();
         return allGroups;
     }
 
@@ -48,11 +51,11 @@ public class FlashCardRepository {
     }
 
     public void insertGroup(Groups group) {
-        new InsertGroupAsyncTask(groupDao).execute(group);
+        new InsertGroupAsyncTask(groupsDao).execute(group);
     }
 
     public void updateGroup(Groups group){
-        new UpdateGroupAsyncTask(groupDao).execute(group);
+        new UpdateGroupAsyncTask(groupsDao).execute(group);
     }
 
     public void updateFlashCards(FlashCards flashCards) {
@@ -76,9 +79,9 @@ public class FlashCardRepository {
     }
 
     private static class InsertGroupAsyncTask extends AsyncTask<Groups,Void,Void>{
-        GroupDao dao;
+        GroupsDao dao;
 
-        InsertGroupAsyncTask(GroupDao dao){
+        InsertGroupAsyncTask(GroupsDao dao) {
             this.dao = dao;
         }
 
@@ -93,10 +96,10 @@ public class FlashCardRepository {
 
 
     private static class UpdateGroupAsyncTask extends AsyncTask<Groups, Void, Void> {
-        GroupDao dao;
+        GroupsDao dao;
 
-        UpdateGroupAsyncTask(GroupDao groupDao) {
-            dao = groupDao;
+        UpdateGroupAsyncTask(GroupsDao groupsDao) {
+            dao = groupsDao;
         }
 
 

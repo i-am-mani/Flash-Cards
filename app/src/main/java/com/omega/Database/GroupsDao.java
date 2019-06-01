@@ -9,7 +9,7 @@ import androidx.room.Update;
 import java.util.List;
 
 @Dao
-public interface GroupDao {
+public interface GroupsDao {
 
     @Insert
     public long insertGroup(Groups groups);
