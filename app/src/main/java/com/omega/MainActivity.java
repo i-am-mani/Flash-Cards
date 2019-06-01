@@ -5,11 +5,13 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
 
+import com.omega.Database.Groups;
 import com.omega.Fragments.CheckoutFlashCardFragment;
 import com.omega.Fragments.CreateFlashCardFragment;
 import com.omega.Fragments.SplashScreen;
+import com.omega.Util.ISwitchToFragment;
 
-public class MainActivity extends AppCompatActivity implements SplashScreen.SplashScreenCallbacks {
+public class MainActivity extends AppCompatActivity implements ISwitchToFragment {
 
 
 
@@ -26,8 +28,8 @@ public class MainActivity extends AppCompatActivity implements SplashScreen.Spla
 
 
     @Override
-    public void switchToCreateFlashCard() {
-        CreateFlashCardFragment createFlashCard = new CreateFlashCardFragment();
+    public void switchToCreateFlashCard(Groups group) {
+        CreateFlashCardFragment createFlashCard = new CreateFlashCardFragment(group);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.frame_main_area,createFlashCard);
         transaction.addToBackStack(null);

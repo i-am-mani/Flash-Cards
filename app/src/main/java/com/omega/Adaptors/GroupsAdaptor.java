@@ -1,6 +1,7 @@
 package com.omega.Adaptors;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,9 +19,12 @@ public class GroupsAdaptor extends RecyclerView.Adapter<GroupsAdaptor.GroupsView
 
     LayoutInflater layoutInflater;
     List<Groups> groupsList;
+    String TAG = GroupsAdaptor.class.getSimpleName();
+    GroupsAdaptorListenerInterface itemListener;
 
-    public GroupsAdaptor(Context context){
+    public GroupsAdaptor(Context context,GroupsAdaptorListenerInterface adaptorListenerInterface){
         layoutInflater = LayoutInflater.from(context);
+        itemListener = adaptorListenerInterface;
     }
 
     @Override
@@ -51,13 +55,22 @@ public class GroupsAdaptor extends RecyclerView.Adapter<GroupsAdaptor.GroupsView
         }
     }
 
-    public class GroupsViewHolder extends RecyclerView.ViewHolder {
+    public class GroupsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView tvGroupName;
         TextView tvGroupDescription;
         public GroupsViewHolder(View itemView) {
             super(itemView);
             tvGroupName = itemView.findViewById(R.id.text_checkout_group_name);
             tvGroupDescription = itemView.findViewById(R.id.text_checkout_group_description);
+            itemView.setOnClickListener(this);
+        }
+
+
+        @Override
+        public void onClick(View v) {
+            Log.d(TAG, "onClick: " + getAdapterPosition());
+            itemListener.onItemClick(v,tvGroupName.getText().toString(),tvGroupDescription.getText().toString());
+
         }
     }
 
@@ -65,4 +78,9 @@ public class GroupsAdaptor extends RecyclerView.Adapter<GroupsAdaptor.GroupsView
         groupsList = dataSet;
         notifyDataSetChanged();
     }
+
+    public interface GroupsAdaptorListenerInterface{
+        public void onItemClick(View view,String groupName,String groupDescription);
+    }
+
 }

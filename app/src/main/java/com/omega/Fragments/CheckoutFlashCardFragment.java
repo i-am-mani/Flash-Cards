@@ -1,8 +1,8 @@
 package com.omega.Fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -11,20 +11,31 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-
 import com.omega.Adaptors.GroupsAdaptor;
+import com.omega.Database.Groups;
 import com.omega.R;
 import com.omega.Util.EqualSpaceItemDecoration;
 import com.omega.Util.FlashCardViewModel;
+import com.omega.Util.ISwitchToFragment;
 
 public class CheckoutFlashCardFragment extends Fragment {
 
     FlashCardViewModel flashCardViewModel;
     GroupsAdaptor groupsAdaptor;
+    ISwitchToFragment switchToFragment;
 
     public CheckoutFlashCardFragment(){
 
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            switchToFragment = (ISwitchToFragment) context;
+        } catch (ClassCastException c) {
+            c.printStackTrace();
+        }
     }
 
     @Override
@@ -45,11 +56,19 @@ public class CheckoutFlashCardFragment extends Fragment {
 
     private void initializeVariables(View viewGroup) {
         RecyclerView rvGroups = viewGroup.findViewById(R.id.recycler_view_group);
-
-        groupsAdaptor = new GroupsAdaptor(getActivity());
+        groupsAdaptor = new GroupsAdaptor(getActivity(), new GroupsItemImpl() );
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         rvGroups.setLayoutManager(linearLayoutManager);
         rvGroups.setAdapter(groupsAdaptor);
         rvGroups.addItemDecoration(new EqualSpaceItemDecoration(40));
     }
+
+
+    class GroupsItemImpl implements GroupsAdaptor.GroupsAdaptorListenerInterface {
+        @Override
+        public void onItemClick(View view,String groupName,String groupDescription) {
+            switchToFragment.switchToCreateFlashCard(new Groups(groupName,groupDescription));
+        }
+    }
 }
+
