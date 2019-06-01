@@ -26,7 +26,7 @@ import com.omega.R;
 
 public class CreateFlashCardFragment extends Fragment {
 
-    private MutableLiveData<Groups> GROUP_NAME = new MutableLiveData(null);
+    private String GROUP_NAME;
     private FlashCardsAdaptor adaptor;
 
     private FloatingActionButton addFlashCard;
@@ -35,15 +35,21 @@ public class CreateFlashCardFragment extends Fragment {
 
     final String TAG = "CreateFlashCardFragment";
     private FlashCardViewModel flashCardViewModel;
-    public CreateFlashCardFragment(Groups group){
-        GROUP_NAME.setValue(group);
+    public CreateFlashCardFragment(String groupName){
+        GROUP_NAME  = groupName;
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         flashCardViewModel = ViewModelProviders.of(this).get(FlashCardViewModel.class);
+        if(GROUP_NAME != null){
+            attachObserver();
+        }
+    }
 
+    private void attachObserver() {
+        flashCardViewModel.getAllFlashCardsOfGroup(GROUP_NAME).observe(this,flashCards -> adaptor.setDataset(flashCards));
     }
 
     @Override
@@ -52,18 +58,6 @@ public class CreateFlashCardFragment extends Fragment {
         getActivity().setTitle("Create New Flash Card");
         initializeInstanceVariables(viewGroup);
         initializeCallbacks(viewGroup);
-        GROUP_NAME.observe(this,s -> {
-            if (s != null) {
-                Log.d(TAG, "onCreateView: inside group ovserver");
-                flashCardViewModel.createGroup(s.getGroupName(),s.getGroupDescription());
-
-                flashCardViewModel.getAllFlashCardsOfGroup(s.getGroupName()).observe(this, flashCards -> {
-                    adaptor.setDataset(flashCards);
-                    Log.d(TAG, "onActivityCreated: Dataset changed");
-                });
-            }
-
-        });
         return viewGroup;
     }
 
@@ -80,7 +74,9 @@ public class CreateFlashCardFragment extends Fragment {
                 String group = ((EditText) dialog.findViewById(R.id.edit_text_group_name)).getText().toString();
                 if (!desc.equals("") && !group.equals("")) {
                     Log.d(TAG, "initializeDialog: creating new group");
-                    GROUP_NAME.setValue(new Groups(group, desc));
+                    GROUP_NAME = group;
+                    flashCardViewModel.createGroup(group,desc);
+                    attachObserver();
                     dialog.dismiss();
                 }
             });
@@ -102,7 +98,7 @@ public class CreateFlashCardFragment extends Fragment {
                 String title =((EditText) dialog.findViewById(R.id.edit_text_title)).getText().toString();
                 String content = ((EditText) dialog.findViewById(R.id.edit_text_message)).getText().toString();
                 Log.d(TAG, "initializeCallbacks: creating new flash card");
-                flashCardViewModel.createFlashCard(title,content,GROUP_NAME.getValue().getGroupName());
+                flashCardViewModel.createFlashCard(title,content,GROUP_NAME);
                 dialog.dismiss();
             });
         });
@@ -114,7 +110,7 @@ public class CreateFlashCardFragment extends Fragment {
         Log.d(TAG, "initializeCallbacks: Creating new dialog");
         addFlashCard = viewGroup.findViewById(R.id.fab_create_flash_card);
         addFlashCard.setOnClickListener(v -> {
-            if (GROUP_NAME.getValue() == null) {
+            if (GROUP_NAME == null) {
                 initializeGroupDialog();
             }
             else{
