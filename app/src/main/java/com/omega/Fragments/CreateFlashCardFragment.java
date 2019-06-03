@@ -109,7 +109,7 @@ public class CreateFlashCardFragment extends Fragment {
         dialog.setContentView(R.layout.dialog_create_group);
         Button btnCreateGroup = dialog.findViewById(R.id.button_create_group);
         dialog.getWindow().setBackgroundDrawableResource(R.color.DarkModePrimaryDarkColor);
-
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.setOnShowListener(dialog1 -> {
             Log.d(TAG, "initializeDialog: onShow fired");
             btnCreateGroup.setOnClickListener(v -> {
