@@ -21,10 +21,12 @@
         android:id="@+id/button_check_out"
         android:layout_width="234dp"
         android:layout_height="64dp"
-        android:layout_marginStart="88dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="220dp"
+        android:layout_marginEnd="8dp"
         android:text="@string/splash_screen_option_check_out"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/guideline5"
+        app:layout_constraintStart_toStartOf="@+id/guideline4"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
@@ -47,5 +49,19 @@
         android:text="@string/splash_screen_title"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.16" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.9" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

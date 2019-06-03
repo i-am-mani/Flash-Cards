@@ -87,6 +87,8 @@ public class CreateFlashCardFragment extends Fragment {
         dialog.setCanceledOnTouchOutside(true);
         dialog.setContentView(R.layout.dailog_create_flash_card);
 
+        dialog.getWindow().setBackgroundDrawableResource(R.color.DarkModePrimaryDarkColor);
+
         dialog.setOnShowListener(dialog1 -> {
             Button btnCreateFlashCard = dialog.findViewById(R.id.button_create_flash_card);
             btnCreateFlashCard.setOnClickListener(v1 -> {
@@ -97,7 +99,6 @@ public class CreateFlashCardFragment extends Fragment {
                 dialog.dismiss();
             });
         });
-
         dialog.show();
     }
 
@@ -105,6 +106,7 @@ public class CreateFlashCardFragment extends Fragment {
         Dialog dialog = new Dialog(getActivity());
         dialog.setContentView(R.layout.dialog_create_group);
         Button btnCreateGroup = dialog.findViewById(R.id.button_create_group);
+        dialog.getWindow().setBackgroundDrawableResource(R.color.DarkModePrimaryDarkColor);
 
         dialog.setOnShowListener(dialog1 -> {
             Log.d(TAG, "initializeDialog: onShow fired");
