@@ -88,7 +88,13 @@ public class GroupsAdaptor extends RecyclerView.Adapter<GroupsAdaptor.GroupsView
         @Override
         public void onClick(View v) {
             Log.d(TAG, "onClick: " + getAdapterPosition());
-            itemListener.onItemClick(v,tvGroupName.getText().toString());
+
+            v.animate().translationXBy(1500).setDuration(200).withEndAction(() -> {
+                itemListener.onItemClick(v, tvGroupName.getText().toString());
+            });
+
+
+
 
         }
     }
