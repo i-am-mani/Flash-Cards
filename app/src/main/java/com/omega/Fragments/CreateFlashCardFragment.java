@@ -89,6 +89,8 @@ public class CreateFlashCardFragment extends Fragment {
 
         dialog.getWindow().setBackgroundDrawableResource(R.color.DarkModePrimaryDarkColor);
 
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
         dialog.setOnShowListener(dialog1 -> {
             Button btnCreateFlashCard = dialog.findViewById(R.id.button_create_flash_card);
             btnCreateFlashCard.setOnClickListener(v1 -> {

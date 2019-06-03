@@ -10,9 +10,7 @@
         <item name="android:textColorHint">@color/DarkModeSecondaryTextColor</item>
         <item name="android:textColor">@android:color/white</item>
         <item name="android:windowBackground">@color/DarkModePrimaryColor</item>
-    </style>
-
-    <style name="AppTheme.LightTheme" parent="Theme.AppCompat.Light">
+        <item name="android:navigationBarColor">@color/DarkModePrimaryColor</item>
 
     </style>
 

@@ -59,11 +59,9 @@ public class SplashScreen extends Fragment {
     private void initializeCallbacks(View viewGroup) {
         Button createFlashCard = viewGroup.findViewById(R.id.button_create);
         Button checkoutFlashCard = viewGroup.findViewById(R.id.button_check_out);
-        Button options = viewGroup.findViewById(R.id.button_options);
 
         createFlashCard.setOnClickListener(v -> ImplSwitchToFragment.switchToCreateFlashCard(null));
         checkoutFlashCard.setOnClickListener(v -> ImplSwitchToFragment.switchToCheckoutFlashCard());
-        options.setOnClickListener(v -> ImplSwitchToFragment.switchToOptions());
     }
 
 }

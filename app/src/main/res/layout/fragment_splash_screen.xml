@@ -4,13 +4,28 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:elevation="0dp"
     tools:context=".Fragments.SplashScreen">
 
+    <TextView
+        android:id="@+id/text_splash_screen_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="36dp"
+        android:layout_marginEnd="8dp"
+        android:text="@string/splash_screen_title"
+        android:textSize="34dp"
+        app:layout_constraintEnd_toStartOf="@+id/guideline5"
+        app:layout_constraintStart_toStartOf="@+id/guideline4"
+        app:layout_constraintTop_toTopOf="parent" />
     <Button
         android:id="@+id/button_create"
-        android:layout_width="234dp"
-        android:layout_height="64dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:layout_marginTop="36dp"
+        android:background="@drawable/ic_hexagon"
+        android:backgroundTint="#385038"
         android:text="@string/splash_screen_option_create"
         app:layout_constraintEnd_toEndOf="@+id/button_check_out"
         app:layout_constraintHorizontal_bias="0.0"
@@ -19,36 +34,19 @@
 
     <Button
         android:id="@+id/button_check_out"
-        android:layout_width="234dp"
-        android:layout_height="64dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="220dp"
+        android:layout_marginTop="160dp"
         android:layout_marginEnd="8dp"
+        android:background="@drawable/ic_hexagon"
+        android:backgroundTint="#475C6B"
         android:text="@string/splash_screen_option_check_out"
         app:layout_constraintEnd_toStartOf="@+id/guideline5"
+        app:layout_constraintHorizontal_bias="0.301"
         app:layout_constraintStart_toStartOf="@+id/guideline4"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/button_options"
-        android:layout_width="234dp"
-        android:layout_height="64dp"
-        android:layout_marginTop="36dp"
-        android:text="@string/splash_screen_option_options"
-        app:layout_constraintEnd_toEndOf="@+id/button_create"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/button_create"
-        app:layout_constraintTop_toBottomOf="@+id/button_create" />
-
-    <TextView
-        android:id="@+id/text_splash_screen_title"
-        android:layout_width="86dp"
-        android:layout_height="31dp"
-        android:layout_marginStart="146dp"
-        android:layout_marginTop="57dp"
-        android:text="@string/splash_screen_title"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline4"
