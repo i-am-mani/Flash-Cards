@@ -14,11 +14,15 @@ import com.omega.R;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class FlashCardsAdaptor extends RecyclerView.Adapter<FlashCardsAdaptor.FlashCardViewHolder> {
 
 
     private final Context context;
     private List<FlashCards> flashCardsList = null;
+    private FlashCardAdaptorListener adaptorListener;
 
     public FlashCardsAdaptor(Context context){
             this.context = context;
@@ -64,18 +68,26 @@ public class FlashCardsAdaptor extends RecyclerView.Adapter<FlashCardsAdaptor.Fl
         notifyDataSetChanged();
     }
 
-    public class FlashCardViewHolder extends RecyclerView.ViewHolder {
+    public interface FlashCardAdaptorListener {
+        void startPlayMode(String group);
+    }
 
+    public class FlashCardViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.text_title)
         TextView tvTitle;
+        @BindView(R.id.text_content)
         TextView tvContent;
+
 
         public FlashCardViewHolder(View itemView) {
             super(itemView);
-            tvTitle = itemView.findViewById(R.id.text_title);
-            tvContent = itemView.findViewById(R.id.text_content);
+            ButterKnife.bind(this, itemView);
         }
 
-
+//        @OnClick(R.id.button_play)
+//        public void play(View view) {
+//            adaptorListener.startPlayMode();
+//        }
     }
 
 
