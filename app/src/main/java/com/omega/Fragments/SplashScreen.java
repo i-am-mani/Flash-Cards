@@ -58,7 +58,7 @@ public class SplashScreen extends Fragment {
         // Inflate the layout for this fragment
         View mainView = inflater.inflate(R.layout.fragment_splash_screen, container, false);
         ButterKnife.bind(this, mainView);
-
+        getActivity().setTitle("Home");
         return mainView;
     }
 

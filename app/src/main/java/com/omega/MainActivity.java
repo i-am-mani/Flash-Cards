@@ -1,8 +1,11 @@
 package com.omega;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.ViewGroup;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
@@ -21,7 +24,6 @@ public class MainActivity extends AppCompatActivity implements ISwitchToFragment
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         SplashScreen splashScreen = SplashScreen.newInstance();
         FragmentTransaction transaction= getSupportFragmentManager().beginTransaction();
         transaction.add(R.id.frame_main_area, splashScreen);
@@ -62,5 +64,22 @@ public class MainActivity extends AppCompatActivity implements ISwitchToFragment
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.menu_main, menu);
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        if (item.getItemId() == R.id.menu_help) {
+            Dialog dialog = new Dialog(this);
+            dialog.setContentView(R.layout.dialog_help);
+            dialog.setCanceledOnTouchOutside(true);
+            dialog.getWindow().setBackgroundDrawableResource(R.color.DarkModePrimaryDarkColor);
+            dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            dialog.show();
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
+
     }
 }

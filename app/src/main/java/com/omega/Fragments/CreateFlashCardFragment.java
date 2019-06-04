@@ -10,8 +10,6 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -33,9 +31,7 @@ import butterknife.OnClick;
 public class CreateFlashCardFragment extends Fragment {
 
     @BindView(R.id.button_play)
-    ImageButton btnPlay;
-    @BindView(R.id.text_play)
-    TextView tvPlay;
+    Button btnPlay;
 
     private String GROUP_NAME;
     private final String TAG = CreateFlashCardFragment.class.getSimpleName();
@@ -79,7 +75,7 @@ public class CreateFlashCardFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View viewGroup = inflater.inflate(R.layout.fragment_create_flash_card, container, false);
-        getActivity().setTitle("Create New Flash Card");
+        getActivity().setTitle("Create New Flash Card"); //set Fragment title
         initializeInstanceVariables(viewGroup);
         initializeCallbacks(viewGroup);
         ButterKnife.bind(this, viewGroup);
@@ -164,7 +160,6 @@ public class CreateFlashCardFragment extends Fragment {
 
     private void attachObserver() {
         flashCardViewModel.getAllFlashCardsOfGroup(GROUP_NAME).observe(this, flashCards -> rvAdaptor.setDataSet(flashCards));
-        tvPlay.setVisibility(View.VISIBLE);
         btnPlay.setVisibility(View.VISIBLE);
     }
 

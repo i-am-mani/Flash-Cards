@@ -53,6 +53,7 @@ public class CheckoutFlashCardFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View viewGroup = inflater.inflate(R.layout.fragment_check_out_flash_cards, container, false);
+        getActivity().setTitle("Checkout Groups");
         initializeVariables(viewGroup);
         return viewGroup;
     }

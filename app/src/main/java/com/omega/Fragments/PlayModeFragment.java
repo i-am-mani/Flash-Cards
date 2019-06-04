@@ -59,6 +59,7 @@ public class PlayModeFragment extends Fragment {
         View mainView = inflater.inflate(R.layout.fragment_play_mode, container, false);
         ButterKnife.bind(this, mainView);
         initializeRecyclerView();
+        getActivity().setTitle("Play mode");
         return mainView;
     }
 
