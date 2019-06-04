@@ -11,6 +11,7 @@
         <item name="android:textColor">@android:color/white</item>
         <item name="android:windowBackground">@color/DarkModePrimaryColor</item>
         <item name="android:navigationBarColor">@color/DarkModePrimaryColor</item>
+        <item name="android:itemBackground">@color/DarkModePrimaryColor</item>
 
     </style>
 
