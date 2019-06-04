@@ -12,7 +12,9 @@ import androidx.recyclerview.widget.RecyclerView;
 public class SwipeCallback extends ItemTouchHelper.SimpleCallback {
 
 
-    ColorDrawable background = new ColorDrawable(Color.RED);
+    ColorDrawable backgroundDelete = new ColorDrawable(Color.RED);
+    ColorDrawable backgroundEdit = new ColorDrawable(Color.GREEN);
+
     OnSwiped onSwiped;
 
     public SwipeCallback(OnSwiped ImpOnSwiped) {
@@ -33,30 +35,43 @@ public class SwipeCallback extends ItemTouchHelper.SimpleCallback {
 
     @Override
     public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-        onSwiped.deleteItem(viewHolder.getAdapterPosition());
+        if (direction == ItemTouchHelper.RIGHT) {
+            onSwiped.deleteItem(viewHolder.getAdapterPosition());
+        } else if (direction == ItemTouchHelper.LEFT) {
+            onSwiped.editItem(viewHolder.getAdapterPosition());
+        }
     }
 
     @Override
     public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
         super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
         View itemView = viewHolder.itemView;
-
+        backgroundDelete.setAlpha(50);
+        backgroundEdit.setAlpha(50);
         if (dX > 0) { // Swiping to the right
-            background.setBounds(itemView.getLeft(), itemView.getTop(),
+            backgroundDelete.setBounds(itemView.getLeft(), itemView.getTop(),
                     itemView.getLeft() + ((int) dX),
                     itemView.getBottom());
 
+            backgroundDelete.draw(c);
+
         } else if (dX < 0) { // Swiping to the left
-            background.setBounds(itemView.getRight() + ((int) dX),
+            backgroundEdit.setBounds(itemView.getRight() + ((int) dX),
                     itemView.getTop(), itemView.getRight(), itemView.getBottom());
+            backgroundEdit.draw(c);
+
         } else { // view is unSwiped
-            background.setBounds(0, 0, 0, 0);
+            backgroundEdit.setBounds(0, 0, 0, 0);
+            backgroundDelete.setBounds(0, 0, 0, 0);
+            backgroundEdit.draw(c);
+            backgroundDelete.draw(c);
         }
-        background.draw(c);
     }
 
     public interface OnSwiped {
         void deleteItem(int adapterPosition);
+
+        void editItem(int adapterPosition);
     }
 
 
