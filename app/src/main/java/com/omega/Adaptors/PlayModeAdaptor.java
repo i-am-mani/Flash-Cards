@@ -1,6 +1,5 @@
 package com.omega.Adaptors;
 
-import android.animation.AnimatorSet;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -55,16 +54,18 @@ public class PlayModeAdaptor extends RecyclerView.Adapter<PlayModeAdaptor.PlayMo
                 Log.d(TAG, "onBindViewHolder: " + curY);
                 if (curY < 180) {
                     item.animate().rotationY(180).setDuration(400)
-                            .withStartAction(() -> holder.tvMainContent.animate().rotationY(180).setDuration(400))
-                            .withEndAction(() -> holder.tvMainContent.setText(content))
+                            .withStartAction(() -> holder.tvMainContent.animate().rotationY(180).alpha(0).setDuration(100)
+                                    .withEndAction(() -> holder.tvMainContent.animate().alpha(1).setDuration(200)
+                                            .withStartAction(() -> holder.tvMainContent.setText(content))))
                             .start();
-
-                    AnimatorSet animatorSet = new AnimatorSet();
+//                            .withEndAction(() -> holder.tvMainContent.setText(content))
                 } else {
                     item.animate().rotationY(0).setDuration(400)
-                            .withStartAction(() -> holder.tvMainContent.animate().rotationY(0).setDuration(300))
-                            .withEndAction(() -> holder.tvMainContent.setText(title))
+                            .withStartAction(() -> holder.tvMainContent.animate().rotationY(0).alpha(0).setDuration(100)
+                                    .withEndAction(() -> holder.tvMainContent.animate().alpha(1).setDuration(200).
+                                            withStartAction(() -> holder.tvMainContent.setText(title))))
                             .start();
+//                            .withEndAction(() -> holder.tvMainContent.setText(title))
                 }
 
             }
