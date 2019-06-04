@@ -2,12 +2,14 @@ package com.omega;
 
 import android.app.Dialog;
 import android.os.Bundle;
+import android.transition.Explode;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.ViewGroup;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.omega.Fragments.CheckoutFlashCardFragment;
@@ -34,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements ISwitchToFragment
     @Override
     public void switchToCreateFlashCard(String groupName) {
         CreateFlashCardFragment createFlashCard = new CreateFlashCardFragment(groupName);
+        addExplodeTransactionToFragment(createFlashCard);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.frame_main_area,createFlashCard);
         transaction.addToBackStack(null);
@@ -43,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements ISwitchToFragment
     @Override
     public void switchToPlayMode(String group) {
         PlayModeFragment playModeFragment = new PlayModeFragment(group);
+        addExplodeTransactionToFragment(playModeFragment);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.frame_main_area, playModeFragment);
         transaction.addToBackStack(null);
@@ -52,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements ISwitchToFragment
     @Override
     public void switchToCheckoutFlashCard() {
         CheckoutFlashCardFragment checkoutFlashCard = new CheckoutFlashCardFragment();
-
+        addExplodeTransactionToFragment(checkoutFlashCard);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.frame_main_area, checkoutFlashCard);
         transaction.addToBackStack(null);
@@ -80,6 +84,11 @@ public class MainActivity extends AppCompatActivity implements ISwitchToFragment
         } else {
             return super.onOptionsItemSelected(item);
         }
-
     }
+
+    private void addExplodeTransactionToFragment(Fragment fragment) {
+        fragment.setEnterTransition(new Explode());
+        fragment.setExitTransition(new Explode());
+    }
+
 }
