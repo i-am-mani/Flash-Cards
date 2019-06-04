@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.SnapHelper;
 
 import com.omega.Adaptors.PlayModeAdaptor;
 import com.omega.R;
+import com.omega.Util.EqualSpaceItemDecoration;
 import com.omega.Util.FlashCardViewModel;
 import com.omega.Util.ISwitchToFragment;
 
@@ -67,6 +68,9 @@ public class PlayModeFragment extends Fragment {
 
         SnapHelper snapHelper = new LinearSnapHelper();
         snapHelper.attachToRecyclerView(rvPlayCard);
+
+        EqualSpaceItemDecoration decoration = new EqualSpaceItemDecoration(40);
+        rvPlayCard.addItemDecoration(decoration);
 
         rvPlayCard.setLayoutManager(linearLayoutManager);
         rvPlayCard.setAdapter(playModeAdaptor);

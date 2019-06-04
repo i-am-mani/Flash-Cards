@@ -1,17 +1,25 @@
 package com.omega.Fragments;
 
 
+import android.animation.Animator;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.Button;
 
 import androidx.fragment.app.Fragment;
 
 import com.omega.R;
 import com.omega.Util.ISwitchToFragment;
+
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class SplashScreen extends Fragment {
 
@@ -20,7 +28,6 @@ public class SplashScreen extends Fragment {
     public SplashScreen() {
         // Required empty public constructor
     }
-
 
     public static SplashScreen newInstance() {
         SplashScreen fragment = new SplashScreen();
@@ -50,18 +57,60 @@ public class SplashScreen extends Fragment {
 
         // Inflate the layout for this fragment
         View mainView = inflater.inflate(R.layout.fragment_splash_screen, container, false);
-
-        initializeCallbacks(mainView);
+        ButterKnife.bind(this, mainView);
 
         return mainView;
     }
 
-    private void initializeCallbacks(View viewGroup) {
-        Button createFlashCard = viewGroup.findViewById(R.id.button_create);
-        Button checkoutFlashCard = viewGroup.findViewById(R.id.button_check_out);
+    @OnClick({R.id.button_check_out, R.id.button_create})
+    public void play(View view) {
+        Button btn = (Button) view;
 
-        createFlashCard.setOnClickListener(v -> ImplSwitchToFragment.switchToCreateFlashCard(null));
-        checkoutFlashCard.setOnClickListener(v -> ImplSwitchToFragment.switchToCheckoutFlashCard());
+        ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(btn, "rotation", 0f, 360f);
+        objectAnimator.setDuration(800);
+
+        float density = Resources.getSystem().getDisplayMetrics().density;
+        int btnWidth = btn.getWidth() / 2;
+        int widthPixels = Resources.getSystem().getDisplayMetrics().widthPixels;
+        float dp = widthPixels / density;
+
+        ObjectAnimator objectAnimator1 = ObjectAnimator.ofFloat(btn, "translationX", btn.getTranslationX(), dp + btnWidth);
+        objectAnimator1.setDuration(800);
+
+        AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet.play(objectAnimator).with(objectAnimator1);
+        animatorSet.setInterpolator(new AccelerateDecelerateInterpolator());
+        animatorSet.addListener(new Animator.AnimatorListener() {
+
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+
+                if (btn.getId() == R.id.button_check_out) {
+                    ImplSwitchToFragment.switchToCheckoutFlashCard();
+                } else if (btn.getId() == R.id.button_create) {
+                    ImplSwitchToFragment.switchToCreateFlashCard(null);
+                }
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+        animatorSet.start();
+
+
     }
+
 
 }
