@@ -1,6 +1,7 @@
 package com.omega.Fragments;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,6 +21,10 @@ import com.omega.Adaptors.FlashCardsAdaptor;
 import com.omega.R;
 import com.omega.Util.EqualSpaceItemDecoration;
 import com.omega.Util.FlashCardViewModel;
+import com.omega.Util.ISwitchToFragment;
+
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class CreateFlashCardFragment extends Fragment {
 
@@ -29,6 +34,7 @@ public class CreateFlashCardFragment extends Fragment {
     private FloatingActionButton btnAddFlashCard;
     private RecyclerView rvFlashCards;
     private FlashCardViewModel flashCardViewModel;
+    private ISwitchToFragment ImplSwitchToFragment;
 
     public CreateFlashCardFragment(String groupName){
         GROUP_NAME  = groupName;
@@ -44,12 +50,24 @@ public class CreateFlashCardFragment extends Fragment {
         }
     }
 
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            ImplSwitchToFragment = (ISwitchToFragment) context;
+        } catch (ClassCastException c) {
+            c.printStackTrace();
+        }
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View viewGroup = inflater.inflate(R.layout.fragment_create_flash_card, container, false);
         getActivity().setTitle("Create New Flash Card");
         initializeInstanceVariables(viewGroup);
         initializeCallbacks(viewGroup);
+        ButterKnife.bind(this, viewGroup);
         return viewGroup;
     }
 
@@ -131,5 +149,10 @@ public class CreateFlashCardFragment extends Fragment {
 
     private void attachObserver() {
         flashCardViewModel.getAllFlashCardsOfGroup(GROUP_NAME).observe(this, flashCards -> rvAdaptor.setDataSet(flashCards));
+    }
+
+    @OnClick(R.id.button_play)
+    public void startPlayMode(View v) {
+        ImplSwitchToFragment.switchToPlayMode(GROUP_NAME);
     }
 }
