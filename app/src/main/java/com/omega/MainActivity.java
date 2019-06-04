@@ -1,13 +1,13 @@
 package com.omega;
 
+import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.os.Bundle;
-
-import com.omega.Database.Groups;
 import com.omega.Fragments.CheckoutFlashCardFragment;
 import com.omega.Fragments.CreateFlashCardFragment;
+import com.omega.Fragments.PlayModeFragment;
 import com.omega.Fragments.SplashScreen;
 import com.omega.Util.ISwitchToFragment;
 
@@ -37,8 +37,12 @@ public class MainActivity extends AppCompatActivity implements ISwitchToFragment
     }
 
     @Override
-    public void switchToOptions() {
-
+    public void switchToPlayMode(String group) {
+        PlayModeFragment playModeFragment = new PlayModeFragment(group);
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.frame_main_area, playModeFragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 
     @Override
