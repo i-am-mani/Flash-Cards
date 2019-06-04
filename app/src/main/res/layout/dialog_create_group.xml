@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:background="@drawable/shape_edit_text_rectangle"
-    android:layout_marginLeft="20dp"
-    android:layout_marginRight="20dp"
-    tools:context=".dialogs.SingleEditTextDialog">
+    android:background="@drawable/shape_edit_text_rectangle">
 
     <TextView
         android:id="@+id/text_title"
@@ -15,6 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal|center_vertical"
         android:text="Create Group"
+        android:layout_marginTop="16dp"
         android:textSize="24sp" />
 
     <EditText
@@ -27,9 +24,7 @@
         android:background="@drawable/shape_edit_text_rectangle"
         android:gravity="top|left"
         android:hint="Enter Group Name"
-        android:paddingLeft="10dp"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp"
+        android:padding="10dp"
         android:scrollbars="vertical" />
 
     <EditText
@@ -38,17 +33,15 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical|center_horizontal"
         android:layout_marginStart="16dp"
+        android:background="@drawable/shape_edit_text_rectangle"
 
         android:layout_marginTop="30dp"
         android:layout_marginEnd="16dp"
-        android:background="@drawable/shape_edit_text_rectangle"
         android:cursorVisible="true"
         android:gravity="top|left"
         android:hint="Enter Groups's Description"
         android:minLines="6"
-        android:paddingLeft="10dp"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp" />
+        android:padding="10dp" />
 
 
     <Button
