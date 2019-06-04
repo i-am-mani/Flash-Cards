@@ -17,4 +17,21 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="et_hint_group_name">Group Name</string>
     <string name="tv_search">Search</string>
+
+
+    <string name="content">
+        <b>Flash Cards</b>
+        is a card bearing information, as words or numbers, on either or both sides.
+        One writes a question on a side and an answer overleaf. User is supposed to look at the question and recall the answer.
+        They\'re helpful tool to aid memory retention, used extensively to aid memorization.\n\n
+        To create flashcard, Click on Create button in home screen, first create a Group and then Add FlashCards to that group.
+        <b>Play</b>, feature will allow you to go skim through all your flashcard of particular group, first prompting
+        you guess the answer by displaying only question then you can tap on it to see the correct answer.\n\n\n
+        <b>Groups</b> \n
+        Groups are used to organize flash cards in categories. \n
+        To create a new Group, click on Create Button in Home Screen and you will be prompted with group dialog.\n
+        Once created they\'re present in Checkout Groups section ( Click on Checkout button in Home ), click on any group
+        you can create more flash card or play.
+
+    </string>
 </resources>
