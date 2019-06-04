@@ -1,6 +1,8 @@
 package com.omega.Adaptors;
 
+import android.animation.AnimatorSet;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +23,7 @@ public class PlayModeAdaptor extends RecyclerView.Adapter<PlayModeAdaptor.PlayMo
 
     Context context;
     List<FlashCards> dataSet;
+    String TAG = PlayModeAdaptor.class.getSimpleName();
 
     public PlayModeAdaptor(Context c) {
         context = c;
@@ -40,22 +43,32 @@ public class PlayModeAdaptor extends RecyclerView.Adapter<PlayModeAdaptor.PlayMo
     @Override
     public void onBindViewHolder(@NonNull PlayModeViewHolder holder, int position) {
 
-        if (dataSet != null) {
-            String title = dataSet.get(position).getTitle();
-            String content = dataSet.get(position).getContent();
+        View item = holder.mainView;
 
-            View item = holder.mainView;
-            float curY = item.getY();
-            if (curY < 180) {
-                item.animate().rotationY(180).setDuration(400).start();
-            } else {
-                item.animate().rotationY(0).setDuration(400).start();
+        String title = dataSet.get(position).getTitle();
+        String content = dataSet.get(position).getContent();
+        holder.tvMainContent.setText(title);
+
+        item.setOnClickListener(v -> {
+            if (dataSet != null) {
+                float curY = item.getRotationY();
+                Log.d(TAG, "onBindViewHolder: " + curY);
+                if (curY < 180) {
+                    item.animate().rotationY(180).setDuration(400)
+                            .withStartAction(() -> holder.tvMainContent.animate().rotationY(180).setDuration(400))
+                            .withEndAction(() -> holder.tvMainContent.setText(content))
+                            .start();
+
+                    AnimatorSet animatorSet = new AnimatorSet();
+                } else {
+                    item.animate().rotationY(0).setDuration(400)
+                            .withStartAction(() -> holder.tvMainContent.animate().rotationY(0).setDuration(300))
+                            .withEndAction(() -> holder.tvMainContent.setText(title))
+                            .start();
+                }
+
             }
-
-            holder.tvMainContent.setText(title);
-        }
-
-
+        });
     }
 
     @Override
