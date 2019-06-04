@@ -69,6 +69,10 @@ public class GroupsAdaptor extends RecyclerView.Adapter<GroupsAdaptor.GroupsView
         return group;
     }
 
+    public void refresh(int pos) {
+        notifyItemChanged(pos);
+    }
+
     public interface GroupsAdaptorListenerInterface {
         void onItemClick(View view, String groupName);
     }
@@ -92,9 +96,6 @@ public class GroupsAdaptor extends RecyclerView.Adapter<GroupsAdaptor.GroupsView
             v.animate().translationXBy(1500).setDuration(200).withEndAction(() -> {
                 itemListener.onItemClick(v, tvGroupName.getText().toString());
             });
-
-
-
 
         }
     }
