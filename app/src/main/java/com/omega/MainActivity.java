@@ -1,6 +1,8 @@
 package com.omega;
 
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
@@ -53,6 +55,12 @@ public class MainActivity extends AppCompatActivity implements ISwitchToFragment
         transaction.replace(R.id.frame_main_area, checkoutFlashCard);
         transaction.addToBackStack(null);
         transaction.commit();
+    }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menu_main, menu);
+        return true;
     }
 }

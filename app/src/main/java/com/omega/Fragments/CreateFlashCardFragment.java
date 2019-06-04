@@ -10,7 +10,10 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -23,10 +26,16 @@ import com.omega.Util.EqualSpaceItemDecoration;
 import com.omega.Util.FlashCardViewModel;
 import com.omega.Util.ISwitchToFragment;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class CreateFlashCardFragment extends Fragment {
+
+    @BindView(R.id.button_play)
+    ImageButton btnPlay;
+    @BindView(R.id.text_play)
+    TextView tvPlay;
 
     private String GROUP_NAME;
     private final String TAG = CreateFlashCardFragment.class.getSimpleName();
@@ -38,6 +47,12 @@ public class CreateFlashCardFragment extends Fragment {
 
     public CreateFlashCardFragment(String groupName){
         GROUP_NAME  = groupName;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -149,6 +164,8 @@ public class CreateFlashCardFragment extends Fragment {
 
     private void attachObserver() {
         flashCardViewModel.getAllFlashCardsOfGroup(GROUP_NAME).observe(this, flashCards -> rvAdaptor.setDataSet(flashCards));
+        tvPlay.setVisibility(View.VISIBLE);
+        btnPlay.setVisibility(View.VISIBLE);
     }
 
     @OnClick(R.id.button_play)

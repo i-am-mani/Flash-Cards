@@ -70,11 +70,11 @@ public class SplashScreen extends Fragment {
         objectAnimator.setDuration(800);
 
         float density = Resources.getSystem().getDisplayMetrics().density;
-        int btnWidth = btn.getWidth() / 2;
+        int btnWidth = btn.getWidth();
         int widthPixels = Resources.getSystem().getDisplayMetrics().widthPixels;
         float dp = widthPixels / density;
 
-        ObjectAnimator objectAnimator1 = ObjectAnimator.ofFloat(btn, "translationX", btn.getTranslationX(), dp + btnWidth);
+        ObjectAnimator objectAnimator1 = ObjectAnimator.ofFloat(btn, "translationX", btn.getTranslationX(), dp + btnWidth + 60);
         objectAnimator1.setDuration(800);
 
         AnimatorSet animatorSet = new AnimatorSet();
