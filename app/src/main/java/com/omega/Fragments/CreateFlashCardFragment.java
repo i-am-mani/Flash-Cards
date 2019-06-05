@@ -39,6 +39,9 @@ public class CreateFlashCardFragment extends Fragment {
     @BindView(R.id.button_play)
     Button btnPlay;
 
+    @BindView(R.id.text_create_section_hint)
+    TextView tvHint;
+
     private String GROUP_NAME;
     private final String TAG = CreateFlashCardFragment.class.getSimpleName();
     private FlashCardsAdaptor rvAdaptor;
@@ -86,7 +89,19 @@ public class CreateFlashCardFragment extends Fragment {
         initializeInstanceVariables(viewGroup);
         initializeCallbacks(viewGroup);
         ButterKnife.bind(this, viewGroup);
+
+        setHints();
+
         return viewGroup;
+    }
+
+    private void setHints() {
+
+        if (GROUP_NAME != null) {
+            tvHint.setText(R.string.hint_create_section_flashcard);
+        } else {
+            tvHint.setText(R.string.hint_create_section_group);
+        }
     }
 
     @Override
@@ -158,6 +173,7 @@ public class CreateFlashCardFragment extends Fragment {
                     Log.d(TAG, "initializeDialog: creating new group");
                     GROUP_NAME = group;
                     flashCardViewModel.createGroup(group,desc);
+                    setHints();
                     attachObserver();
                     dialog.dismiss();
                 }
@@ -170,6 +186,8 @@ public class CreateFlashCardFragment extends Fragment {
     private void attachObserver() {
         flashCardViewModel.getAllFlashCardsOfGroup(GROUP_NAME).observe(this, flashCards -> {
             rvAdaptor.setDataSet(flashCards);
+            if (flashCards.size() > 0)
+                tvHint.setVisibility(View.GONE);
         });
         btnPlay.setVisibility(View.VISIBLE);
     }
@@ -180,6 +198,8 @@ public class CreateFlashCardFragment extends Fragment {
     }
 
     class ImplOnSwipe implements SwipeCallback.OnSwiped {
+
+        private String newTitle;
 
         @Override
         public void deleteItem(int adapterPosition) {
@@ -205,29 +225,34 @@ public class CreateFlashCardFragment extends Fragment {
 
         @Override
         public void editItem(int adapterPosition) {
-
-            Log.d(TAG, "editItem: " + GROUP_NAME + " " + flashCardViewModel.getAllFlashCardsOfGroup(GROUP_NAME).getValue());
             FlashCards flashCard = rvAdaptor.getItemAtPosition(adapterPosition);
-            String title = flashCard.getTitle();
 
             Dialog dialog = new Dialog(getActivity());
             dialog.setCanceledOnTouchOutside(true);
             dialog.setContentView(R.layout.dialog_edit);
 
             ((TextView) (dialog.findViewById(R.id.text_dialog_title))).setText("Edit FlashCard");
+            TextInputEditText etContent = dialog.findViewById(R.id.edit_text_new_description);
+            TextInputEditText etTitle = dialog.findViewById(R.id.edit_text_new_group_name);
 
-            ((TextView) dialog.findViewById(R.id.text_edit_group_name)).setText(title);
+            //set et text
+            etTitle.setText(flashCard.getTitle());
+            etContent.setText(flashCard.getContent());
+
 
             dialog.getWindow().setBackgroundDrawableResource(R.color.DarkModePrimaryDarkColor);
             dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
             Button btnConfirmEdit = dialog.findViewById(R.id.button_confirm_edit);
             btnConfirmEdit.setOnClickListener(v -> {
-                newContent = ((TextInputEditText) dialog.findViewById(R.id.edit_text_new_description)).getText().toString();
+                newContent = etContent.getText().toString();
+                newTitle = etTitle.getText().toString();
+
                 flashCard.setContent(newContent);
+                flashCard.setTitle(newTitle);
                 flashCardViewModel.updateFlashCard(flashCard);
-                rvAdaptor.refresh(adapterPosition);
                 dialog.dismiss();
+                rvAdaptor.refresh(adapterPosition);
             });
             dialog.setOnCancelListener(dialog1 -> rvAdaptor.refresh(adapterPosition));
             dialog.show();

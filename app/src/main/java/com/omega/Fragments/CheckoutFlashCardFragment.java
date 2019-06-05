@@ -36,6 +36,7 @@ public class CheckoutFlashCardFragment extends Fragment {
     String newDesc;
 
     String TAG = CheckoutFlashCardFragment.class.getSimpleName();
+    private String newName;
 
     public CheckoutFlashCardFragment(){
 
@@ -97,7 +98,6 @@ public class CheckoutFlashCardFragment extends Fragment {
             alertDialog.setTitle("Confirmation Alert");
             alertDialog.setMessage("Are you sure you want to delete item ? ");
 
-
             alertDialog.setPositiveButton("Yes", (dialog, which) -> {
                 flashCardViewModel.deleteGroup(group);
             });
@@ -115,20 +115,33 @@ public class CheckoutFlashCardFragment extends Fragment {
         @Override
         public void editItem(int adapterPosition) {
             Log.d(TAG, "editItem: Left Swiped");
-            String groupName = flashCardViewModel.getAllGroups().getValue().get(adapterPosition).getGroupName();
+            Groups group = groupsAdaptor.getItemAtPosition(adapterPosition);
 
             Dialog dialog = new Dialog(getActivity());
             dialog.setCanceledOnTouchOutside(true);
             dialog.setContentView(R.layout.dialog_edit);
+
             ((TextView) (dialog.findViewById(R.id.text_dialog_title))).setText("Edit Group");
-            ((TextView) dialog.findViewById(R.id.text_edit_group_name)).setText(groupName);
+
+            TextInputEditText etDesc = dialog.findViewById(R.id.edit_text_new_description);
+            TextInputEditText etName = dialog.findViewById(R.id.edit_text_new_group_name);
+
+            etName.setText(group.getGroupName());
+            etDesc.setText(group.getGroupDescription());
+
             dialog.getWindow().setBackgroundDrawableResource(R.color.DarkModePrimaryDarkColor);
             dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             Button btnConfirmEdit = dialog.findViewById(R.id.button_confirm_edit);
             btnConfirmEdit.setOnClickListener(v -> {
-                newDesc = ((TextInputEditText) dialog.findViewById(R.id.edit_text_new_description)).getText().toString();
-                flashCardViewModel.updateGroup(groupName, newDesc);
+                newDesc = etDesc.getText().toString();
+                newName = etName.getText().toString();
+
+                group.setGroupDescription(newDesc);
+                group.setGroupName(newName);
+
+                flashCardViewModel.updateGroup(group);
                 dialog.dismiss();
+                groupsAdaptor.refresh(adapterPosition);
             });
             dialog.setOnCancelListener(dialog1 -> groupsAdaptor.refresh(adapterPosition));
             dialog.show();
