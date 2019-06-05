@@ -25,6 +25,7 @@
         One writes a question on a side and an answer overleaf. User is supposed to look at the question and recall the answer.
         They\'re helpful tool to aid memory retention, used extensively to aid memorization.\n\n
         To create flashcard, Click on Create button in home screen, first create a Group and then Add FlashCards to that group.
+        <b>Swipe Left to Edit, and Right to Delete</b>
         <b>Play</b>, feature will allow you to go skim through all your flashcard of particular group, first prompting
         you guess the answer by displaying only question then you can tap on it to see the correct answer.\n\n\n
         <b>Groups</b> \n
@@ -33,5 +34,13 @@
         Once created they\'re present in Checkout Groups section ( Click on Checkout button in Home ), click on any group
         you can create more flash card or play.
 
+    </string>
+
+    <string name="hint_create_section_group">
+        Create a Group first
+    </string>
+
+    <string name="hint_create_section_flashcard">
+        No FlashCards yet!
     </string>
 </resources>
