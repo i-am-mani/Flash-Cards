@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
@@ -100,7 +101,9 @@ public class CheckoutFlashCardFragment extends Fragment {
 
             Dialog dialog = new Dialog(getActivity());
             dialog.setCanceledOnTouchOutside(true);
-            dialog.setContentView(R.layout.dialog_edit_group);
+            dialog.setContentView(R.layout.dialog_edit);
+            ((TextView) (dialog.findViewById(R.id.text_dialog_title))).setText("Edit Group");
+            ((TextView) dialog.findViewById(R.id.text_edit_group_name)).setText(groupName);
             dialog.getWindow().setBackgroundDrawableResource(R.color.DarkModePrimaryDarkColor);
             dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             Button btnConfirmEdit = dialog.findViewById(R.id.button_confirm_edit);
