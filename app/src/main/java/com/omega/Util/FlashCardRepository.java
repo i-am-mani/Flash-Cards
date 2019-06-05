@@ -37,6 +37,7 @@ public class FlashCardRepository {
 
     public LiveData<List<FlashCards>> getAllFlashCardsOfGroup(String groupName) {
         LiveData<List<FlashCards>> allFlashCardsOfGroup = flashCardDao.getAllFlashCardsOfGroup(groupName);
+        Log.d("Repository", "getAllFlashCardsOfGroup: " + allFlashCardsOfGroup.getValue());
         return allFlashCardsOfGroup;
     }
 
@@ -64,6 +65,14 @@ public class FlashCardRepository {
 
     public void deleteGroup(Groups group) {
         new DeleteRowAsyncTask(groupsDao).execute(group);
+    }
+
+    public void deleteFlashcard(FlashCards flashCards) {
+        new DeleteRowFromFlashCardsAsyncTask(flashCardDao).execute(flashCards);
+    }
+
+    public void updateFlashcard(FlashCards flashCards) {
+        new UpdateFlashCardsAsyncTask(flashCardDao).execute(flashCards);
     }
 
 
@@ -142,5 +151,23 @@ public class FlashCardRepository {
             return null;
         }
     }
+
+    private static class DeleteRowFromFlashCardsAsyncTask extends AsyncTask<FlashCards, Void, Void> {
+        FlashCardsDao doa;
+
+        public DeleteRowFromFlashCardsAsyncTask(FlashCardsDao flashCardsDao) {
+            doa = flashCardsDao;
+        }
+
+        @Override
+        protected Void doInBackground(FlashCards... flashCards) {
+            doa.deleteFlashCard(flashCards[0]);
+            return null;
+        }
+    }
+
+
+
+
 
 }

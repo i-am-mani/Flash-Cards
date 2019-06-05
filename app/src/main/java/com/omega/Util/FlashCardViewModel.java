@@ -52,8 +52,24 @@ public class FlashCardViewModel extends AndroidViewModel {
         flashCardRepository.deleteGroup(group);
     }
 
+    public void deleteFlashcard(String title) {
+        flashCardRepository.deleteFlashcard(new FlashCards(title));
+    }
+
+    public void updateFlashCard(String title, String content, String groupName) {
+        flashCardRepository.deleteFlashcard(new FlashCards(title, content, groupName));
+    }
+
     public void updateGroup(String name, String desc) {
         Groups tempGroup = new Groups(name, desc);
         flashCardRepository.updateGroup(tempGroup);
+    }
+
+    public void deleteFlashcard(FlashCards itemTitle) {
+        flashCardRepository.deleteFlashcard(itemTitle);
+    }
+
+    public void updateFlashCard(FlashCards flashCard) {
+        flashCardRepository.updateFlashcard(flashCard);
     }
 }
