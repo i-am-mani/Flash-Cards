@@ -72,4 +72,8 @@ public class FlashCardViewModel extends AndroidViewModel {
     public void updateFlashCard(FlashCards flashCard) {
         flashCardRepository.updateFlashcard(flashCard);
     }
+
+    public void updateGroup(Groups group) {
+        flashCardRepository.updateGroup(group);
+    }
 }
