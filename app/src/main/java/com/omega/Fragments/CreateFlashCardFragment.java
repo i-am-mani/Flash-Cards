@@ -1,5 +1,6 @@
 package com.omega.Fragments;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
@@ -183,7 +184,23 @@ public class CreateFlashCardFragment extends Fragment {
         @Override
         public void deleteItem(int adapterPosition) {
             FlashCards itemTitle = rvAdaptor.getItemAtPosition(adapterPosition);
-            flashCardViewModel.deleteFlashcard(itemTitle);
+
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
+            alertDialog.setTitle("Confirmation Alert");
+            alertDialog.setMessage("Are you sure you want to delete item ? ");
+
+
+            alertDialog.setPositiveButton("Yes", (dialog, which) -> {
+                flashCardViewModel.deleteFlashcard(itemTitle);
+            });
+            alertDialog.setNegativeButton("Undo", (dialog, which) -> {
+                rvAdaptor.refresh(adapterPosition);
+            });
+            alertDialog.setOnDismissListener(dialog -> rvAdaptor.refresh(adapterPosition));
+
+            AlertDialog dialog = alertDialog.create();
+            dialog.getWindow().setBackgroundDrawableResource(R.color.DarkModePrimaryDarkColor);
+            dialog.show();
         }
 
         @Override
