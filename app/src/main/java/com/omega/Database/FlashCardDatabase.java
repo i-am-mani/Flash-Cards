@@ -6,7 +6,7 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-@Database(entities = {FlashCards.class, Groups.class}, version = 3)
+@Database(entities = {FlashCards.class, Groups.class}, version = 4)
 public abstract class FlashCardDatabase extends RoomDatabase {
 
     public abstract FlashCardsDao flashCardDao();

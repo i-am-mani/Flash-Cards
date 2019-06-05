@@ -4,15 +4,28 @@ import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Ignore;
 import androidx.room.Index;
+import androidx.room.PrimaryKey;
 
 import static androidx.room.ForeignKey.CASCADE;
 
 @Entity(tableName = "Flashcards",
-        indices = {@Index("group_name")},
-        primaryKeys = {"title","group_name"},
-        foreignKeys = {@ForeignKey(entity = Groups.class, parentColumns = "name", childColumns = "group_name", onDelete = CASCADE)})
+        indices = {@Index(value = {"title", "group_name"})},
+        foreignKeys = {@ForeignKey(entity = Groups.class, parentColumns = "name", childColumns = "group_name", onDelete = CASCADE, onUpdate = CASCADE)})
 public class FlashCards {
+
+    @PrimaryKey(autoGenerate = true)
+    private int id;
+
+    @Ignore
+    public FlashCards(String title) {
+        this.title = title;
+    }
+
+    public int getId() {
+        return id;
+    }
 
     @NonNull
     @ColumnInfo(name = "title")
@@ -29,6 +42,10 @@ public class FlashCards {
         this.title = title;
         this.content = content;
         this.groupName = groupName;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getGroupName() {

@@ -4,16 +4,16 @@ package com.omega.Database;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
-import androidx.room.Ignore;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "Groups")
+@Entity(tableName = "Groups",
+        indices = @Index(unique = true, value = "name"))
 public class Groups {
 
-    @ColumnInfo(name = "created_at")
-    private String createdAt;
+    @PrimaryKey(autoGenerate = true)
+    private int id;
 
-    @PrimaryKey
     @NonNull
     @ColumnInfo(name = "name")
     private String groupName;
@@ -35,13 +35,6 @@ public class Groups {
     }
 
 
-    public String getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(String createdAt) {
-        this.createdAt = createdAt;
-    }
 
     public String getGroupName() {
         return groupName;
@@ -49,6 +42,14 @@ public class Groups {
 
     public void setGroupName(String groupName) {
         this.groupName = groupName;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
 
