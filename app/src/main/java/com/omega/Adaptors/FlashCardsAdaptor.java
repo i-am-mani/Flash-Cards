@@ -68,6 +68,14 @@ public class FlashCardsAdaptor extends RecyclerView.Adapter<FlashCardsAdaptor.Fl
         notifyDataSetChanged();
     }
 
+    public void refresh(int pos) {
+        notifyItemChanged(pos);
+    }
+
+    public FlashCards getItemAtPosition(int pos) {
+        return flashCardsList.get(pos);
+    }
+
     public interface FlashCardAdaptorListener {
         void startPlayMode(String group);
     }
@@ -84,10 +92,6 @@ public class FlashCardsAdaptor extends RecyclerView.Adapter<FlashCardsAdaptor.Fl
             ButterKnife.bind(this, itemView);
         }
 
-//        @OnClick(R.id.button_play)
-//        public void play(View view) {
-//            adaptorListener.startPlayMode();
-//        }
     }
 
 
