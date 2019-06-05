@@ -105,7 +105,7 @@ public class CheckoutFlashCardFragment extends Fragment {
                 groupsAdaptor.refresh(adapterPosition);
             });
 
-            alertDialog.setOnDismissListener(dialog -> groupsAdaptor.refresh(adapterPosition));
+            alertDialog.setOnCancelListener(dialog -> groupsAdaptor.refresh(adapterPosition));
 
             AlertDialog dialog = alertDialog.create();
             dialog.getWindow().setBackgroundDrawableResource(R.color.DarkModePrimaryDarkColor);

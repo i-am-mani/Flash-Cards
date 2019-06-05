@@ -216,7 +216,9 @@ public class CreateFlashCardFragment extends Fragment {
             alertDialog.setNegativeButton("Undo", (dialog, which) -> {
                 rvAdaptor.refresh(adapterPosition);
             });
-            alertDialog.setOnDismissListener(dialog -> rvAdaptor.refresh(adapterPosition));
+
+
+            alertDialog.setOnCancelListener(dialog -> rvAdaptor.refresh(adapterPosition));
 
             AlertDialog dialog = alertDialog.create();
             dialog.getWindow().setBackgroundDrawableResource(R.color.DarkModePrimaryDarkColor);

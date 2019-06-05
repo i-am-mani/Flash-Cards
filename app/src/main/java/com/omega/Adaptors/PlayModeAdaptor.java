@@ -55,14 +55,14 @@ public class PlayModeAdaptor extends RecyclerView.Adapter<PlayModeAdaptor.PlayMo
                 if (curY < 180) {
                     item.animate().rotationY(180).setDuration(400)
                             .withStartAction(() -> holder.tvMainContent.animate().rotationY(180).alpha(0).setDuration(100)
-                                    .withEndAction(() -> holder.tvMainContent.animate().alpha(1).setDuration(200)
+                                    .withEndAction(() -> holder.tvMainContent.animate().alpha(1).setDuration(100)
                                             .withStartAction(() -> holder.tvMainContent.setText(content))))
                             .start();
 //                            .withEndAction(() -> holder.tvMainContent.setText(content))
                 } else {
                     item.animate().rotationY(0).setDuration(400)
                             .withStartAction(() -> holder.tvMainContent.animate().rotationY(0).alpha(0).setDuration(100)
-                                    .withEndAction(() -> holder.tvMainContent.animate().alpha(1).setDuration(200).
+                                    .withEndAction(() -> holder.tvMainContent.animate().alpha(1).setDuration(100).
                                             withStartAction(() -> holder.tvMainContent.setText(title))))
                             .start();
 //                            .withEndAction(() -> holder.tvMainContent.setText(title))
