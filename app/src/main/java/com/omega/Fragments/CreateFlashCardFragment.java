@@ -10,19 +10,24 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.textfield.TextInputEditText;
 import com.omega.Adaptors.FlashCardsAdaptor;
+import com.omega.Database.FlashCards;
 import com.omega.R;
 import com.omega.Util.EqualSpaceItemDecoration;
 import com.omega.Util.FlashCardViewModel;
 import com.omega.Util.ISwitchToFragment;
+import com.omega.Util.SwipeCallback;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -40,6 +45,7 @@ public class CreateFlashCardFragment extends Fragment {
     private RecyclerView rvFlashCards;
     private FlashCardViewModel flashCardViewModel;
     private ISwitchToFragment ImplSwitchToFragment;
+    private String newContent;
 
     public CreateFlashCardFragment(String groupName){
         GROUP_NAME  = groupName;
@@ -106,6 +112,8 @@ public class CreateFlashCardFragment extends Fragment {
         rvFlashCards.setLayoutManager(layoutManager);
         rvFlashCards.setAdapter(rvAdaptor);
 
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeCallback(new CreateFlashCardFragment.ImplOnSwipe()));
+        itemTouchHelper.attachToRecyclerView(rvFlashCards);
         rvFlashCards.addItemDecoration(new EqualSpaceItemDecoration(40));
     }
 
@@ -159,7 +167,9 @@ public class CreateFlashCardFragment extends Fragment {
     }
 
     private void attachObserver() {
-        flashCardViewModel.getAllFlashCardsOfGroup(GROUP_NAME).observe(this, flashCards -> rvAdaptor.setDataSet(flashCards));
+        flashCardViewModel.getAllFlashCardsOfGroup(GROUP_NAME).observe(this, flashCards -> {
+            rvAdaptor.setDataSet(flashCards);
+        });
         btnPlay.setVisibility(View.VISIBLE);
     }
 
@@ -167,4 +177,44 @@ public class CreateFlashCardFragment extends Fragment {
     public void startPlayMode(View v) {
         ImplSwitchToFragment.switchToPlayMode(GROUP_NAME);
     }
+
+    class ImplOnSwipe implements SwipeCallback.OnSwiped {
+
+        @Override
+        public void deleteItem(int adapterPosition) {
+            FlashCards itemTitle = rvAdaptor.getItemAtPosition(adapterPosition);
+            flashCardViewModel.deleteFlashcard(itemTitle);
+        }
+
+        @Override
+        public void editItem(int adapterPosition) {
+
+            Log.d(TAG, "editItem: " + GROUP_NAME + " " + flashCardViewModel.getAllFlashCardsOfGroup(GROUP_NAME).getValue());
+            FlashCards flashCard = rvAdaptor.getItemAtPosition(adapterPosition);
+            String title = flashCard.getTitle();
+
+            Dialog dialog = new Dialog(getActivity());
+            dialog.setCanceledOnTouchOutside(true);
+            dialog.setContentView(R.layout.dialog_edit);
+
+            ((TextView) (dialog.findViewById(R.id.text_dialog_title))).setText("Edit FlashCard");
+
+            ((TextView) dialog.findViewById(R.id.text_edit_group_name)).setText(title);
+
+            dialog.getWindow().setBackgroundDrawableResource(R.color.DarkModePrimaryDarkColor);
+            dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+            Button btnConfirmEdit = dialog.findViewById(R.id.button_confirm_edit);
+            btnConfirmEdit.setOnClickListener(v -> {
+                newContent = ((TextInputEditText) dialog.findViewById(R.id.edit_text_new_description)).getText().toString();
+                flashCard.setContent(newContent);
+                flashCardViewModel.updateFlashCard(flashCard);
+                rvAdaptor.refresh(adapterPosition);
+                dialog.dismiss();
+            });
+            dialog.setOnCancelListener(dialog1 -> rvAdaptor.refresh(adapterPosition));
+            dialog.show();
+        }
+    }
+
 }
