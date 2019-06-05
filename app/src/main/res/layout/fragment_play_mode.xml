@@ -31,4 +31,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline6" />
 
+    <TextView
+        android:id="@+id/text_play_mode_hint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:alpha="0.5"
+        android:text="TextView"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+        app:layout_constraintBottom_toTopOf="@+id/recycler_view_play_mode"
+        app:layout_constraintEnd_toStartOf="@+id/recycler_view_play_mode"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/recycler_view_play_mode"
+        app:layout_constraintTop_toBottomOf="@+id/recycler_view_play_mode" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -32,6 +33,9 @@ public class PlayModeFragment extends Fragment {
     private FlashCardViewModel flashCardViewModel;
     private ISwitchToFragment ImplSwitchToFragment;
 
+    @BindView(R.id.text_play_mode_hint)
+    TextView tvHint;
+
 
     public PlayModeFragment(String groupName) {
         this.groupName = groupName;
@@ -48,6 +52,9 @@ public class PlayModeFragment extends Fragment {
         flashCardViewModel = ViewModelProviders.of(this).get(FlashCardViewModel.class);
         flashCardViewModel.getAllFlashCardsOfGroup(groupName).observe(this, flashCards -> {
             playModeAdaptor.setDataSet(flashCards);
+            if (flashCards.size() > 0) {
+                tvHint.setVisibility(View.GONE);
+            }
         });
 
     }
@@ -59,6 +66,7 @@ public class PlayModeFragment extends Fragment {
         View mainView = inflater.inflate(R.layout.fragment_play_mode, container, false);
         ButterKnife.bind(this, mainView);
         initializeRecyclerView();
+        tvHint.setText(R.string.hint_create_section_flashcard);
         getActivity().setTitle("Play mode");
         return mainView;
     }
