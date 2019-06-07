@@ -1,5 +1,6 @@
 package com.omega.Fragments;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -91,8 +92,11 @@ public class PlayModeFragment extends Fragment {
         SnapHelper snapHelper = new LinearSnapHelper();
         snapHelper.attachToRecyclerView(rvPlayCard);
 
-        EqualSpaceItemDecoration decoration = new EqualSpaceItemDecoration(40);
-        rvPlayCard.addItemDecoration(decoration);
+
+        if (getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            EqualSpaceItemDecoration decoration = new EqualSpaceItemDecoration(40);
+            rvPlayCard.addItemDecoration(decoration);
+        }
 
         rvPlayCard.setLayoutManager(linearLayoutManager);
         rvPlayCard.setAdapter(playModeAdaptor);

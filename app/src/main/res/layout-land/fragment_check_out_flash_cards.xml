@@ -8,13 +8,12 @@
         android:id="@+id/recycler_view_group"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="9dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/guideline3"
+        app:layout_constraintStart_toStartOf="@+id/guideline17"
         app:layout_constraintTop_toTopOf="@+id/guideline2" />
 
     <androidx.constraintlayout.widget.Guideline
@@ -51,13 +50,13 @@
         android:layout_height="45dp"
         android:layout_marginStart="12dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="44dp"
-        android:padding="10dp"
+        android:layout_marginBottom="8dp"
         android:hint="@string/et_hint_group_name"
         android:inputType="text"
+        android:padding="10dp"
         app:layout_constraintBottom_toTopOf="@+id/guideline2"
         app:layout_constraintEnd_toStartOf="@+id/guideline3"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/textView" />
 
     <androidx.constraintlayout.widget.Guideline
@@ -65,5 +64,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.98" />
+        app:layout_constraintGuide_percent="0.8" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline17"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.18" />
 </androidx.constraintlayout.widget.ConstraintLayout>
