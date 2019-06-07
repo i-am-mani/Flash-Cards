@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
@@ -50,6 +51,10 @@ public class CreateFlashCardFragment extends Fragment {
     private FlashCardViewModel flashCardViewModel;
     private ISwitchToFragment ImplSwitchToFragment;
     private String newContent;
+
+    public CreateFlashCardFragment() {
+        //no-argument constructor
+    }
 
     public CreateFlashCardFragment(String groupName){
         GROUP_NAME  = groupName;
@@ -90,6 +95,11 @@ public class CreateFlashCardFragment extends Fragment {
         initializeCallbacks(viewGroup);
         ButterKnife.bind(this, viewGroup);
 
+        if (savedInstanceState != null) {
+            Log.d(TAG, "onCreateView: GROUP_NAME + " + savedInstanceState.getString("GROUP_NAME"));
+            GROUP_NAME = savedInstanceState.getString("GROUP_NAME");
+        }
+
         setHints();
 
         return viewGroup;
@@ -105,8 +115,10 @@ public class CreateFlashCardFragment extends Fragment {
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("GROUP_NAME", GROUP_NAME);
+        Log.d(TAG, "onSaveInstanceState: GROUP_NAME = " + GROUP_NAME);
     }
 
     private void initializeCallbacks(View viewGroup) {

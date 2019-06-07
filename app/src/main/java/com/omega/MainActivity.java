@@ -3,6 +3,7 @@ package com.omega;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.transition.Explode;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -26,10 +27,15 @@ public class MainActivity extends AppCompatActivity implements ISwitchToFragment
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        SplashScreen splashScreen = SplashScreen.newInstance();
-        FragmentTransaction transaction= getSupportFragmentManager().beginTransaction();
-        transaction.add(R.id.frame_main_area, splashScreen);
-        transaction.commit();
+        if (savedInstanceState == null) {
+            SplashScreen splashScreen = SplashScreen.newInstance();
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.add(R.id.frame_main_area, splashScreen);
+            transaction.commit();
+        } else {
+            Log.d("MAIN", "onCreate: " + savedInstanceState.toString());
+        }
+
     }
 
 

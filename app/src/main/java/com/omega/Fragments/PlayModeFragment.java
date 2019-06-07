@@ -25,8 +25,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class PlayModeFragment extends Fragment {
-
-    private final String groupName;
+    private final static String KEY = "GroupName";
+    private String groupName;
     @BindView(R.id.recycler_view_play_mode)
     RecyclerView rvPlayCard;
     private PlayModeAdaptor playModeAdaptor;
@@ -35,6 +35,10 @@ public class PlayModeFragment extends Fragment {
 
     @BindView(R.id.text_play_mode_hint)
     TextView tvHint;
+
+    public PlayModeFragment() {
+        //No Argument constructor
+    }
 
 
     public PlayModeFragment(String groupName) {
@@ -65,10 +69,19 @@ public class PlayModeFragment extends Fragment {
 
         View mainView = inflater.inflate(R.layout.fragment_play_mode, container, false);
         ButterKnife.bind(this, mainView);
+        if (savedInstanceState != null) {
+            groupName = savedInstanceState.getString(KEY);
+        }
         initializeRecyclerView();
         tvHint.setText(R.string.hint_create_section_flashcard);
         getActivity().setTitle("Play mode");
         return mainView;
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(KEY, groupName);
     }
 
     private void initializeRecyclerView() {
