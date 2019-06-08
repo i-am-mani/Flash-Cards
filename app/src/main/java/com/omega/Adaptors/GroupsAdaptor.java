@@ -13,11 +13,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.omega.Database.Groups;
 import com.omega.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class GroupsAdaptor extends RecyclerView.Adapter<GroupsAdaptor.GroupsViewHolder> {
 
     LayoutInflater layoutInflater;
+    List<Groups> filterList;
     List<Groups> groupsList;
     String TAG = GroupsAdaptor.class.getSimpleName();
     GroupsAdaptorListenerInterface itemListener;
@@ -36,9 +38,9 @@ public class GroupsAdaptor extends RecyclerView.Adapter<GroupsAdaptor.GroupsView
 
     @Override
     public void onBindViewHolder(GroupsViewHolder holder, int position) {
-        if (groupsList != null) {
-            String name = groupsList.get(position).getGroupName();
-            String description = groupsList.get(position).getGroupDescription();
+        if (filterList != null) {
+            String name = filterList.get(position).getGroupName();
+            String description = filterList.get(position).getGroupDescription();
             holder.tvGroupName.setText(name);
             holder.tvGroupDescription.setText(description);
         }
@@ -49,8 +51,8 @@ public class GroupsAdaptor extends RecyclerView.Adapter<GroupsAdaptor.GroupsView
 
     @Override
     public int getItemCount() {
-        if (groupsList != null) {
-            return groupsList.size();
+        if (filterList != null) {
+            return filterList.size();
         }
         else{
             return 0;
@@ -59,15 +61,33 @@ public class GroupsAdaptor extends RecyclerView.Adapter<GroupsAdaptor.GroupsView
 
     public void setDataSet(List<Groups> dataSet) {
         groupsList = dataSet;
+        filterList = new ArrayList<>(dataSet); //i.e default no search keyword
         notifyDataSetChanged();
     }
 
     public Groups getItemAtPosition(int pos) {
-        return groupsList.get(pos);
+        return filterList.get(pos);
     }
 
     public void refresh(int pos) {
         notifyItemChanged(pos);
+    }
+
+    public void filter(String query) {
+        if (groupsList != null) {
+            if (filterList == null) {
+                filterList = new ArrayList<>();
+            }
+            filterList.clear(); // clear existing search list
+            for (Groups groups : groupsList) { // add matching items with query
+                Log.d(TAG, "filter: group name " + groups.getGroupName());
+                if (groups.getGroupName().contains(query)) {
+                    filterList.add(groups);
+                }
+            }
+            Log.d(TAG, "filter: " + filterList + "group list " + groupsList);
+            notifyDataSetChanged();
+        }
     }
 
     public interface GroupsAdaptorListenerInterface {
