@@ -1,13 +1,16 @@
 package com.omega.Fragments;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -26,6 +29,10 @@ import com.omega.Util.FlashCardViewModel;
 import com.omega.Util.ISwitchToFragment;
 import com.omega.Util.SwipeCallback;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnTextChanged;
+
 public class CheckoutFlashCardFragment extends Fragment {
 
     FlashCardViewModel flashCardViewModel;
@@ -37,6 +44,9 @@ public class CheckoutFlashCardFragment extends Fragment {
 
     String TAG = CheckoutFlashCardFragment.class.getSimpleName();
     private String newName;
+
+    @BindView(R.id.edit_text_search)
+    TextInputEditText et_search;
 
     public CheckoutFlashCardFragment(){
 
@@ -62,6 +72,7 @@ public class CheckoutFlashCardFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View viewGroup = inflater.inflate(R.layout.fragment_check_out_flash_cards, container, false);
+        ButterKnife.bind(this, viewGroup);
         getActivity().setTitle("Checkout Groups");
         initializeVariables(viewGroup);
         return viewGroup;
@@ -77,8 +88,29 @@ public class CheckoutFlashCardFragment extends Fragment {
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeCallback(new OnSwipeDeleteItem()));
         itemTouchHelper.attachToRecyclerView(rvGroups);
+
+        et_search.setOnKeyListener((v, keyCode, event) -> {
+            Log.d(TAG, "initializeVariables: " + keyCode);
+            if (keyCode == KeyEvent.KEYCODE_ENTER) {
+                hideKeyboard(et_search);
+                et_search.setFocusable(false);
+                et_search.setFocusableInTouchMode(true);
+                return true;
+            }
+            return false;
+        });
     }
 
+    @OnTextChanged(R.id.edit_text_search)
+    public void adapterSearchKeyword(CharSequence text) {
+        Log.d(TAG, "adapterSearchKeyword: " + text);
+        groupsAdaptor.filter(text.toString());
+    }
+
+    public void hideKeyboard(View view) {
+        InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
 
     class GroupsItemImpl implements GroupsAdaptor.GroupsAdaptorListenerInterface {
         @Override
@@ -147,6 +179,7 @@ public class CheckoutFlashCardFragment extends Fragment {
             dialog.show();
         }
     }
+
 
 }
 
