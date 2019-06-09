@@ -16,6 +16,10 @@ import com.omega.R;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 public class GroupsAdaptor extends RecyclerView.Adapter<GroupsAdaptor.GroupsViewHolder> {
 
     LayoutInflater layoutInflater;
@@ -92,16 +96,19 @@ public class GroupsAdaptor extends RecyclerView.Adapter<GroupsAdaptor.GroupsView
 
     public interface GroupsAdaptorListenerInterface {
         void onItemClick(View view, String groupName);
+
+        void onPlayButtonClicked(View view, String groupName);
     }
 
     public class GroupsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+        @BindView(R.id.text_checkout_group_name)
         TextView tvGroupName;
+        @BindView(R.id.text_checkout_group_description)
         TextView tvGroupDescription;
 
         public GroupsViewHolder(View itemView) {
             super(itemView);
-            tvGroupName = itemView.findViewById(R.id.text_checkout_group_name);
-            tvGroupDescription = itemView.findViewById(R.id.text_checkout_group_description);
+            ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(this);
         }
 
@@ -110,10 +117,16 @@ public class GroupsAdaptor extends RecyclerView.Adapter<GroupsAdaptor.GroupsView
         public void onClick(View v) {
             Log.d(TAG, "onClick: " + getAdapterPosition());
 
-            v.animate().translationXBy(1500).setDuration(200).withEndAction(() -> {
+            v.animate().translationXBy(1500).setDuration(100).withEndAction(() -> {
                 itemListener.onItemClick(v, tvGroupName.getText().toString());
             });
+        }
 
+        @OnClick(R.id.image_button_start_play_mode)
+        public void goToPlayMode(View v) {
+            v.animate().translationXBy(1500).setDuration(200).withEndAction(() -> {
+                itemListener.onPlayButtonClicked(v, tvGroupName.getText().toString());
+            });
         }
     }
 
