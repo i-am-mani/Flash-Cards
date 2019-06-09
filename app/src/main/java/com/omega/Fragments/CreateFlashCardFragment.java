@@ -147,12 +147,12 @@ public class CreateFlashCardFragment extends Fragment {
 
     private void initializeFlashCardDialog() {
         Dialog dialog = new Dialog(getActivity());
-        dialog.setTitle("Create new Flash Card");
+//        dialog.setTitle("Create new Flash Card");
         dialog.requestWindowFeature(Window.FEATURE_SWIPE_TO_DISMISS);
         dialog.setCanceledOnTouchOutside(true);
         dialog.setContentView(R.layout.dailog_create_flash_card);
 
-        dialog.getWindow().setBackgroundDrawableResource(R.color.DarkModePrimaryDarkColor);
+        dialog.getWindow().setBackgroundDrawableResource(R.color.DarkModePrimaryColor);
 
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
@@ -171,10 +171,13 @@ public class CreateFlashCardFragment extends Fragment {
 
     private void initializeGroupDialog() {
         Dialog dialog = new Dialog(getActivity());
+        dialog.requestWindowFeature(Window.FEATURE_SWIPE_TO_DISMISS);
         dialog.setContentView(R.layout.dialog_create_group);
         Button btnCreateGroup = dialog.findViewById(R.id.button_create_group);
-        dialog.getWindow().setBackgroundDrawableResource(R.color.DarkModePrimaryDarkColor);
+        dialog.getWindow().setBackgroundDrawableResource(R.color.DarkModePrimaryColor);
+
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
         dialog.setOnShowListener(dialog1 -> {
             Log.d(TAG, "initializeDialog: onShow fired");
             btnCreateGroup.setOnClickListener(v -> {
@@ -242,6 +245,7 @@ public class CreateFlashCardFragment extends Fragment {
             FlashCards flashCard = rvAdaptor.getItemAtPosition(adapterPosition);
 
             Dialog dialog = new Dialog(getActivity());
+            dialog.requestWindowFeature(Window.FEATURE_SWIPE_TO_DISMISS);
             dialog.setCanceledOnTouchOutside(true);
             dialog.setContentView(R.layout.dialog_edit);
 
@@ -254,7 +258,7 @@ public class CreateFlashCardFragment extends Fragment {
             etContent.setText(flashCard.getContent());
 
 
-            dialog.getWindow().setBackgroundDrawableResource(R.color.DarkModePrimaryDarkColor);
+            dialog.getWindow().setBackgroundDrawableResource(R.color.DarkModePrimaryColor);
             dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
             Button btnConfirmEdit = dialog.findViewById(R.id.button_confirm_edit);

@@ -10,6 +10,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.TextView;
@@ -117,6 +118,11 @@ public class CheckoutFlashCardFragment extends Fragment {
         public void onItemClick(View view,String groupName) {
             switchToFragment.switchToCreateFlashCard(groupName);
         }
+
+        @Override
+        public void onPlayButtonClicked(View view, String groupName) {
+            switchToFragment.switchToPlayMode(groupName);
+        }
     }
 
     class OnSwipeDeleteItem implements SwipeCallback.OnSwiped {
@@ -150,6 +156,7 @@ public class CheckoutFlashCardFragment extends Fragment {
             Groups group = groupsAdaptor.getItemAtPosition(adapterPosition);
 
             Dialog dialog = new Dialog(getActivity());
+            dialog.requestWindowFeature(Window.FEATURE_SWIPE_TO_DISMISS);
             dialog.setCanceledOnTouchOutside(true);
             dialog.setContentView(R.layout.dialog_edit);
 
@@ -161,7 +168,7 @@ public class CheckoutFlashCardFragment extends Fragment {
             etName.setText(group.getGroupName());
             etDesc.setText(group.getGroupDescription());
 
-            dialog.getWindow().setBackgroundDrawableResource(R.color.DarkModePrimaryDarkColor);
+            dialog.getWindow().setBackgroundDrawableResource(R.color.DarkModePrimaryColor);
             dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             Button btnConfirmEdit = dialog.findViewById(R.id.button_confirm_edit);
             btnConfirmEdit.setOnClickListener(v -> {

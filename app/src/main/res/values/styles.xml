@@ -12,7 +12,18 @@
         <item name="android:windowBackground">@color/DarkModePrimaryColor</item>
         <item name="android:navigationBarColor">@color/DarkModePrimaryColor</item>
         <item name="android:itemBackground">@color/DarkModePrimaryColor</item>
+    </style>
 
+    <style name="HintDialogInputEditText">
+        <item name="android:textSize">12sp</item>
+        <item name="android:color">@color/DarkModeSecondaryTextColor</item>
+    </style>
+
+    <style name="InputEditText" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="android:textColor">@color/DarkModeSecondaryTextColor</item>
+        <item name="android:textColorHint">@color/DarkModeSecondaryTextColor</item>
+        <item name="boxStrokeColor">@color/DarkModeSecondaryTextColor</item>
+        <item name="hintTextAppearance">@style/HintDialogInputEditText</item>
     </style>
 
 </resources>

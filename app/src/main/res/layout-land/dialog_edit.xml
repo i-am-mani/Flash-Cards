@@ -15,29 +15,31 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         style="@style/InputEditText"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="20dp"
-        android:layout_marginRight="20dp">
+        android:layout_marginRight="20dp"
+        android:layout_weight="1">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edit_text_new_group_name"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/DarkModeSecondaryTextColor"
+            android:layout_height="match_parent"
             android:gravity="left|top"
-            android:hint="Enter new Group name" />
+            android:hint="Enter new Group name"
+            android:textColor="@color/DarkModeSecondaryTextColor" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         style="@style/InputEditText"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         android:layout_marginLeft="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginRight="20dp">
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="20dp"
+        android:layout_weight="2">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edit_text_new_description"
@@ -45,8 +47,8 @@
             android:layout_height="wrap_content"
             android:gravity="left|top"
             android:hint="Enter Description"
-            android:textColor="@color/DarkModeSecondaryTextColor"
-            android:minLines="6" />
+            android:minLines="6"
+            android:textColor="@color/DarkModeSecondaryTextColor" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
