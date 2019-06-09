@@ -48,7 +48,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/DarkModeSecondaryTextColor"
             android:gravity="top|left"
-            android:hint="Enter Description"
+            android:hint="@string/hint_solution_create_flash_card"
             android:minLines="10"
             android:padding="10dp" />
     </com.google.android.material.textfield.TextInputLayout>

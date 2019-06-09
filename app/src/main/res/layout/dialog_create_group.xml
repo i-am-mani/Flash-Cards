@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/DarkModeSecondaryTextColor"
             android:gravity="top|left"
-            android:hint="Enter Groups's Name"
+            android:hint="Enter Group Name"
             android:padding="10dp" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -46,7 +46,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/DarkModeSecondaryTextColor"
             android:gravity="top|left"
-            android:hint="Enter Groups's Description"
+            android:hint="Enter Group Description"
             android:minLines="6"
             android:padding="10dp" />
     </com.google.android.material.textfield.TextInputLayout>
