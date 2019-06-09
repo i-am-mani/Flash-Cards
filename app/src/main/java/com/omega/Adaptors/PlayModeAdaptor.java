@@ -86,7 +86,25 @@ public class PlayModeAdaptor extends RecyclerView.Adapter<PlayModeAdaptor.PlayMo
         notifyDataSetChanged();
     }
 
+    public FlashCards removeItemAtPos(int pos) {
+        FlashCards cardToReturn = dataSet.get(pos);
+        dataSet.remove(pos);
+        notifyItemRemoved(pos);
+        return cardToReturn;
+    }
+
+    public boolean isDataSetEmpty() {
+        return dataSet.isEmpty();
+    }
+
+    public interface adapterListener {
+        void afterExhaustingDataset();
+    }
+
     class PlayModeViewHolder extends RecyclerView.ViewHolder {
+//        boolean isDown = false;
+//        float downY = 0f;
+
         @BindView(R.id.text_play_mode_content)
         TextView tvMainContent;
 
@@ -96,8 +114,34 @@ public class PlayModeAdaptor extends RecyclerView.Adapter<PlayModeAdaptor.PlayMo
             super(itemView);
             mainView = itemView;
             ButterKnife.bind(this, itemView);
-
+//
+//            itemView.setOnTouchListener((v, event) -> {
+//
+//                if(event.getAction() == MotionEvent.ACTION_UP){
+//                    isDown = false;
+//                } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+//                    downY = event.getRawY();
+//                    isDown = true;
+//                } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
+//                    float touchY = event.getRawY();
+//                    float viewHeight = itemView.getHeight();
+//
+////                    Log.d(TAG, "PlayModeViewHolder: DownY" + downY + " cuY = " + event.getRawY());
+//                    if (isDown && Math.abs(touchY - downY) > viewHeight/3) {
+//                        if(downY > touchY){
+//                            Log.d(TAG, "PlayModeViewHolder: correct answer");
+//                            dataSet.remove()
+//                            isDown = false;
+//                        } else if (downY < touchY) {
+//                            Log.d(TAG, "PlayModeViewHolder: wrong answer");
+//                            isDown = false;
+//                        }
+//                    }
+//                }
+//                return true;
+//            });
         }
 
     }
+
 }
