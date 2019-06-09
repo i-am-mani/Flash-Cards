@@ -1,11 +1,14 @@
 package com.omega.Fragments;
 
+import android.app.AlertDialog;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -18,21 +21,30 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SnapHelper;
 
 import com.omega.Adaptors.PlayModeAdaptor;
+import com.omega.Database.FlashCards;
 import com.omega.R;
 import com.omega.Util.EqualSpaceItemDecoration;
 import com.omega.Util.FlashCardViewModel;
 import com.omega.Util.ISwitchToFragment;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class PlayModeFragment extends Fragment {
 
     private final static String KEY = "GroupName";
     private static long START_TIME = 0;
+    @BindView(R.id.button_correct)
+    ImageButton btnCorrect;
     private String groupName;
+
     @BindView(R.id.text_time)
     TextView tvTime;
+
     @BindView(R.id.text_score)
     TextView tvScore;
     Handler timerHandler = new Handler();
@@ -42,6 +54,10 @@ public class PlayModeFragment extends Fragment {
 
     @BindView(R.id.text_play_mode_hint)
     TextView tvHint;
+    @BindView(R.id.button_wrong)
+    ImageButton btnWrong;
+    private Score scoreHandeler;
+
     Runnable timerRunnable = new Runnable() {
         @Override
         public void run() {
@@ -95,6 +111,7 @@ public class PlayModeFragment extends Fragment {
         initializeRecyclerView();
         tvHint.setText(R.string.hint_create_section_flashcard);
         getActivity().setTitle("Play mode");
+        scoreHandeler = new Score(tvScore);
         return mainView;
     }
 
@@ -114,6 +131,7 @@ public class PlayModeFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
+        START_TIME = System.currentTimeMillis();
         tvTime.removeCallbacks(timerRunnable);
     }
 
@@ -129,10 +147,104 @@ public class PlayModeFragment extends Fragment {
             EqualSpaceItemDecoration decoration = new EqualSpaceItemDecoration(40);
             rvPlayCard.addItemDecoration(decoration);
         }
-
         rvPlayCard.setLayoutManager(linearLayoutManager);
         rvPlayCard.setAdapter(playModeAdaptor);
+
     }
 
+    @OnClick({R.id.button_correct, R.id.button_wrong})
+    public void removeItemOnCorrect(View view) {
+        LinearLayoutManager layoutManager = (LinearLayoutManager) rvPlayCard.getLayoutManager();
+        int pos = layoutManager.findFirstCompletelyVisibleItemPosition();
 
+        FlashCards card = playModeAdaptor.removeItemAtPos(pos);
+        if (view.getId() == R.id.button_correct) {
+            scoreHandeler.incrementCorrectAnswer();
+        } else {
+            scoreHandeler.incrementWrongAnswer(card);
+        }
+
+        if (playModeAdaptor.isDataSetEmpty()) {
+            afterExhaustingDataset();
+        }
+
+    }
+
+    public void afterExhaustingDataset() {
+        List<FlashCards> wrongAnswers = scoreHandeler.getWrongAnswers();
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Result");
+        builder.setMessage("Out of " + scoreHandeler.getAttempted() + " you have scored " + scoreHandeler.getCorrect());
+
+        if (wrongAnswers.size() > 0) {
+            builder.setPositiveButton("Check Mistaken FlashCards", (dialog, which) -> {
+                playModeAdaptor.setDataSet(wrongAnswers);
+                resetScoreAndTime();
+            });
+        } else {
+            builder.setPositiveButton("Exit", (dialog, which) -> getActivity().onBackPressed());
+        }
+
+        builder.setNegativeButton("Retry", (dialog, which) -> {
+            flashCardViewModel.getAllFlashCardsOfGroup(groupName).observe(getActivity(), flashCards -> {
+                playModeAdaptor.setDataSet(flashCards);
+            });
+            resetScoreAndTime();
+        });
+        builder.setOnCancelListener(dialog -> {
+            getActivity().onBackPressed();
+        });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.getWindow().setGravity(Gravity.CENTER_VERTICAL);
+        alertDialog.getWindow().setBackgroundDrawableResource(R.color.DarkModePrimaryDarkColor);
+        alertDialog.show();
+
+    }
+
+    private void resetScoreAndTime() {
+        tvScore.setText("Score :");
+        scoreHandeler = new Score(tvScore);
+        START_TIME = System.currentTimeMillis();
+    }
+}
+
+class Score {
+
+    TextView scoreView;
+    private int correct = 0;
+    private int attempted = 0;
+    private List<FlashCards> wrongAnswerList = new ArrayList<>();
+
+    public Score(TextView scoreView) {
+        this.scoreView = scoreView;
+    }
+
+    public int getCorrect() {
+        return correct;
+    }
+
+    public int getAttempted() {
+        return attempted;
+    }
+
+    public void incrementCorrectAnswer() {
+        ++attempted;
+        ++correct;
+        updateScore();
+    }
+
+    public void incrementWrongAnswer(FlashCards card) {
+        attempted++;
+        wrongAnswerList.add(card);
+        updateScore();
+    }
+
+    private void updateScore() {
+        scoreView.setText(correct + " : " + attempted);
+    }
+
+    public List<FlashCards> getWrongAnswers() {
+        return wrongAnswerList;
+    }
 }
