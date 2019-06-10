@@ -19,10 +19,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.omega.Fragments.CasualPlayModeFragment;
 import com.omega.Fragments.CheckoutFlashCardFragment;
 import com.omega.Fragments.CreateFlashCardFragment;
-import com.omega.Fragments.PlayModeFragment;
-import com.omega.Fragments.SplashScreen;
+import com.omega.Fragments.ReverseMatchPlayModeFragment;
+import com.omega.Fragments.SplashScreenFragment;
+import com.omega.Fragments.SplashScreenPlayModeFragment;
+import com.omega.Fragments.TrueFalsePlayModeFragment;
 import com.omega.Util.ISwitchToFragment;
 
 public class MainActivity extends AppCompatActivity implements ISwitchToFragment {
@@ -34,14 +37,13 @@ public class MainActivity extends AppCompatActivity implements ISwitchToFragment
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         if (savedInstanceState == null) {
-            SplashScreen splashScreen = SplashScreen.newInstance();
+            SplashScreenFragment splashScreenFragment = SplashScreenFragment.newInstance();
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.add(R.id.frame_main_area, splashScreen);
+            transaction.add(R.id.frame_main_area, splashScreenFragment);
             transaction.commit();
         } else {
             Log.d("MAIN", "onCreate: " + savedInstanceState.toString());
         }
-
     }
 
 
@@ -57,10 +59,10 @@ public class MainActivity extends AppCompatActivity implements ISwitchToFragment
 
     @Override
     public void switchToPlayMode(String group) {
-        PlayModeFragment playModeFragment = new PlayModeFragment(group);
-        addExplodeTransactionToFragment(playModeFragment);
+        SplashScreenPlayModeFragment splashScreenPlayModeFragment = new SplashScreenPlayModeFragment(group);
+        addExplodeTransactionToFragment(splashScreenPlayModeFragment);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.frame_main_area, playModeFragment);
+        transaction.replace(R.id.frame_main_area, splashScreenPlayModeFragment);
         transaction.addToBackStack(null);
         transaction.commit();
     }
@@ -74,6 +76,39 @@ public class MainActivity extends AppCompatActivity implements ISwitchToFragment
         transaction.addToBackStack(null);
         transaction.commit();
     }
+
+    @Override
+    public void switchToPlayModeCasual(String group) {
+        CasualPlayModeFragment casualPlayModeFragment = new CasualPlayModeFragment(group);
+        addExplodeTransactionToFragment(casualPlayModeFragment);
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.frame_main_area, casualPlayModeFragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+
+    }
+
+    @Override
+    public void switchToPlayModeReverseMatch(String group) {
+        ReverseMatchPlayModeFragment reverseMatchPlayModeFragment = new ReverseMatchPlayModeFragment(group);
+        addExplodeTransactionToFragment(reverseMatchPlayModeFragment);
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.frame_main_area, reverseMatchPlayModeFragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+
+    }
+
+    @Override
+    public void switchToPlayModeTrueFalse(String group) {
+        TrueFalsePlayModeFragment trueFalsePlayModeFragment = new TrueFalsePlayModeFragment(group);
+        addExplodeTransactionToFragment(trueFalsePlayModeFragment);
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.frame_main_area, trueFalsePlayModeFragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
