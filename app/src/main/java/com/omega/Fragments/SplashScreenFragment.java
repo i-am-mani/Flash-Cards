@@ -21,16 +21,16 @@ import com.omega.Util.ISwitchToFragment;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class SplashScreen extends Fragment {
+public class SplashScreenFragment extends Fragment {
 
     ISwitchToFragment ImplSwitchToFragment;
 
-    public SplashScreen() {
+    public SplashScreenFragment() {
         // Required empty public constructor
     }
 
-    public static SplashScreen newInstance() {
-        SplashScreen fragment = new SplashScreen();
+    public static SplashScreenFragment newInstance() {
+        SplashScreenFragment fragment = new SplashScreenFragment();
 
         return fragment;
     }
