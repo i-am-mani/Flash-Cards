@@ -5,6 +5,7 @@
     android:layout_height="match_parent">
 
     <Button
+        android:id="@+id/button_casual"
         android:layout_width="170dp"
         android:layout_height="170dp"
         android:layout_marginStart="8dp"
@@ -14,13 +15,14 @@
         android:background="@drawable/ic_hexagon"
         android:backgroundTint="#344055"
         android:foregroundTint="@color/DarkModePrimaryColor"
-        android:text="Flash Cards"
+        android:text="Casual"
         app:layout_constraintBottom_toTopOf="@+id/guideline29"
         app:layout_constraintEnd_toStartOf="@+id/guideline32"
         app:layout_constraintStart_toStartOf="@+id/guideline30"
         app:layout_constraintTop_toTopOf="@+id/guideline28" />
 
     <Button
+        android:id="@+id/button_reverse_match"
         android:layout_width="170dp"
         android:layout_height="170dp"
         android:layout_marginStart="8dp"
@@ -38,7 +40,7 @@
 
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/button_true_false"
         android:layout_width="170dp"
         android:layout_height="170dp"
         android:layout_marginStart="8dp"

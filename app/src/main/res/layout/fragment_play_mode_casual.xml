@@ -20,7 +20,7 @@
         app:layout_constraintGuide_percent="0.85" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view_flash_cards"
+        android:id="@+id/recycler_view_casual_mode_flash_cards"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="8dp"
