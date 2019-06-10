@@ -20,7 +20,7 @@ import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SnapHelper;
 
-import com.omega.Adaptors.PlayModeAdaptor;
+import com.omega.Adaptors.TrueFalseModePlayAdaptor;
 import com.omega.Database.FlashCards;
 import com.omega.R;
 import com.omega.Util.EqualSpaceItemDecoration;
@@ -34,7 +34,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class PlayModeFragment extends Fragment {
+public class TrueFalsePlayModeFragment extends Fragment {
 
     private final static String KEY = "GroupName";
     private static long START_TIME = 0;
@@ -49,7 +49,7 @@ public class PlayModeFragment extends Fragment {
     TextView tvScore;
     Handler timerHandler = new Handler();
 
-    @BindView(R.id.recycler_view_play_mode)
+    @BindView(R.id.recycler_view_play_mode_flashcards)
     RecyclerView rvPlayCard;
 
     @BindView(R.id.text_play_mode_hint)
@@ -69,15 +69,15 @@ public class PlayModeFragment extends Fragment {
             timerHandler.postDelayed(this, 500);
         }
     };
-    private PlayModeAdaptor playModeAdaptor;
+    private TrueFalseModePlayAdaptor trueFalseModePlayAdaptor;
     private FlashCardViewModel flashCardViewModel;
     private ISwitchToFragment ImplSwitchToFragment;
 
-    public PlayModeFragment() {
+    public TrueFalsePlayModeFragment() {
         //No Argument constructor
     }
 
-    public PlayModeFragment(String groupName) {
+    public TrueFalsePlayModeFragment(String groupName) {
         this.groupName = groupName;
     }
 
@@ -91,7 +91,7 @@ public class PlayModeFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         flashCardViewModel = ViewModelProviders.of(this).get(FlashCardViewModel.class);
         flashCardViewModel.getAllFlashCardsOfGroup(groupName).observe(this, flashCards -> {
-            playModeAdaptor.setDataSet(flashCards);
+            trueFalseModePlayAdaptor.setDataSet(flashCards);
             if (flashCards.size() > 0) {
                 tvHint.setVisibility(View.GONE);
             }
@@ -137,7 +137,7 @@ public class PlayModeFragment extends Fragment {
 
     private void initializeRecyclerView() {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-        playModeAdaptor = new PlayModeAdaptor(getActivity());
+        trueFalseModePlayAdaptor = new TrueFalseModePlayAdaptor(getActivity());
 
         SnapHelper snapHelper = new LinearSnapHelper();
         snapHelper.attachToRecyclerView(rvPlayCard);
@@ -148,8 +148,7 @@ public class PlayModeFragment extends Fragment {
             rvPlayCard.addItemDecoration(decoration);
         }
         rvPlayCard.setLayoutManager(linearLayoutManager);
-        rvPlayCard.setAdapter(playModeAdaptor);
-
+        rvPlayCard.setAdapter(trueFalseModePlayAdaptor);
     }
 
     @OnClick({R.id.button_correct, R.id.button_wrong})
@@ -157,14 +156,14 @@ public class PlayModeFragment extends Fragment {
         LinearLayoutManager layoutManager = (LinearLayoutManager) rvPlayCard.getLayoutManager();
         int pos = layoutManager.findFirstCompletelyVisibleItemPosition();
 
-        FlashCards card = playModeAdaptor.removeItemAtPos(pos);
+        FlashCards card = trueFalseModePlayAdaptor.removeItemAtPos(pos);
         if (view.getId() == R.id.button_correct) {
             scoreHandeler.incrementCorrectAnswer();
         } else {
             scoreHandeler.incrementWrongAnswer(card);
         }
 
-        if (playModeAdaptor.isDataSetEmpty()) {
+        if (trueFalseModePlayAdaptor.isDataSetEmpty()) {
             afterExhaustingDataset();
         }
 
@@ -179,7 +178,7 @@ public class PlayModeFragment extends Fragment {
 
         if (wrongAnswers.size() > 0) {
             builder.setPositiveButton("Check Mistaken FlashCards", (dialog, which) -> {
-                playModeAdaptor.setDataSet(wrongAnswers);
+                trueFalseModePlayAdaptor.setDataSet(wrongAnswers);
                 resetScoreAndTime();
             });
         } else {
@@ -188,7 +187,7 @@ public class PlayModeFragment extends Fragment {
 
         builder.setNegativeButton("Retry", (dialog, which) -> {
             flashCardViewModel.getAllFlashCardsOfGroup(groupName).observe(getActivity(), flashCards -> {
-                playModeAdaptor.setDataSet(flashCards);
+                trueFalseModePlayAdaptor.setDataSet(flashCards);
             });
             resetScoreAndTime();
         });
