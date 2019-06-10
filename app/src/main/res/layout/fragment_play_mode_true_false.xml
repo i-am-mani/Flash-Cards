@@ -19,7 +19,7 @@
         app:layout_constraintGuide_percent="0.85" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view_play_mode"
+        android:id="@+id/recycler_view_play_mode_flashcards"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="16dp"
@@ -38,11 +38,11 @@
         android:alpha="0.5"
         android:text="TextView"
         android:textAppearance="@style/TextAppearance.AppCompat.Title"
-        app:layout_constraintBottom_toTopOf="@+id/recycler_view_play_mode"
-        app:layout_constraintEnd_toStartOf="@+id/recycler_view_play_mode"
+        app:layout_constraintBottom_toTopOf="@+id/recycler_view_play_mode_flashcards"
+        app:layout_constraintEnd_toStartOf="@+id/recycler_view_play_mode_flashcards"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/recycler_view_play_mode"
-        app:layout_constraintTop_toBottomOf="@+id/recycler_view_play_mode" />
+        app:layout_constraintStart_toEndOf="@+id/recycler_view_play_mode_flashcards"
+        app:layout_constraintTop_toBottomOf="@+id/recycler_view_play_mode_flashcards" />
 
     <TextView
         android:id="@+id/text_time"

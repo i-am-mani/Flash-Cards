@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:elevation="0dp"
-    tools:context=".Fragments.SplashScreen">
+    tools:context=".Fragments.SplashScreenFragment">
 
     <TextView
         android:id="@+id/text_splash_screen_title"
