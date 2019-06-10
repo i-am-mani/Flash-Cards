@@ -41,35 +41,9 @@ public class SimpleFlashCardViewerAdapter extends RecyclerView.Adapter<SimpleFla
 
     @Override
     public void onBindViewHolder(@NonNull PlayModeViewHolder holder, int position) {
-
-        View item = holder.mainView;
-
         String title = dataSet.get(position).getTitle();
         String content = dataSet.get(position).getContent();
-        holder.tvMainContent.setText(title);
-
-        item.setOnClickListener(v -> {
-            if (dataSet != null) {
-                float curY = item.getRotationY();
-                Log.d(TAG, "onBindViewHolder: " + curY);
-                if (curY < 180) {
-                    item.animate().rotationY(180).setDuration(400)
-                            .withStartAction(() -> holder.tvMainContent.animate().rotationY(180).alpha(0).setDuration(100)
-                                    .withEndAction(() -> holder.tvMainContent.animate().alpha(1).setDuration(100)
-                                            .withStartAction(() -> holder.tvMainContent.setText(content))))
-                            .start();
-//                            .withEndAction(() -> holder.tvMainContent.setText(content))
-                } else {
-                    item.animate().rotationY(0).setDuration(400)
-                            .withStartAction(() -> holder.tvMainContent.animate().rotationY(0).alpha(0).setDuration(100)
-                                    .withEndAction(() -> holder.tvMainContent.animate().alpha(1).setDuration(100).
-                                            withStartAction(() -> holder.tvMainContent.setText(title))))
-                            .start();
-//                            .withEndAction(() -> holder.tvMainContent.setText(title))
-                }
-
-            }
-        });
+        holder.onBind(title, content);
     }
 
     @Override
@@ -92,10 +66,46 @@ public class SimpleFlashCardViewerAdapter extends RecyclerView.Adapter<SimpleFla
 
         View mainView;
 
+        String title, solution;
+
         public PlayModeViewHolder(@NonNull View itemView) {
             super(itemView);
             mainView = itemView;
             ButterKnife.bind(this, itemView);
+        }
+
+        public void onBind(String title, String solution) {
+            this.title = title;
+            this.solution = solution;
+            attachListener();
+        }
+
+        private void attachListener() {
+
+            mainView.setOnClickListener(v -> {
+                revertCardAction();
+            });
+        }
+
+        public void revertCardAction() {
+            tvMainContent.setText(title);
+            float curY = mainView.getRotationY();
+            Log.d(TAG, "onBindViewHolder: " + curY);
+            if (curY < 180) {
+                mainView.animate().rotationY(180).setDuration(400)
+                        .withStartAction(() -> tvMainContent.animate().rotationY(180).alpha(0).setDuration(100)
+                                .withEndAction(() -> tvMainContent.animate().alpha(1).setDuration(100)
+                                        .withStartAction(() -> tvMainContent.setText(solution))))
+                        .start();
+//                            .withEndAction(() -> holder.tvMainContent.setText(content))
+            } else {
+                mainView.animate().rotationY(0).setDuration(400)
+                        .withStartAction(() -> tvMainContent.animate().rotationY(0).alpha(0).setDuration(100)
+                                .withEndAction(() -> tvMainContent.animate().alpha(1).setDuration(100).
+                                        withStartAction(() -> tvMainContent.setText(title))))
+                        .start();
+//                            .withEndAction(() -> holder.tvMainContent.setText(title))
+            }
         }
 
     }
