@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SnapHelper;
 
+import com.omega.Adaptors.SimpleFlashCardViewerAdapter;
 import com.omega.Adaptors.TrueFalseModePlayAdaptor;
 import com.omega.Database.FlashCards;
 import com.omega.R;
@@ -156,11 +157,27 @@ public class TrueFalsePlayModeFragment extends Fragment {
         LinearLayoutManager layoutManager = (LinearLayoutManager) rvPlayCard.getLayoutManager();
         int pos = layoutManager.findFirstCompletelyVisibleItemPosition();
 
+        SimpleFlashCardViewerAdapter.PlayModeViewHolder holder =
+                (SimpleFlashCardViewerAdapter.PlayModeViewHolder) rvPlayCard.findViewHolderForAdapterPosition(pos);
         FlashCards card = trueFalseModePlayAdaptor.removeItemAtPos(pos);
+        String sol = holder.solution;
+
+        boolean isCorrect = (sol == card.getContent());
+
         if (view.getId() == R.id.button_correct) {
-            scoreHandeler.incrementCorrectAnswer();
+            if (isCorrect) {
+                scoreHandeler.incrementCorrectAnswer();
+            } else {
+                scoreHandeler.incrementWrongAnswer(card);
+            }
+
         } else {
-            scoreHandeler.incrementWrongAnswer(card);
+            if (!isCorrect) {
+                scoreHandeler.incrementCorrectAnswer();
+            } else {
+                scoreHandeler.incrementWrongAnswer(card);
+            }
+
         }
 
         if (trueFalseModePlayAdaptor.isDataSetEmpty()) {
@@ -168,6 +185,7 @@ public class TrueFalsePlayModeFragment extends Fragment {
         }
 
     }
+
 
     public void afterExhaustingDataset() {
         List<FlashCards> wrongAnswers = scoreHandeler.getWrongAnswers();
