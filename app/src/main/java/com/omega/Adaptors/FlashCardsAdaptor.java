@@ -22,7 +22,6 @@ public class FlashCardsAdaptor extends RecyclerView.Adapter<FlashCardsAdaptor.Fl
 
     private final Context context;
     private List<FlashCards> flashCardsList = null;
-    private FlashCardAdaptorListener adaptorListener;
 
     public FlashCardsAdaptor(Context context){
             this.context = context;
@@ -74,10 +73,6 @@ public class FlashCardsAdaptor extends RecyclerView.Adapter<FlashCardsAdaptor.Fl
 
     public FlashCards getItemAtPosition(int pos) {
         return flashCardsList.get(pos);
-    }
-
-    public interface FlashCardAdaptorListener {
-        void startPlayMode(String group);
     }
 
     public class FlashCardViewHolder extends RecyclerView.ViewHolder {
