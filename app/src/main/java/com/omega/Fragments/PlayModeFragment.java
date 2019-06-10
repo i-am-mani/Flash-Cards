@@ -103,7 +103,7 @@ public class PlayModeFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View mainView = inflater.inflate(R.layout.fragment_play_mode, container, false);
+        View mainView = inflater.inflate(R.layout.fragment_play_mode_true_false, container, false);
         ButterKnife.bind(this, mainView);
         if (savedInstanceState != null) {
             groupName = savedInstanceState.getString(KEY);
