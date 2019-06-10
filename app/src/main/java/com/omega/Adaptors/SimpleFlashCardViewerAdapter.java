@@ -1,5 +1,7 @@
 package com.omega.Adaptors;
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,7 +23,7 @@ import butterknife.ButterKnife;
 public class SimpleFlashCardViewerAdapter extends RecyclerView.Adapter<SimpleFlashCardViewerAdapter.PlayModeViewHolder> {
 
     Context context;
-    List<FlashCards> dataSet;
+    protected List<FlashCards> dataSet;
     String TAG = TrueFalseModePlayAdaptor.class.getSimpleName();
 
     public SimpleFlashCardViewerAdapter(Context c) {
@@ -60,13 +62,13 @@ public class SimpleFlashCardViewerAdapter extends RecyclerView.Adapter<SimpleFla
         notifyDataSetChanged();
     }
 
-    class PlayModeViewHolder extends RecyclerView.ViewHolder {
+    public class PlayModeViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.text_play_mode_content)
         TextView tvMainContent;
 
         View mainView;
 
-        String title, solution;
+        public String title, solution;
 
         public PlayModeViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -77,6 +79,7 @@ public class SimpleFlashCardViewerAdapter extends RecyclerView.Adapter<SimpleFla
         public void onBind(String title, String solution) {
             this.title = title;
             this.solution = solution;
+            tvMainContent.setText(title);
             attachListener();
         }
 
@@ -88,23 +91,49 @@ public class SimpleFlashCardViewerAdapter extends RecyclerView.Adapter<SimpleFla
         }
 
         public void revertCardAction() {
-            tvMainContent.setText(title);
-            float curY = mainView.getRotationY();
-            Log.d(TAG, "onBindViewHolder: " + curY);
-            if (curY < 180) {
-                mainView.animate().rotationY(180).setDuration(400)
-                        .withStartAction(() -> tvMainContent.animate().rotationY(180).alpha(0).setDuration(100)
-                                .withEndAction(() -> tvMainContent.animate().alpha(1).setDuration(100)
-                                        .withStartAction(() -> tvMainContent.setText(solution))))
-                        .start();
-//                            .withEndAction(() -> holder.tvMainContent.setText(content))
+
+            float curX = mainView.getRotationX();
+            Log.d(TAG, "onBindViewHolder: " + curX);
+            if (curX < 180) {
+
+                ObjectAnimator rotationY = ObjectAnimator.ofFloat(itemView, "rotationX", 180);
+                rotationY.setDuration(400);
+
+                ObjectAnimator textRotation = ObjectAnimator.ofFloat(tvMainContent, "rotationX", 180);
+                textRotation.setDuration(400);
+
+                ObjectAnimator objectAnimator = ObjectAnimator.ofObject(tvMainContent, "text", (fraction, startValue, endValue) -> {
+                    Log.d(TAG, "revertCardAction: startValue = " + startValue);
+                    Log.d(TAG, "revertCardAction: endValue = " + endValue);
+                    Log.d(TAG, "revertCardAction: fraction = " + fraction);
+                    tvMainContent.setText((String) endValue);
+                    return endValue;
+                }, solution);
+                objectAnimator.setDuration(1);
+
+                AnimatorSet animatorSet = new AnimatorSet();
+                animatorSet.play(rotationY).with(textRotation);
+                animatorSet.play(objectAnimator).after(200);
+                animatorSet.start();
+
             } else {
-                mainView.animate().rotationY(0).setDuration(400)
-                        .withStartAction(() -> tvMainContent.animate().rotationY(0).alpha(0).setDuration(100)
-                                .withEndAction(() -> tvMainContent.animate().alpha(1).setDuration(100).
-                                        withStartAction(() -> tvMainContent.setText(title))))
-                        .start();
-//                            .withEndAction(() -> holder.tvMainContent.setText(title))
+                ObjectAnimator rotationY = ObjectAnimator.ofFloat(itemView, "rotationX", 0);
+                rotationY.setDuration(400);
+
+                ObjectAnimator textRotation = ObjectAnimator.ofFloat(tvMainContent, "rotationX", 0);
+                textRotation.setDuration(400);
+
+                ObjectAnimator objectAnimator = ObjectAnimator.ofObject(tvMainContent, "text", (fraction, startValue, endValue) -> {
+                    tvMainContent.setText((String) endValue);
+                    return startValue;
+                }, title);
+                objectAnimator.setDuration(1);
+
+                AnimatorSet animatorSet = new AnimatorSet();
+                animatorSet.play(rotationY).with(textRotation);
+                animatorSet.play(objectAnimator).after(200);
+                animatorSet.start();
+
             }
         }
 
