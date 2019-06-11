@@ -1,5 +1,7 @@
 package com.omega.Adaptors;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.util.Log;
@@ -25,6 +27,7 @@ public class SolutionReverseMatchPlayAdaptor extends RecyclerView.Adapter<Soluti
     private final Context context;
     List<String> dataSet;
     ReverseMatchPlayModeFragment.ImplSolutionAdaptorCallbacks adaptorCallbacks;
+    boolean isMarked = false;
 
     public SolutionReverseMatchPlayAdaptor(Context c, ReverseMatchPlayModeFragment.ImplSolutionAdaptorCallbacks implSolutionAdaptorCallbacks) {
         context = c;
@@ -61,6 +64,10 @@ public class SolutionReverseMatchPlayAdaptor extends RecyclerView.Adapter<Soluti
 
     public interface ISolutionCallbacks {
         String getValidateSolution();
+
+        void updateScore();
+
+        void moveToNextCard();
     }
 
     public class SolutionsAdaptor extends RecyclerView.ViewHolder {
@@ -87,6 +94,13 @@ public class SolutionReverseMatchPlayAdaptor extends RecyclerView.Adapter<Soluti
                             context.getResources().getColor(R.color.G4),
                             context.getResources().getColor(R.color.G5));
                     changeColor.setDuration(400);
+                    changeColor.addListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            super.onAnimationEnd(animation);
+
+                        }
+                    });
                     changeColor.start();
                 } else {
                     Log.d("SolutionsAdaptor", "attachCallback: Wrong answer");
@@ -104,7 +118,7 @@ public class SolutionReverseMatchPlayAdaptor extends RecyclerView.Adapter<Soluti
 
         public void onBind(String solution) {
             tvTitle.setText(solution);
-            cardView.setCardBackgroundColor(context.getResources().getColor(R.color.DarkModePrimaryDarkColor));
+            cardView.setBackgroundColor(context.getResources().getColor(R.color.DarkModePrimaryDarkColor));
             attachCallback(solution);
         }
     }
