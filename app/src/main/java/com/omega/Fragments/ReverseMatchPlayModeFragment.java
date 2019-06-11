@@ -1,25 +1,40 @@
 package com.omega.Fragments;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SnapHelper;
 
+import com.omega.Adaptors.SolutionReverseMatchPlayAdaptor;
+import com.omega.Adaptors.TitleReverseMatchPlayAdaptor;
 import com.omega.R;
 import com.omega.Util.EqualSpaceItemDecoration;
 import com.omega.Util.FlashCardViewModel;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class ReverseMatchPlayModeFragment extends Fragment {
+    TitleReverseMatchPlayAdaptor titleAdaptor;
     String GROUP_NAME;
     FlashCardViewModel flashCardViewModel;
+    SolutionReverseMatchPlayAdaptor solutionAdaptor;
+    FlashCardViewModel viewModel;
+    @BindView(R.id.text_time)
+    TextView tvTime;
 
 
     @BindView(R.id.recycler_view_title_flash_cards)
@@ -27,17 +42,32 @@ public class ReverseMatchPlayModeFragment extends Fragment {
 
     @BindView(R.id.recycler_view_solution_flash_cards)
     RecyclerView rvSolutionFlashCards;
+    private long START_TIME;
+    private Handler timerHandler = new Handler();
+
+    Runnable timerRunnable = new Runnable() {
+        @Override
+        public void run() {
+            long millis = System.currentTimeMillis() - START_TIME;
+            int seconds = (int) (millis / 1000);
+            int minutes = seconds / 60;
+            seconds = seconds % 60;
+            tvTime.setText(String.format("%d:%02d", minutes, seconds));
+            timerHandler.postDelayed(this, 500);
+        }
+    };
 
     public ReverseMatchPlayModeFragment(String group) {
         GROUP_NAME = group;
     }
 
-
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        EqualSpaceItemDecoration decoration = new EqualSpaceItemDecoration(40);
-        rvSolutionFlashCards.addItemDecoration(decoration);
+        viewModel = ViewModelProviders.of(this).get(FlashCardViewModel.class);
+        viewModel.getAllFlashCardsOfGroup(GROUP_NAME).observe(this, flashCards -> {
+            titleAdaptor.setDataSet(flashCards);
+        });
     }
 
     @Nullable
@@ -55,15 +85,53 @@ public class ReverseMatchPlayModeFragment extends Fragment {
     }
 
     private void initSolutionRecyclerView() {
+        solutionAdaptor = new SolutionReverseMatchPlayAdaptor(getActivity(), new ImplSolutionAdaptorCallbacks());
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        EqualSpaceItemDecoration decoration = new EqualSpaceItemDecoration(20);
 
-        EqualSpaceItemDecoration decoration = new EqualSpaceItemDecoration(40);
-        rvTitleFlashCards.addItemDecoration(decoration);
+        rvSolutionFlashCards.setAdapter(solutionAdaptor);
+        rvSolutionFlashCards.setLayoutManager(linearLayoutManager);
+        rvSolutionFlashCards.addItemDecoration(decoration);
     }
 
     private void initTitleRecyclerView() {
-        /**
-         * Set adapter, get current title on screen, ask for 4 alternative solutions (1 right 3 wrong) for that title,
-         * Set adapter of solution RV, on click check if it's the correct answer ( if yes ++score else --score )
-         */
+        titleAdaptor = new TitleReverseMatchPlayAdaptor(getActivity());
+
+        LinearLayoutManager titleLinearLayoutManager = new LinearLayoutManager(getActivity(), RecyclerView.HORIZONTAL, false);
+        EqualSpaceItemDecoration decoration = new EqualSpaceItemDecoration(40);
+
+        SnapHelper snapHelper = new LinearSnapHelper();
+        snapHelper.attachToRecyclerView(rvTitleFlashCards);
+
+        rvTitleFlashCards.setAdapter(titleAdaptor);
+        rvTitleFlashCards.setLayoutManager(titleLinearLayoutManager);
+        rvTitleFlashCards.addItemDecoration(decoration);
+
+        rvTitleFlashCards.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                // Set Solution RV data set
+                LinearLayoutManager layoutManager = (LinearLayoutManager) rvTitleFlashCards.getLayoutManager();
+                int pos = layoutManager.findFirstCompletelyVisibleItemPosition();
+                if (pos > 0) {
+                    List<String> options = titleAdaptor.getSolutionOptions(pos);
+                    solutionAdaptor.setDataSet(options);
+                }
+            }
+        });
     }
+
+
+    public class ImplSolutionAdaptorCallbacks implements SolutionReverseMatchPlayAdaptor.ISolutionCallbacks {
+        @Override
+        public String getValidateSolution() {
+            LinearLayoutManager layoutManager = (LinearLayoutManager) rvTitleFlashCards.getLayoutManager();
+
+            int pos = layoutManager.findFirstCompletelyVisibleItemPosition();
+            String solution = titleAdaptor.getItemAt(pos).getContent();
+            return solution;
+        }
+    }
+
 }
