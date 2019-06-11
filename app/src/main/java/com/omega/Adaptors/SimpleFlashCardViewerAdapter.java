@@ -57,6 +57,17 @@ public class SimpleFlashCardViewerAdapter extends RecyclerView.Adapter<SimpleFla
         }
     }
 
+    public FlashCards getItemAt(int pos) {
+        return dataSet.get(pos);
+    }
+
+    public FlashCards removeItemAtPos(int pos) {
+        FlashCards cardToReturn = dataSet.get(pos);
+        dataSet.remove(pos);
+        notifyItemRemoved(pos);
+        return cardToReturn;
+    }
+
     public void setDataSet(List<FlashCards> ds) {
         dataSet = ds;
         notifyDataSetChanged();
