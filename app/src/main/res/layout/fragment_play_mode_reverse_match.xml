@@ -38,17 +38,14 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_solution_flash_cards"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/guideline38"
-        app:layout_constraintStart_toStartOf="@+id/guideline37"
         app:layout_constraintTop_toTopOf="@+id/guideline36"
         tools:itemCount="4"
+        tools:layout_editor_absoluteX="49dp"
         tools:listitem="@layout/item_play_mode" />
 
     <androidx.constraintlayout.widget.Guideline
@@ -88,4 +85,14 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline35"
         app:layout_constraintEnd_toStartOf="@+id/guideline38"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:alpha="0.2"
+        android:text="Solutions"
+        app:layout_constraintBottom_toTopOf="@+id/guideline36"
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
