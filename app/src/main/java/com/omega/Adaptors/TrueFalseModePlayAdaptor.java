@@ -4,8 +4,6 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 
-import com.omega.Database.FlashCards;
-
 import java.util.Random;
 
 
@@ -13,13 +11,6 @@ public class TrueFalseModePlayAdaptor extends SimpleFlashCardViewerAdapter {
 
     public TrueFalseModePlayAdaptor(Context c) {
         super(c);
-    }
-
-    public FlashCards removeItemAtPos(int pos) {
-        FlashCards cardToReturn = dataSet.get(pos);
-        dataSet.remove(pos);
-        notifyItemRemoved(pos);
-        return cardToReturn;
     }
 
     public boolean isDataSetEmpty() {
