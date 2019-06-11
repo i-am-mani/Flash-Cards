@@ -90,6 +90,10 @@ public class SimpleFlashCardViewerAdapter extends RecyclerView.Adapter<SimpleFla
             });
         }
 
+        public void detachListener() {
+            mainView.setOnClickListener(null);
+        }
+
         public void revertCardAction() {
 
             float curX = mainView.getRotationX();
