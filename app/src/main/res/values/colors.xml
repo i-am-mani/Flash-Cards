@@ -15,4 +15,19 @@
     <color name="DarkModePrimaryTextColor">#FFF</color>
 
     <color name="DarkModeSecondaryTextColor">#eceff1</color>
+
+    <color name="SuccessColor">#1A27D127</color>
+    <color name="FailureColor">#1AD51010</color>
+
+    <color name="G1">#2B362B</color>
+    <color name="G2">#323632</color>
+    <color name="G3">#283D28</color>
+    <color name="G4">#2A462A</color>
+    <color name="G5">#298329</color>
+
+    <color name="R1">#3F3939</color>
+    <color name="R2">#574848</color>
+    <color name="R3">#7A5C5C</color>
+    <color name="R4">#A77474</color>
+    <color name="R5">#F05555</color>
 </resources>
