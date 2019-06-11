@@ -33,6 +33,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline35"
         app:layout_constraintVertical_bias="1.0"
+        android:visibility="invisible"
         tools:itemCount="1"
         tools:listitem="@layout/item_play_mode" />
 
@@ -44,6 +45,7 @@
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline36"
+        android:visibility="invisible"
         tools:itemCount="4"
         tools:layout_editor_absoluteX="49dp"
         tools:listitem="@layout/item_play_mode" />
@@ -93,6 +95,21 @@
         android:layout_marginStart="8dp"
         android:alpha="0.2"
         android:text="Solutions"
+        android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/guideline36"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/button_play_reverse_match"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/G5"
+        android:drawableLeft="@drawable/ic_play"
+        android:paddingRight="8dp"
+        android:text="Start"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/recycler_view_title_flash_cards"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/recycler_view_title_flash_cards"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
