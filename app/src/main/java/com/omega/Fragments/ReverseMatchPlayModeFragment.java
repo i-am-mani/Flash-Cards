@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -26,6 +27,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class ReverseMatchPlayModeFragment extends Fragment {
     TitleReverseMatchPlayAdaptor titleAdaptor;
@@ -36,12 +38,15 @@ public class ReverseMatchPlayModeFragment extends Fragment {
     @BindView(R.id.text_time)
     TextView tvTime;
 
-
     @BindView(R.id.recycler_view_title_flash_cards)
     RecyclerView rvTitleFlashCards;
 
     @BindView(R.id.recycler_view_solution_flash_cards)
     RecyclerView rvSolutionFlashCards;
+
+    @BindView(R.id.button_start_reverse_match)
+    Button btnStart;
+
     private long START_TIME;
     private Handler timerHandler = new Handler();
 
@@ -112,14 +117,28 @@ public class ReverseMatchPlayModeFragment extends Fragment {
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 // Set Solution RV data set
-                LinearLayoutManager layoutManager = (LinearLayoutManager) rvTitleFlashCards.getLayoutManager();
-                int pos = layoutManager.findFirstCompletelyVisibleItemPosition();
-                if (pos > 0) {
-                    List<String> options = titleAdaptor.getSolutionOptions(pos);
-                    solutionAdaptor.setDataSet(options);
-                }
+                setSolutionAdaptorDataSet();
             }
         });
+    }
+
+    @OnClick(R.id.button_start_reverse_match)
+    public void startReverseMatch(View v) {
+        v.setVisibility(View.GONE);
+        rvSolutionFlashCards.setVisibility(View.VISIBLE);
+        rvTitleFlashCards.setVisibility(View.VISIBLE);
+        tvTime.post(timerRunnable);
+        setSolutionAdaptorDataSet(); // Initial Data set
+    }
+
+
+    public void setSolutionAdaptorDataSet() {
+        LinearLayoutManager layoutManager = (LinearLayoutManager) rvTitleFlashCards.getLayoutManager();
+        int pos = layoutManager.findFirstCompletelyVisibleItemPosition();
+        if (pos > 0) {
+            List<String> options = titleAdaptor.getSolutionOptions(pos);
+            solutionAdaptor.setDataSet(options);
+        }
     }
 
 
@@ -132,6 +151,20 @@ public class ReverseMatchPlayModeFragment extends Fragment {
             String solution = titleAdaptor.getItemAt(pos).getContent();
             return solution;
         }
+
+        @Override
+        public void updateScore() {
+
+        }
+
+        @Override
+        public void moveToNextCard() {
+            LinearLayoutManager layoutManager = (LinearLayoutManager) rvTitleFlashCards.getLayoutManager();
+            int pos = layoutManager.findFirstCompletelyVisibleItemPosition();
+            titleAdaptor.removeItemAtPos(pos);
+            setSolutionAdaptorDataSet();
+        }
     }
+
 
 }
