@@ -185,7 +185,11 @@ public class ReverseMatchPlayModeFragment extends Fragment {
             LinearLayoutManager layoutManager = (LinearLayoutManager) rvTitleFlashCards.getLayoutManager();
             int pos = layoutManager.findFirstCompletelyVisibleItemPosition();
             titleAdaptor.removeItemAtPos(pos);
-            setSolutionDataSet(pos + 1); // Get solution options for next question.
+            if (titleAdaptor.getItemCount() > 1) {
+                setSolutionDataSet(pos + 1); // Get solution options for next question.
+            } else if (titleAdaptor.getItemCount() == 1) {
+                setSolutionDataSet(pos); // Edge case when only one title exists
+            }
         }
     }
 }
