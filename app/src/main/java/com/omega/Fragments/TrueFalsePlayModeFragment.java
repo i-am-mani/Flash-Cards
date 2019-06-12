@@ -27,8 +27,8 @@ import com.omega.R;
 import com.omega.Util.EqualSpaceItemDecoration;
 import com.omega.Util.FlashCardViewModel;
 import com.omega.Util.ISwitchToFragment;
+import com.omega.Util.Score;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -57,7 +57,7 @@ public class TrueFalsePlayModeFragment extends Fragment {
     TextView tvHint;
     @BindView(R.id.button_wrong)
     ImageButton btnWrong;
-    private Score scoreHandeler;
+    private Score scoreHandler;
 
     Runnable timerRunnable = new Runnable() {
         @Override
@@ -112,7 +112,7 @@ public class TrueFalsePlayModeFragment extends Fragment {
         initializeRecyclerView();
         tvHint.setText(R.string.hint_create_section_flashcard);
         getActivity().setTitle("Play mode");
-        scoreHandeler = new Score(tvScore);
+        scoreHandler = new Score(tvScore);
         return mainView;
     }
 
@@ -166,16 +166,16 @@ public class TrueFalsePlayModeFragment extends Fragment {
 
         if (view.getId() == R.id.button_correct) {
             if (isCorrect) {
-                scoreHandeler.incrementCorrectAnswer();
+                scoreHandler.incrementCorrectAnswer();
             } else {
-                scoreHandeler.incrementWrongAnswer(card);
+                scoreHandler.incrementWrongAnswer(card);
             }
 
         } else {
             if (!isCorrect) {
-                scoreHandeler.incrementCorrectAnswer();
+                scoreHandler.incrementCorrectAnswer();
             } else {
-                scoreHandeler.incrementWrongAnswer(card);
+                scoreHandler.incrementWrongAnswer(card);
             }
 
         }
@@ -188,11 +188,11 @@ public class TrueFalsePlayModeFragment extends Fragment {
 
 
     public void afterExhaustingDataset() {
-        List<FlashCards> wrongAnswers = scoreHandeler.getWrongAnswers();
+        List<FlashCards> wrongAnswers = scoreHandler.getWrongAnswers();
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("Result");
-        builder.setMessage("Out of " + scoreHandeler.getAttempted() + " you have scored " + scoreHandeler.getCorrect());
+        builder.setMessage("Out of " + scoreHandler.getAttempted() + " you have scored " + scoreHandler.getCorrect());
 
         if (wrongAnswers.size() > 0) {
             builder.setPositiveButton("Check Mistaken FlashCards", (dialog, which) -> {
@@ -221,47 +221,8 @@ public class TrueFalsePlayModeFragment extends Fragment {
 
     private void resetScoreAndTime() {
         tvScore.setText("Score :");
-        scoreHandeler = new Score(tvScore);
+        scoreHandler = new Score(tvScore);
         START_TIME = System.currentTimeMillis();
     }
 }
 
-class Score {
-
-    TextView scoreView;
-    private int correct = 0;
-    private int attempted = 0;
-    private List<FlashCards> wrongAnswerList = new ArrayList<>();
-
-    public Score(TextView scoreView) {
-        this.scoreView = scoreView;
-    }
-
-    public int getCorrect() {
-        return correct;
-    }
-
-    public int getAttempted() {
-        return attempted;
-    }
-
-    public void incrementCorrectAnswer() {
-        ++attempted;
-        ++correct;
-        updateScore();
-    }
-
-    public void incrementWrongAnswer(FlashCards card) {
-        attempted++;
-        wrongAnswerList.add(card);
-        updateScore();
-    }
-
-    private void updateScore() {
-        scoreView.setText(correct + " : " + attempted);
-    }
-
-    public List<FlashCards> getWrongAnswers() {
-        return wrongAnswerList;
-    }
-}
