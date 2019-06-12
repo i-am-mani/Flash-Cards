@@ -150,10 +150,14 @@ public class ReverseMatchPlayModeFragment extends Fragment {
         LinearLayoutManager layoutManager = (LinearLayoutManager) rvTitleFlashCards.getLayoutManager();
         int pos = layoutManager.findFirstCompletelyVisibleItemPosition();
         if (pos >= 0 && prePos != pos) {
-            List<String> options = titleAdaptor.getSolutionOptions(pos);
-            solutionAdaptor.setDataSet(options);
-            prePos = pos;
+            setSolutionDataSet(pos);
         }
+    }
+
+    private void setSolutionDataSet(int pos) {
+        List<String> options = titleAdaptor.getSolutionOptions(pos);
+        solutionAdaptor.setDataSet(options);
+        prePos = pos;
     }
 
 
@@ -181,7 +185,7 @@ public class ReverseMatchPlayModeFragment extends Fragment {
             LinearLayoutManager layoutManager = (LinearLayoutManager) rvTitleFlashCards.getLayoutManager();
             int pos = layoutManager.findFirstCompletelyVisibleItemPosition();
             titleAdaptor.removeItemAtPos(pos);
-            setSolutionAdaptorDataSet();
+            setSolutionDataSet(pos + 1); // Get solution options for next question.
         }
     }
 }
