@@ -48,6 +48,7 @@ public class SolutionReverseMatchPlayAdaptor extends RecyclerView.Adapter<Soluti
     public void onBindViewHolder(@NonNull SolutionsAdaptor holder, int position) {
         holder.onBind(dataSet.get(position));
         holder.setDefaultCardColor();
+        isMarked = false;
     }
 
     public void setDataSet(List<String> data) {
@@ -89,12 +90,18 @@ public class SolutionReverseMatchPlayAdaptor extends RecyclerView.Adapter<Soluti
                 if (sol == solution) {
                     Log.d("SolutionsAdaptor", "attachCallback: Correct answer");
                     animateColorChangeSuccess();
-                    adaptorCallbacks.updateScore(true);
+                    if (!isMarked) {
+                        adaptorCallbacks.updateScore(true);
+                        isMarked = true;
+                    }
                     setDefaultCardColor();
                 } else {
                     Log.d("SolutionsAdaptor", "attachCallback: Wrong answer");
                     animateChangeColorFailure();
-                    adaptorCallbacks.updateScore(false);
+                    if (!isMarked) {
+                        adaptorCallbacks.updateScore(false);
+                        isMarked = true;
+                    }
                     setDefaultCardColor();
                 }
             });
