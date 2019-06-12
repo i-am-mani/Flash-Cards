@@ -5,12 +5,16 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.omega.Database.FlashCards;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
 public class TitleReverseMatchPlayAdaptor extends SimpleFlashCardViewerAdapter {
+
+    private List<FlashCards> removedItemFromDataSet = new ArrayList<>();
 
     public TitleReverseMatchPlayAdaptor(Context c) {
         super(c);
@@ -29,12 +33,16 @@ public class TitleReverseMatchPlayAdaptor extends SimpleFlashCardViewerAdapter {
         //add correct answer
         solutions.add(correctSol);
 
-        int questionCount = dataSet.size() > 4 ? 4 : dataSet.size();
+        List<FlashCards> totalDataSet = new ArrayList<>();
+        totalDataSet.addAll(dataSet); // Add existing data set
+        totalDataSet.addAll(removedItemFromDataSet); // Add removed items from data set
+
+        int questionCount = totalDataSet.size() > 4 ? 4 : totalDataSet.size();
 
         while (questionCount > 1) {
-            int randInt = random.nextInt(dataSet.size());
-            if (!solutions.contains(dataSet.get(randInt).getContent())) {
-                String randSolution = getItemAt(randInt).getContent();
+            int randInt = random.nextInt(totalDataSet.size());
+            if (!solutions.contains(totalDataSet.get(randInt).getContent())) {
+                String randSolution = totalDataSet.get(randInt).getContent();
                 solutions.add(randSolution);
                 questionCount--;
             }
@@ -42,5 +50,12 @@ public class TitleReverseMatchPlayAdaptor extends SimpleFlashCardViewerAdapter {
         Collections.shuffle(solutions);
         Log.d(TAG, "getSolutionOptions: solutions list =" + solutions + "Size =" + solutions.size());
         return solutions;
+    }
+
+    @Override
+    public FlashCards removeItemAtPos(int pos) {
+        FlashCards removedFc = super.removeItemAtPos(pos);
+        removedItemFromDataSet.add(removedFc);
+        return removedFc;
     }
 }
