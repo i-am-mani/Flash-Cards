@@ -13,9 +13,6 @@ public class TrueFalseModePlayAdaptor extends SimpleFlashCardViewerAdapter {
         super(c);
     }
 
-    public boolean isDataSetEmpty() {
-        return dataSet.isEmpty();
-    }
 
     @Override
     public void onBindViewHolder(@NonNull PlayModeViewHolder holder, int position) {

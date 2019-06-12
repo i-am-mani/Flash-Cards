@@ -68,6 +68,10 @@ public class SimpleFlashCardViewerAdapter extends RecyclerView.Adapter<SimpleFla
         return cardToReturn;
     }
 
+    public boolean isDataSetEmpty() {
+        return dataSet.isEmpty();
+    }
+
     public void setDataSet(List<FlashCards> ds) {
         dataSet = ds;
         notifyDataSetChanged();
