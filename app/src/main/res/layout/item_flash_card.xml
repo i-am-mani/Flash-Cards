@@ -6,6 +6,7 @@
     android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/card_flash_card"
         android:layout_width="match_parent"
         android:layout_height="88dp"
         app:cardCornerRadius="4dp"

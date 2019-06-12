@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal|center_vertical"
             android:text="Example"
-            android:textSize="34dp" />
+            android:textSize="16dp" />
 
 
     </androidx.cardview.widget.CardView>
