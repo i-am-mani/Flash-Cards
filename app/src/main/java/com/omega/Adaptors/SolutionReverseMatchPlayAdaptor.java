@@ -65,7 +65,7 @@ public class SolutionReverseMatchPlayAdaptor extends RecyclerView.Adapter<Soluti
     public interface ISolutionCallbacks {
         String getValidateSolution();
 
-        void updateScore();
+        void updateScore(boolean isCorrect);
 
         void moveToNextCard();
     }
@@ -86,34 +86,45 @@ public class SolutionReverseMatchPlayAdaptor extends RecyclerView.Adapter<Soluti
                 String sol = adaptorCallbacks.getValidateSolution();
                 if (sol == solution) {
                     Log.d("SolutionsAdaptor", "attachCallback: Correct answer");
-
-                    ObjectAnimator changeColor = ObjectAnimator.ofArgb(cardView, "backgroundColor",
-                            context.getResources().getColor(R.color.G1),
-                            context.getResources().getColor(R.color.G2),
-                            context.getResources().getColor(R.color.G3),
-                            context.getResources().getColor(R.color.G4),
-                            context.getResources().getColor(R.color.G5));
-                    changeColor.setDuration(400);
-                    changeColor.addListener(new AnimatorListenerAdapter() {
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            super.onAnimationEnd(animation);
-
-                        }
-                    });
-                    changeColor.start();
+                    animateColorChangeSuccess();
+                    adaptorCallbacks.updateScore(true);
+                    adaptorCallbacks.moveToNextCard();
                 } else {
                     Log.d("SolutionsAdaptor", "attachCallback: Wrong answer");
-                    ObjectAnimator changeColor = ObjectAnimator.ofArgb(cardView, "backgroundColor",
-                            context.getResources().getColor(R.color.R1),
-                            context.getResources().getColor(R.color.R2),
-                            context.getResources().getColor(R.color.R3),
-                            context.getResources().getColor(R.color.R4),
-                            context.getResources().getColor(R.color.R5));
-                    changeColor.setDuration(400);
-                    changeColor.start();
+                    animateChangeColorFailure();
+                    adaptorCallbacks.updateScore(false);
+                    adaptorCallbacks.moveToNextCard();
                 }
             });
+        }
+
+        private void animateChangeColorFailure() {
+            ObjectAnimator changeColor = ObjectAnimator.ofArgb(cardView, "backgroundColor",
+                    context.getResources().getColor(R.color.R1),
+                    context.getResources().getColor(R.color.R2),
+                    context.getResources().getColor(R.color.R3),
+                    context.getResources().getColor(R.color.R4),
+                    context.getResources().getColor(R.color.R5));
+            changeColor.setDuration(400);
+            changeColor.start();
+        }
+
+        private void animateColorChangeSuccess() {
+            ObjectAnimator changeColor = ObjectAnimator.ofArgb(cardView, "backgroundColor",
+                    context.getResources().getColor(R.color.G1),
+                    context.getResources().getColor(R.color.G2),
+                    context.getResources().getColor(R.color.G3),
+                    context.getResources().getColor(R.color.G4),
+                    context.getResources().getColor(R.color.G5));
+            changeColor.setDuration(400);
+            changeColor.addListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    super.onAnimationEnd(animation);
+
+                }
+            });
+            changeColor.start();
         }
 
         public void onBind(String solution) {
