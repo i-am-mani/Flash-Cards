@@ -8,6 +8,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -39,8 +40,7 @@ public class TrueFalsePlayModeFragment extends Fragment {
 
     private final static String KEY = "GroupName";
     private static long START_TIME = 0;
-    @BindView(R.id.button_correct)
-    ImageButton btnCorrect;
+
     private String groupName;
 
     @BindView(R.id.text_time)
@@ -55,8 +55,16 @@ public class TrueFalsePlayModeFragment extends Fragment {
 
     @BindView(R.id.text_play_mode_hint)
     TextView tvHint;
+
+    @BindView(R.id.button_correct)
+    ImageButton btnCorrect;
+
     @BindView(R.id.button_wrong)
     ImageButton btnWrong;
+
+    @BindView(R.id.button_start_true_false)
+    Button btnStart;
+
     private Score scoreHandler;
 
     Runnable timerRunnable = new Runnable() {
@@ -125,15 +133,13 @@ public class TrueFalsePlayModeFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        START_TIME = START_TIME == 0 ? System.currentTimeMillis() : START_TIME;
-        tvTime.postDelayed(timerRunnable, 0);
+        startTimer();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        START_TIME = System.currentTimeMillis();
-        tvTime.removeCallbacks(timerRunnable);
+        stopTimer();
     }
 
     private void initializeRecyclerView() {
@@ -186,8 +192,19 @@ public class TrueFalsePlayModeFragment extends Fragment {
 
     }
 
+    @OnClick(R.id.button_start_true_false)
+    public void startTrueFalse(View view) {
+        btnStart.setVisibility(View.GONE);
+
+        btnCorrect.setVisibility(View.VISIBLE);
+        btnWrong.setVisibility(View.VISIBLE);
+        rvPlayCard.setVisibility(View.VISIBLE);
+        startTimer();
+    }
+
 
     public void afterExhaustingDataset() {
+        stopTimer();
         List<FlashCards> wrongAnswers = scoreHandler.getWrongAnswers();
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -223,6 +240,15 @@ public class TrueFalsePlayModeFragment extends Fragment {
         tvScore.setText("Score :");
         scoreHandler = new Score(tvScore);
         START_TIME = System.currentTimeMillis();
+    }
+
+    private void startTimer() {
+        START_TIME = System.currentTimeMillis();
+        tvTime.postDelayed(timerRunnable, 0);
+    }
+
+    private void stopTimer() {
+        tvTime.removeCallbacks(timerRunnable);
     }
 }
 
