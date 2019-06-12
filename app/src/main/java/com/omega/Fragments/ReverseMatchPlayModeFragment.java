@@ -2,6 +2,7 @@ package com.omega.Fragments;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ import com.omega.Adaptors.TitleReverseMatchPlayAdaptor;
 import com.omega.R;
 import com.omega.Util.EqualSpaceItemDecoration;
 import com.omega.Util.FlashCardViewModel;
+import com.omega.Util.Score;
 
 import java.util.List;
 
@@ -47,6 +49,12 @@ public class ReverseMatchPlayModeFragment extends Fragment {
     @BindView(R.id.button_start_reverse_match)
     Button btnStart;
 
+    @BindView(R.id.text_score)
+    TextView tvScore;
+
+    private int prePos = -1;
+
+    private Score score;
     private long START_TIME;
     private Handler timerHandler = new Handler();
 
@@ -61,6 +69,7 @@ public class ReverseMatchPlayModeFragment extends Fragment {
             timerHandler.postDelayed(this, 500);
         }
     };
+
 
     public ReverseMatchPlayModeFragment(String group) {
         GROUP_NAME = group;
@@ -87,6 +96,7 @@ public class ReverseMatchPlayModeFragment extends Fragment {
     private void initializeVariables() {
         initTitleRecyclerView();
         initSolutionRecyclerView();
+        score = new Score(tvScore);
     }
 
     private void initSolutionRecyclerView() {
@@ -116,6 +126,8 @@ public class ReverseMatchPlayModeFragment extends Fragment {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
+                Log.d("OnScrolled", "onScrolled: " + dx + " " + dy);
+                int widthPixels = rvTitleFlashCards.getWidth();
                 // Set Solution RV data set
                 setSolutionAdaptorDataSet();
             }
@@ -127,6 +139,8 @@ public class ReverseMatchPlayModeFragment extends Fragment {
         v.setVisibility(View.GONE);
         rvSolutionFlashCards.setVisibility(View.VISIBLE);
         rvTitleFlashCards.setVisibility(View.VISIBLE);
+        // init  timer
+        START_TIME = System.currentTimeMillis();
         tvTime.post(timerRunnable);
         setSolutionAdaptorDataSet(); // Initial Data set
     }
@@ -135,9 +149,10 @@ public class ReverseMatchPlayModeFragment extends Fragment {
     public void setSolutionAdaptorDataSet() {
         LinearLayoutManager layoutManager = (LinearLayoutManager) rvTitleFlashCards.getLayoutManager();
         int pos = layoutManager.findFirstCompletelyVisibleItemPosition();
-        if (pos > 0) {
+        if (pos >= 0 && prePos != pos) {
             List<String> options = titleAdaptor.getSolutionOptions(pos);
             solutionAdaptor.setDataSet(options);
+            prePos = pos;
         }
     }
 
@@ -153,8 +168,12 @@ public class ReverseMatchPlayModeFragment extends Fragment {
         }
 
         @Override
-        public void updateScore() {
-
+        public void updateScore(boolean isCorrect) {
+            if (isCorrect) {
+                score.incrementCorrectAnswer();
+            } else {
+                score.incrementWrongAnswer();
+            }
         }
 
         @Override
@@ -165,6 +184,4 @@ public class ReverseMatchPlayModeFragment extends Fragment {
             setSolutionAdaptorDataSet();
         }
     }
-
-
 }
