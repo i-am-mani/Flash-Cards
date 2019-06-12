@@ -2,6 +2,7 @@ package com.omega.Adaptors;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.util.Log;
@@ -46,6 +47,7 @@ public class SolutionReverseMatchPlayAdaptor extends RecyclerView.Adapter<Soluti
     @Override
     public void onBindViewHolder(@NonNull SolutionsAdaptor holder, int position) {
         holder.onBind(dataSet.get(position));
+        holder.setDefaultCardColor();
     }
 
     public void setDataSet(List<String> data) {
@@ -88,12 +90,12 @@ public class SolutionReverseMatchPlayAdaptor extends RecyclerView.Adapter<Soluti
                     Log.d("SolutionsAdaptor", "attachCallback: Correct answer");
                     animateColorChangeSuccess();
                     adaptorCallbacks.updateScore(true);
-                    adaptorCallbacks.moveToNextCard();
+                    setDefaultCardColor();
                 } else {
                     Log.d("SolutionsAdaptor", "attachCallback: Wrong answer");
                     animateChangeColorFailure();
                     adaptorCallbacks.updateScore(false);
-                    adaptorCallbacks.moveToNextCard();
+                    setDefaultCardColor();
                 }
             });
         }
@@ -105,8 +107,18 @@ public class SolutionReverseMatchPlayAdaptor extends RecyclerView.Adapter<Soluti
                     context.getResources().getColor(R.color.R3),
                     context.getResources().getColor(R.color.R4),
                     context.getResources().getColor(R.color.R5));
-            changeColor.setDuration(400);
-            changeColor.start();
+//            changeColor.setDuration(400);
+//            changeColor.start();
+            ObjectAnimator rotateUp = ObjectAnimator.ofFloat(itemView, "rotation", 20);
+            ObjectAnimator rotateDown = ObjectAnimator.ofFloat(itemView, "rotation", -20);
+            ObjectAnimator rotateCenter = ObjectAnimator.ofFloat(itemView, "rotation", 0);
+
+            AnimatorSet animatorSet = new AnimatorSet();
+            animatorSet.play(rotateUp).with(changeColor).before(rotateDown);
+            animatorSet.play(rotateDown).before(rotateCenter);
+            animatorSet.setDuration(200);
+            animatorSet.start();
+
         }
 
         private void animateColorChangeSuccess() {
@@ -116,21 +128,39 @@ public class SolutionReverseMatchPlayAdaptor extends RecyclerView.Adapter<Soluti
                     context.getResources().getColor(R.color.G3),
                     context.getResources().getColor(R.color.G4),
                     context.getResources().getColor(R.color.G5));
-            changeColor.setDuration(400);
-            changeColor.addListener(new AnimatorListenerAdapter() {
+
+            ObjectAnimator moveRight = ObjectAnimator.ofFloat(cardView, "translationX", context.getResources().getDisplayMetrics().widthPixels);
+
+            moveRight.addListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animator animation) {
                     super.onAnimationEnd(animation);
-
+                    adaptorCallbacks.moveToNextCard();
+                    //To set default color
+                    setDefaultCardColor();
+                    //To show card swiping from left effect
+                    cardView.setVisibility(View.INVISIBLE);
+                    cardView.setX(-1000);
+                    cardView.setVisibility(View.VISIBLE);
+                    ObjectAnimator moveRight = ObjectAnimator.ofFloat(cardView, "x", 0);
+                    moveRight.setDuration(300);
+                    moveRight.start();
                 }
             });
-            changeColor.start();
+
+            AnimatorSet animatorSet = new AnimatorSet();
+            animatorSet.setDuration(600);
+            animatorSet.play(moveRight).with(changeColor);
+            animatorSet.start();
         }
 
         public void onBind(String solution) {
             tvTitle.setText(solution);
-            cardView.setBackgroundColor(context.getResources().getColor(R.color.DarkModePrimaryDarkColor));
             attachCallback(solution);
+        }
+
+        private void setDefaultCardColor() {
+            cardView.setBackgroundColor(context.getResources().getColor(R.color.DarkModePrimaryDarkColor));
         }
     }
 }
