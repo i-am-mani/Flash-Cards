@@ -75,6 +75,23 @@ public class FlashCardRepository {
         new UpdateFlashCardsAsyncTask(flashCardDao).execute(flashCards);
     }
 
+    public void createDummyFlashCards() {
+        insertGroup(new Groups("Operating Systems", "Operating system basic flashcards"));
+        String key[] = {"What is faster, Main Memory or Registers?",
+                "What is smaller, Main Memory or Registers?",
+                "The instruction execution consists of what two steps?",
+                "Where does the processor hold the address of the next instruction?"};
+        String value[] = {"Registers are faster than main memory.",
+                "Registers are smaller than main memory.",
+                "Fetch, Execute",
+                "Program Counter (PC)"};
+
+        for (int i = 0; i < key.length; i++) {
+            insertFlashCard(new FlashCards(key[i], value[i], "Operating Systems"));
+        }
+
+    }
+
 
     private static class InsertFlashCardAsyncTask extends AsyncTask<FlashCards, Void, Void> {
         FlashCardsDao dao;
