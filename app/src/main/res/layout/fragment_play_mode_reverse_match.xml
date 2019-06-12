@@ -17,7 +17,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.58" />
+        app:layout_constraintGuide_percent="0.52" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_title_flash_cards"
@@ -89,7 +89,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/text_solution_reverse_match"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -100,10 +100,10 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/button_play_reverse_match"
+        android:id="@+id/button_start_reverse_match"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/G5"
+        android:background="@color/DarkModePrimaryDarkColor"
         android:drawableLeft="@drawable/ic_play"
         android:paddingRight="8dp"
         android:text="Start"
