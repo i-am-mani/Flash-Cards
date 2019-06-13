@@ -133,7 +133,6 @@ public class TrueFalsePlayModeFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        startTimer();
     }
 
     @Override
