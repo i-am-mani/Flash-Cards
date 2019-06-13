@@ -1,8 +1,10 @@
 package com.omega.Fragments;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,9 +54,12 @@ public class ReverseMatchPlayModeFragment extends Fragment {
     @BindView(R.id.text_score)
     TextView tvScore;
 
+    @BindView(R.id.text_solution_reverse_match)
+    TextView tvSolution;
+
     private int prePos = -1;
 
-    private Score score;
+    private Score scoreHandler;
     private long START_TIME;
     private Handler timerHandler = new Handler();
 
@@ -96,7 +101,7 @@ public class ReverseMatchPlayModeFragment extends Fragment {
     private void initializeVariables() {
         initTitleRecyclerView();
         initSolutionRecyclerView();
-        score = new Score(tvScore);
+        scoreHandler = new Score(tvScore);
     }
 
     private void initSolutionRecyclerView() {
@@ -139,12 +144,16 @@ public class ReverseMatchPlayModeFragment extends Fragment {
         v.setVisibility(View.GONE);
         rvSolutionFlashCards.setVisibility(View.VISIBLE);
         rvTitleFlashCards.setVisibility(View.VISIBLE);
+        tvSolution.setVisibility(View.VISIBLE);
         // init  timer
-        START_TIME = System.currentTimeMillis();
-        tvTime.post(timerRunnable);
+        startTimer();
         setSolutionAdaptorDataSet(); // Initial Data set
     }
 
+    private void startTimer() {
+        START_TIME = System.currentTimeMillis();
+        tvTime.post(timerRunnable);
+    }
 
     public void setSolutionAdaptorDataSet() {
         LinearLayoutManager layoutManager = (LinearLayoutManager) rvTitleFlashCards.getLayoutManager();
@@ -174,9 +183,9 @@ public class ReverseMatchPlayModeFragment extends Fragment {
         @Override
         public void updateScore(boolean isCorrect) {
             if (isCorrect) {
-                score.incrementCorrectAnswer();
+                scoreHandler.incrementCorrectAnswer();
             } else {
-                score.incrementWrongAnswer();
+                scoreHandler.incrementWrongAnswer();
             }
         }
 
@@ -190,6 +199,27 @@ public class ReverseMatchPlayModeFragment extends Fragment {
             } else if (titleAdaptor.getItemCount() == 1) {
                 setSolutionDataSet(pos); // Edge case when only one title exists
             }
+
+            if (titleAdaptor.isDataSetEmpty()) {
+                showFinishedAlertDialog();
+            }
         }
+
+        private void showFinishedAlertDialog() {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle("Result");
+            builder.setMessage("Out of " + scoreHandler.getAttempted() + " you have scored " + scoreHandler.getCorrect());
+
+            builder.setPositiveButton("Exit", (dialog, which) -> getActivity().onBackPressed());
+
+            builder.setOnCancelListener(dialog -> {
+                getActivity().onBackPressed();
+            });
+            AlertDialog alertDialog = builder.create();
+            alertDialog.getWindow().setGravity(Gravity.CENTER_VERTICAL);
+            alertDialog.getWindow().setBackgroundDrawableResource(R.color.DarkModePrimaryDarkColor);
+            alertDialog.show();
+        }
+
     }
 }
