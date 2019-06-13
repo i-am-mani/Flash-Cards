@@ -39,7 +39,7 @@ public class SolutionReverseMatchPlayAdaptor extends RecyclerView.Adapter<Soluti
     @Override
     public SolutionsAdaptor onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(context);
-        View mainView = layoutInflater.inflate(R.layout.item_flash_card, parent, false);
+        View mainView = layoutInflater.inflate(R.layout.item_single_title_card, parent, false);
         SolutionsAdaptor solutionsAdaptor = new SolutionsAdaptor(mainView);
         return solutionsAdaptor;
     }
@@ -74,14 +74,15 @@ public class SolutionReverseMatchPlayAdaptor extends RecyclerView.Adapter<Soluti
     }
 
     public class SolutionsAdaptor extends RecyclerView.ViewHolder {
-        @BindView(R.id.text_title)
+        @BindView(R.id.text_single_title_card)
         TextView tvTitle;
-        @BindView(R.id.card_flash_card)
+        @BindView(R.id.card_view_single_title_card)
         CardView cardView;
 
         public SolutionsAdaptor(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+
         }
 
         private void attachCallback(String solution) {
