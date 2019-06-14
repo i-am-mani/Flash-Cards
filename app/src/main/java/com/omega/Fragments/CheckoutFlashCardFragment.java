@@ -41,11 +41,7 @@ public class CheckoutFlashCardFragment extends Fragment {
     GroupsAdaptor groupsAdaptor;
     ISwitchToFragment switchToFragment;
 
-    String newGroup;
-    String newDesc;
-
     String TAG = CheckoutFlashCardFragment.class.getSimpleName();
-    private String newName;
 
     @BindView(R.id.edit_text_search)
     TextInputEditText et_search;
@@ -72,6 +68,9 @@ public class CheckoutFlashCardFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         flashCardViewModel = ViewModelProviders.of(this).get(FlashCardViewModel.class);
         flashCardViewModel.getAllGroups().observe(this, groups -> groupsAdaptor.setDataSet(groups));
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeCallback(new OnSwipeDeleteItem(groupsAdaptor, flashCardViewModel, getActivity())));
+        itemTouchHelper.attachToRecyclerView(rvGroups);
     }
 
     @Override
@@ -94,9 +93,6 @@ public class CheckoutFlashCardFragment extends Fragment {
         rvGroups.setLayoutManager(linearLayoutManager);
         rvGroups.setAdapter(groupsAdaptor);
         rvGroups.addItemDecoration(new EqualSpaceItemDecoration(40));
-
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeCallback(new OnSwipeDeleteItem(groupsAdaptor, flashCardViewModel, getActivity())));
-        itemTouchHelper.attachToRecyclerView(rvGroups);
     }
 
     @OnTextChanged(R.id.edit_text_search)
