@@ -14,9 +14,9 @@
         android:paddingRight="8dp"
         android:text="Start"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/recycler_view_play_mode_flashcards"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/recycler_view_play_mode_flashcards"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.Guideline
@@ -41,28 +41,15 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
+        android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/guideline8"
         app:layout_constraintEnd_toEndOf="parent"
-        android:visibility="invisible"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintTop_toTopOf="@+id/guideline6"
-        app:layout_constraintVertical_bias="1.0">
+        app:layout_constraintVertical_bias="0.0">
 
     </androidx.recyclerview.widget.RecyclerView>
-
-    <TextView
-        android:id="@+id/text_play_mode_hint"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:alpha="0.5"
-        android:text="TextView"
-        android:textAppearance="@style/TextAppearance.AppCompat.Title"
-        app:layout_constraintBottom_toTopOf="@+id/recycler_view_play_mode_flashcards"
-        app:layout_constraintEnd_toStartOf="@+id/recycler_view_play_mode_flashcards"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/recycler_view_play_mode_flashcards"
-        app:layout_constraintTop_toBottomOf="@+id/recycler_view_play_mode_flashcards" />
 
     <TextView
         android:id="@+id/text_time"
@@ -95,11 +82,11 @@
         android:backgroundTint="@color/DarkModePrimaryColor"
         android:scaleType="fitCenter"
         android:tint="@android:color/holo_red_dark"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guideline27"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline8"
-        android:visibility="invisible"
         app:srcCompat="@drawable/ic_close" />
 
     <ImageButton
@@ -113,11 +100,11 @@
         android:backgroundTint="@color/DarkModePrimaryColor"
         android:scaleType="fitCenter"
         android:tint="@android:color/holo_green_dark"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline27"
         app:layout_constraintTop_toTopOf="@+id/guideline8"
-        android:visibility="invisible"
         app:srcCompat="@drawable/ic_check_circle" />
 
     <androidx.constraintlayout.widget.Guideline
