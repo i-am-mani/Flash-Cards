@@ -18,6 +18,7 @@ import butterknife.OnClick;
 
 public class SplashScreenPlayModeFragment extends Fragment {
 
+    private static final String KEY = "GROUP_KEY";
     ISwitchToFragment switchToFragmentImpl;
     private String GROUP_NAME;
 
@@ -50,9 +51,17 @@ public class SplashScreenPlayModeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View mainView = inflater.inflate(R.layout.fragment_play_mode_splash_screen, container, false);
         ButterKnife.bind(this, mainView);
+        if (savedInstanceState != null) {
+            GROUP_NAME = savedInstanceState.getString(KEY);
+        }
         return mainView;
     }
 
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(KEY, GROUP_NAME);
+    }
 
     @OnClick(R.id.button_casual)
     public void goToCasualPlay(View view) {
