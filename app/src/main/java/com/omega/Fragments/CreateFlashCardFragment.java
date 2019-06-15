@@ -106,7 +106,6 @@ public class CreateFlashCardFragment extends Fragment {
     }
 
     private void setHints() {
-
         if (GROUP_NAME != null) {
             tvHint.setText(R.string.hint_create_section_flashcard);
         } else {
@@ -201,10 +200,12 @@ public class CreateFlashCardFragment extends Fragment {
     private void attachObserver() {
         flashCardViewModel.getAllFlashCardsOfGroup(GROUP_NAME).observe(this, flashCards -> {
             rvAdaptor.setDataSet(flashCards);
-            if (flashCards.size() > 0)
+            if (flashCards.size() > 0) {
                 tvHint.setVisibility(View.GONE);
+                btnPlay.setVisibility(View.VISIBLE);
+            }
         });
-        btnPlay.setVisibility(View.VISIBLE);
+
     }
 
     @OnClick(R.id.button_play)
