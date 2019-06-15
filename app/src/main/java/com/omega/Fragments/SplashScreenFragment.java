@@ -5,6 +5,7 @@ import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -18,6 +19,7 @@ import androidx.fragment.app.Fragment;
 import com.omega.R;
 import com.omega.Util.ISwitchToFragment;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -25,6 +27,11 @@ public class SplashScreenFragment extends Fragment {
 
     ISwitchToFragment ImplSwitchToFragment;
 
+    @BindView(R.id.button_check_out)
+    Button btnCheckout;
+
+    @BindView(R.id.button_create)
+    Button btnCreate;
     public SplashScreenFragment() {
         // Required empty public constructor
     }
@@ -65,21 +72,17 @@ public class SplashScreenFragment extends Fragment {
     @OnClick({R.id.button_check_out, R.id.button_create})
     public void play(View view) {
         Button btn = (Button) view;
+        ObjectAnimator rotateAnimator, translateAnimator = new ObjectAnimator();
+        rotateAnimator = ObjectAnimator.ofFloat(btn, "rotation", 0f, 360f);
+        translateAnimator = getTranslationAnimator(view, btn, translateAnimator);
+        setUpAnimatorSet(btn, rotateAnimator, translateAnimator);
+    }
 
-        ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(btn, "rotation", 0f, 360f);
-        objectAnimator.setDuration(800);
-
-        float density = Resources.getSystem().getDisplayMetrics().density;
-        int btnWidth = btn.getWidth();
-        int widthPixels = Resources.getSystem().getDisplayMetrics().widthPixels;
-        float dp = widthPixels / density;
-
-        ObjectAnimator objectAnimator1 = ObjectAnimator.ofFloat(btn, "translationX", btn.getTranslationX(), dp + btnWidth + 60);
-        objectAnimator1.setDuration(800);
-
+    private void setUpAnimatorSet(Button btn, ObjectAnimator rotateAnimator, ObjectAnimator translateAnimator) {
         AnimatorSet animatorSet = new AnimatorSet();
-        animatorSet.play(objectAnimator).with(objectAnimator1);
+        animatorSet.play(rotateAnimator).with(translateAnimator);
         animatorSet.setInterpolator(new AccelerateDecelerateInterpolator());
+        animatorSet.setDuration(800);
         animatorSet.addListener(new Animator.AnimatorListener() {
 
             @Override
@@ -108,8 +111,25 @@ public class SplashScreenFragment extends Fragment {
             }
         });
         animatorSet.start();
+    }
 
+    private ObjectAnimator getTranslationAnimator(View view, Button btn, ObjectAnimator translateAnimator) {
+        float density = Resources.getSystem().getDisplayMetrics().density;
+        int btnWidth = btn.getWidth();
+        int widthPixels = Resources.getSystem().getDisplayMetrics().widthPixels;
+        float dp = widthPixels / density;
 
+        if (getContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            translateAnimator = ObjectAnimator.ofFloat(btn, "translationX", btn.getTranslationX(), dp + btnWidth + 100);
+
+        } else {
+            if (view.getId() == R.id.button_check_out) {
+                translateAnimator = ObjectAnimator.ofFloat(btn, "translationX", btn.getTranslationX(), -(dp + btnWidth + 100));
+            } else if (view.getId() == R.id.button_create) {
+                translateAnimator = ObjectAnimator.ofFloat(btn, "translationX", btn.getTranslationX(), dp + btnWidth + 100);
+            }
+        }
+        return translateAnimator;
     }
 
 
