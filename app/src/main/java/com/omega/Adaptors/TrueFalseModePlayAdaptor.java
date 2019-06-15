@@ -4,6 +4,9 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 
+import com.omega.Database.FlashCards;
+
+import java.util.List;
 import java.util.Random;
 
 
@@ -18,7 +21,7 @@ public class TrueFalseModePlayAdaptor extends SimpleFlashCardViewerAdapter {
     public void onBindViewHolder(@NonNull PlayModeViewHolder holder, int position) {
 
         Random random = new Random();
-        Boolean isSame = random.nextBoolean();
+        boolean isSame = random.nextBoolean();
 
         if (isSame) {
             super.onBindViewHolder(holder, position);
@@ -34,5 +37,9 @@ public class TrueFalseModePlayAdaptor extends SimpleFlashCardViewerAdapter {
         int randomSolutionIndex = random.nextInt(dataSet.size());
         String solution = dataSet.get(randomSolutionIndex).getContent();
         holder.onBind(title, solution);
+    }
+
+    public List<FlashCards> getDataSet() {
+        return dataSet;
     }
 }
