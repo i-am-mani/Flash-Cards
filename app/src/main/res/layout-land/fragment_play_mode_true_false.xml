@@ -64,7 +64,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="16dp"
-        android:text="Score"
         app:layout_constraintEnd_toStartOf="@+id/guideline15"
         app:layout_constraintTop_toTopOf="@+id/guideline6" />
 
@@ -74,9 +73,23 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="12dp"
-        android:text="Timer"
         app:layout_constraintStart_toStartOf="@+id/guideline16"
         app:layout_constraintTop_toTopOf="@+id/guideline6" />
+
+
+    <Button
+        android:id="@+id/button_start_true_false"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/DarkModePrimaryDarkColor"
+        android:drawableLeft="@drawable/ic_play"
+        android:paddingRight="8dp"
+        android:text="Start"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/recycler_view_play_mode_flashcards"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/recycler_view_play_mode_flashcards"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
     <ImageButton
