@@ -12,6 +12,13 @@
         <item name="android:windowBackground">@color/DarkModePrimaryColor</item>
         <item name="android:navigationBarColor">@color/DarkModePrimaryColor</item>
         <item name="android:itemBackground">@color/DarkModePrimaryColor</item>
+
+        <item name="android:buttonStyle">@style/ButtonColor</item>
+        <item name="android:colorButtonNormal">@color/DarkModePrimaryColor</item>
+    </style>
+
+    <style name="ButtonColor" parent="Widget.AppCompat.Button">
+        <item name="android:background">@color/DarkModePrimaryColor</item>
     </style>
 
     <style name="HintDialogInputEditText">
