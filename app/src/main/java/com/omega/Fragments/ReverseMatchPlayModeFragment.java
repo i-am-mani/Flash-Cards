@@ -75,6 +75,9 @@ public class ReverseMatchPlayModeFragment extends Fragment {
         }
     };
 
+    public ReverseMatchPlayModeFragment() {
+        //no arg constructor
+    }
 
     public ReverseMatchPlayModeFragment(String group) {
         GROUP_NAME = group;
