@@ -18,6 +18,25 @@ public class FlashCardViewModel extends AndroidViewModel {
 
     private LiveData<List<Groups>> allGroups;
 
+    private Score trueFalseScore;
+    private List<FlashCards> trueFalseAdaptorDataSet = null;
+
+    public List<FlashCards> getTrueFalseAdaptorDataSet() {
+        return trueFalseAdaptorDataSet;
+    }
+
+    public void setTrueFalseAdaptorDataSet(List<FlashCards> trueFalseAdaptorDataSet) {
+        this.trueFalseAdaptorDataSet = trueFalseAdaptorDataSet;
+    }
+
+    public Score getTrueFalseScore() {
+        return trueFalseScore;
+    }
+
+    public void setTrueFalseScore(Score scoreHandler) {
+        this.trueFalseScore = scoreHandler;
+    }
+
     public FlashCardViewModel(Application application) {
         super(application);
         flashCardRepository = new FlashCardRepository(application);
