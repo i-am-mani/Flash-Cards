@@ -196,16 +196,27 @@ public class ReverseMatchPlayModeFragment extends Fragment {
         public void moveToNextCard() {
             LinearLayoutManager layoutManager = (LinearLayoutManager) rvTitleFlashCards.getLayoutManager();
             int pos = layoutManager.findFirstCompletelyVisibleItemPosition();
-            titleAdaptor.removeItemAtPos(pos);
-            if (titleAdaptor.getItemCount() > 1) {
-                setSolutionDataSet(pos + 1); // Get solution options for next question.
-            } else if (titleAdaptor.getItemCount() == 1) {
-                setSolutionDataSet(pos); // Edge case when only one title exists
+            if (!removeFlashCard(pos)) {
+                setNewDataSet(pos);
             }
+        }
+
+        private void setNewDataSet(int pos) {
+            if (pos != 0) {
+                setSolutionDataSet(pos - 1);
+            } else if (pos == 0) {
+                setSolutionDataSet(pos);
+            }
+        }
+
+        private boolean removeFlashCard(int pos) {
+            titleAdaptor.removeItemAtPos(pos);
 
             if (titleAdaptor.isDataSetEmpty()) {
                 showFinishedAlertDialog();
+                return true;
             }
+            return false;
         }
 
         private void showFinishedAlertDialog() {
