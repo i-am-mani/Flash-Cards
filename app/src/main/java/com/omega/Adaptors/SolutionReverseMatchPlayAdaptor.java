@@ -51,11 +51,6 @@ public class SolutionReverseMatchPlayAdaptor extends RecyclerView.Adapter<Soluti
         isMarked = false;
     }
 
-    public void setDataSet(List<String> data) {
-        dataSet = data;
-        notifyDataSetChanged();
-    }
-
     @Override
     public int getItemCount() {
         if (dataSet != null) {
@@ -63,6 +58,11 @@ public class SolutionReverseMatchPlayAdaptor extends RecyclerView.Adapter<Soluti
         } else {
             return 0;
         }
+    }
+
+    public void setDataSet(List<String> data) {
+        dataSet = data;
+        notifyDataSetChanged();
     }
 
     public interface ISolutionCallbacks {
