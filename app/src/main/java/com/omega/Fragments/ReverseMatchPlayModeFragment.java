@@ -34,11 +34,13 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class ReverseMatchPlayModeFragment extends Fragment {
+    static String GROUP_NAME;
     TitleReverseMatchPlayAdaptor titleAdaptor;
-    String GROUP_NAME;
-    FlashCardViewModel flashCardViewModel;
-    SolutionReverseMatchPlayAdaptor solutionAdaptor;
-    FlashCardViewModel viewModel;
+    FlashCardViewModel flashCardViewModel = null;
+    SolutionReverseMatchPlayAdaptor solutionAdaptor = null;
+    private long START_TIME;
+
+
     @BindView(R.id.text_time)
     TextView tvTime;
 
@@ -60,7 +62,6 @@ public class ReverseMatchPlayModeFragment extends Fragment {
     private int prePos = -1;
 
     private Score scoreHandler;
-    private long START_TIME;
     private Handler timerHandler = new Handler();
 
     Runnable timerRunnable = new Runnable() {
@@ -86,10 +87,28 @@ public class ReverseMatchPlayModeFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        viewModel = ViewModelProviders.of(this).get(FlashCardViewModel.class);
-        viewModel.getAllFlashCardsOfGroup(GROUP_NAME).observe(this, flashCards -> {
-            titleAdaptor.setDataSet(flashCards);
+        flashCardViewModel = ViewModelProviders.of(this).get(FlashCardViewModel.class);
+        flashCardViewModel.getAllFlashCardsOfGroup(GROUP_NAME).observe(this, flashCards -> {
+            if (savedInstanceState != null) {
+                long time = savedInstanceState.getLong("StartTime");
+                START_TIME = time;
+                scoreHandler = flashCardViewModel.getReverseScore();
+                resetTitleAdaptor();
+                resetSolutionAdaptor();
+            } else {
+                titleAdaptor.setDataSet(flashCards);
+            }
         });
+    }
+
+    private void resetTitleAdaptor() {
+        titleAdaptor = flashCardViewModel.getTitleReverseMatchPlayAdaptor();
+        rvTitleFlashCards.setAdapter(titleAdaptor);
+    }
+
+    private void resetSolutionAdaptor() {
+        solutionAdaptor = flashCardViewModel.getSolutionReverseMatchPlayAdaptor();
+        rvSolutionFlashCards.setAdapter(solutionAdaptor);
     }
 
     @Nullable
@@ -97,18 +116,38 @@ public class ReverseMatchPlayModeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View mainView = inflater.inflate(R.layout.fragment_play_mode_reverse_match, container, false);
         ButterKnife.bind(this, mainView);
+        hideViews();
         initializeVariables();
         return mainView;
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putLong("StartTime", START_TIME);
+        flashCardViewModel.setTitleReverseMatchPlayAdaptor(titleAdaptor);
+        flashCardViewModel.setSolutionReverseMatchPlayAdaptor(solutionAdaptor);
+        flashCardViewModel.setReverseScore(scoreHandler);
+    }
+
+    private void hideViews() {
+        rvTitleFlashCards.setVisibility(View.INVISIBLE);
+        rvSolutionFlashCards.setVisibility(View.INVISIBLE);
+        tvSolution.setVisibility(View.INVISIBLE);
     }
 
     private void initializeVariables() {
         initTitleRecyclerView();
         initSolutionRecyclerView();
-        scoreHandler = new Score(tvScore);
+        if (scoreHandler == null) {
+            scoreHandler = new Score(tvScore);
+        }
     }
 
     private void initSolutionRecyclerView() {
-        solutionAdaptor = new SolutionReverseMatchPlayAdaptor(getActivity(), new ImplSolutionAdaptorCallbacks());
+        if (solutionAdaptor == null) {
+            solutionAdaptor = new SolutionReverseMatchPlayAdaptor(getActivity(), new ImplSolutionAdaptorCallbacks());
+        }
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         EqualSpaceItemDecoration decoration = new EqualSpaceItemDecoration(20);
 
@@ -118,7 +157,9 @@ public class ReverseMatchPlayModeFragment extends Fragment {
     }
 
     private void initTitleRecyclerView() {
-        titleAdaptor = new TitleReverseMatchPlayAdaptor(getActivity());
+        if (titleAdaptor == null) {
+            titleAdaptor = new TitleReverseMatchPlayAdaptor(getActivity());
+        }
 
         LinearLayoutManager titleLinearLayoutManager = new LinearLayoutManager(getActivity(), RecyclerView.HORIZONTAL, false);
         EqualSpaceItemDecoration decoration = new EqualSpaceItemDecoration(40);
@@ -154,7 +195,7 @@ public class ReverseMatchPlayModeFragment extends Fragment {
     }
 
     private void startTimer() {
-        START_TIME = System.currentTimeMillis();
+        START_TIME = START_TIME == 0 ? System.currentTimeMillis() : START_TIME;
         tvTime.post(timerRunnable);
     }
 
