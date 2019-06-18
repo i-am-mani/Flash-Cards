@@ -132,6 +132,17 @@ public class TrueFalsePlayModeFragment extends Fragment {
         return mainView;
     }
 
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(GROUP_NAME_KEY, groupName);
+        String time = String.valueOf(START_TIME);
+        outState.putString(TIME_KEY, time);
+        flashCardViewModel.setTrueFalseAdaptorDataSet(trueFalseModePlayAdaptor.getDataSet());
+        flashCardViewModel.setTrueFalseScore(scoreHandler);
+    }
+
     private void init() {
         getActivity().setTitle("Play mode");
         initializeRecyclerView();
@@ -156,15 +167,6 @@ public class TrueFalsePlayModeFragment extends Fragment {
         btnWrong.setVisibility(View.GONE);
     }
 
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putString(GROUP_NAME_KEY, groupName);
-        String time = String.valueOf(START_TIME);
-        outState.putString(TIME_KEY, time);
-        flashCardViewModel.setTrueFalseAdaptorDataSet(trueFalseModePlayAdaptor.getDataSet());
-        flashCardViewModel.setTrueFalseScore(scoreHandler);
-    }
 
     private void initializeRecyclerView() {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
@@ -192,6 +194,15 @@ public class TrueFalsePlayModeFragment extends Fragment {
         LinearLayoutManager layoutManager = (LinearLayoutManager) rvPlayCard.getLayoutManager();
         int pos = layoutManager.findFirstCompletelyVisibleItemPosition();
 
+        checkSolution(view, pos);
+
+        if (trueFalseModePlayAdaptor.isDataSetEmpty()) {
+            afterExhaustingDataSet();
+        }
+
+    }
+
+    private void checkSolution(View view, int pos) {
         SimpleFlashCardViewerAdapter.PlayModeViewHolder holder =
                 (SimpleFlashCardViewerAdapter.PlayModeViewHolder) rvPlayCard.findViewHolderForAdapterPosition(pos);
         FlashCards card = trueFalseModePlayAdaptor.removeItemAtPos(pos);
@@ -200,25 +211,20 @@ public class TrueFalsePlayModeFragment extends Fragment {
         boolean isCorrect = (sol == card.getContent());
 
         if (view.getId() == R.id.button_correct) {
-            if (isCorrect) {
-                scoreHandler.incrementCorrectAnswer();
-            } else {
-                scoreHandler.incrementWrongAnswer(card);
-            }
+            incrementScore(card, isCorrect);
 
         } else {
-            if (!isCorrect) {
-                scoreHandler.incrementCorrectAnswer();
-            } else {
-                scoreHandler.incrementWrongAnswer(card);
-            }
+            incrementScore(card, !isCorrect);
 
         }
+    }
 
-        if (trueFalseModePlayAdaptor.isDataSetEmpty()) {
-            afterExhaustingDataSet();
+    private void incrementScore(FlashCards card, boolean isCorrect) {
+        if (isCorrect) {
+            scoreHandler.incrementCorrectAnswer();
+        } else {
+            scoreHandler.incrementWrongAnswer(card);
         }
-
     }
 
     @OnClick(R.id.button_start_true_false)
@@ -235,12 +241,23 @@ public class TrueFalsePlayModeFragment extends Fragment {
 
     public void afterExhaustingDataSet() {
         stopTimer();
+        // Incase user wishes to attempt wrongly marked cards
         List<FlashCards> wrongAnswers = scoreHandler.getWrongAnswers();
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        setDialogContent(builder);
+        setDialogButtonsAndListeners(wrongAnswers, builder);
+
+        AlertDialog alertDialog = setWindowProperties(builder);
+        alertDialog.show();
+    }
+
+    private void setDialogContent(AlertDialog.Builder builder) {
         builder.setTitle("Result");
         builder.setMessage("Out of " + scoreHandler.getAttempted() + " you have scored " + scoreHandler.getCorrect());
+    }
 
+    private void setDialogButtonsAndListeners(List<FlashCards> wrongAnswers, AlertDialog.Builder builder) {
         if (wrongAnswers.size() > 0) {
             builder.setPositiveButton("Check Mistaken FlashCards", (dialog, which) -> {
                 trueFalseModePlayAdaptor.setDataSet(wrongAnswers);
@@ -259,10 +276,13 @@ public class TrueFalsePlayModeFragment extends Fragment {
         builder.setOnCancelListener(dialog -> {
             getActivity().onBackPressed();
         });
+    }
+
+    private AlertDialog setWindowProperties(AlertDialog.Builder builder) {
         AlertDialog alertDialog = builder.create();
         alertDialog.getWindow().setGravity(Gravity.CENTER_VERTICAL);
         alertDialog.getWindow().setBackgroundDrawableResource(R.color.DarkModePrimaryDarkColor);
-        alertDialog.show();
+        return alertDialog;
     }
 
     private void resetScoreAndTime() {
