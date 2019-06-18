@@ -28,7 +28,6 @@ import com.omega.Database.FlashCards;
 import com.omega.R;
 import com.omega.Util.EqualSpaceItemDecoration;
 import com.omega.Util.FlashCardViewModel;
-import com.omega.Util.ISwitchToFragment;
 import com.omega.Util.Score;
 
 import java.util.List;
@@ -43,7 +42,7 @@ public class TrueFalsePlayModeFragment extends Fragment {
     private static final String TIME_KEY = "Time";
     private String TAG = getClass().getSimpleName();
 
-    private static long START_TIME = 0;
+    private long START_TIME = 0;
 
     private String groupName;
 
@@ -86,7 +85,6 @@ public class TrueFalsePlayModeFragment extends Fragment {
     };
     private TrueFalseModePlayAdaptor trueFalseModePlayAdaptor;
     private FlashCardViewModel flashCardViewModel;
-    private ISwitchToFragment ImplSwitchToFragment;
 
     public TrueFalsePlayModeFragment() {
         //No Argument constructor
@@ -106,7 +104,8 @@ public class TrueFalsePlayModeFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         flashCardViewModel = ViewModelProviders.of(this).get(FlashCardViewModel.class);
-        if (flashCardViewModel.getTrueFalseAdaptorDataSet() == null && savedInstanceState == null) { // No Previous DataSet found ( in case on Orientation change)
+        // No Previous DataSet found ( in case on Orientation change )
+        if (flashCardViewModel.getTrueFalseAdaptorDataSet() == null && savedInstanceState == null) {
             flashCardViewModel.getAllFlashCardsOfGroup(groupName).observe(this, flashCards -> {
                 trueFalseModePlayAdaptor.setDataSet(flashCards);
             });
@@ -123,22 +122,32 @@ public class TrueFalsePlayModeFragment extends Fragment {
 
         View mainView = inflater.inflate(R.layout.fragment_play_mode_true_false, container, false);
         ButterKnife.bind(this, mainView);
-        Log.d(TAG, "onCreateView: savedState " + savedInstanceState);
-        if (savedInstanceState != null) {
-            groupName = savedInstanceState.getString(GROUP_NAME_KEY);
-            String timeString = savedInstanceState.getString(TIME_KEY);
-            Log.d(TAG, "onCreateView: time " + timeString);
-            START_TIME = Long.parseLong(timeString);
-            btnStart.setVisibility(View.GONE);
-            startTimer();
-        } else {
-            hideAllViews();
-        }
 
+        if (savedInstanceState != null) {
+            useSavedInstanceState(savedInstanceState); // Orientation change
+        } else {
+            hideAllViews(); // first time launch
+        }
+        init();
+        return mainView;
+    }
+
+    private void init() {
         getActivity().setTitle("Play mode");
         initializeRecyclerView();
+        initializeScore();
+    }
+
+    private void initializeScore() {
         scoreHandler = new Score(tvScore);
-        return mainView;
+    }
+
+    private void useSavedInstanceState(Bundle savedInstanceState) {
+        groupName = savedInstanceState.getString(GROUP_NAME_KEY);
+        String timeString = savedInstanceState.getString(TIME_KEY);
+        START_TIME = Long.parseLong(timeString);
+        btnStart.setVisibility(View.GONE);
+        startTimer();
     }
 
     private void hideAllViews() {
@@ -157,31 +166,25 @@ public class TrueFalsePlayModeFragment extends Fragment {
         flashCardViewModel.setTrueFalseScore(scoreHandler);
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        stopTimer();
-    }
-
     private void initializeRecyclerView() {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         trueFalseModePlayAdaptor = new TrueFalseModePlayAdaptor(getActivity());
+        setSpanAndItemDecor();
+        rvPlayCard.setLayoutManager(linearLayoutManager);
+        rvPlayCard.setAdapter(trueFalseModePlayAdaptor);
+    }
 
+    private void setSpanAndItemDecor() {
+        EqualSpaceItemDecoration decoration;
         SnapHelper snapHelper = new LinearSnapHelper();
         snapHelper.attachToRecyclerView(rvPlayCard);
 
-
         if (getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-            EqualSpaceItemDecoration decoration = new EqualSpaceItemDecoration(40);
-            rvPlayCard.addItemDecoration(decoration);
+            decoration = new EqualSpaceItemDecoration(40);
+        } else {
+            decoration = new EqualSpaceItemDecoration(10);
         }
-        rvPlayCard.setLayoutManager(linearLayoutManager);
-        rvPlayCard.setAdapter(trueFalseModePlayAdaptor);
+        rvPlayCard.addItemDecoration(decoration);
     }
 
     @OnClick({R.id.button_correct, R.id.button_wrong})
@@ -213,7 +216,7 @@ public class TrueFalsePlayModeFragment extends Fragment {
         }
 
         if (trueFalseModePlayAdaptor.isDataSetEmpty()) {
-            afterExhaustingDataset();
+            afterExhaustingDataSet();
         }
 
     }
@@ -225,11 +228,12 @@ public class TrueFalsePlayModeFragment extends Fragment {
         btnCorrect.setVisibility(View.VISIBLE);
         btnWrong.setVisibility(View.VISIBLE);
         rvPlayCard.setVisibility(View.VISIBLE);
+        Log.d(TAG, "startTrueFalse: start_timer value = " + START_TIME);
         startTimer();
     }
 
 
-    public void afterExhaustingDataset() {
+    public void afterExhaustingDataSet() {
         stopTimer();
         List<FlashCards> wrongAnswers = scoreHandler.getWrongAnswers();
 
@@ -263,12 +267,17 @@ public class TrueFalsePlayModeFragment extends Fragment {
 
     private void resetScoreAndTime() {
         tvScore.setText("");
-        scoreHandler = new Score(tvScore);
+        initializeScore();
         START_TIME = System.currentTimeMillis();
+        STOP_TIMER = false;
     }
 
     private void startTimer() {
-        Log.d(TAG, "startTimer: start time " + START_TIME);
+        long millis = START_TIME;
+        int seconds = (int) (millis / 1000);
+        int minutes = seconds / 60;
+        seconds = seconds % 60;
+        Log.d(TAG, "startTimer: start time minutes = " + minutes + " Seconds = " + seconds);
         START_TIME = START_TIME == 0 ? System.currentTimeMillis() : START_TIME;
         tvTime.postDelayed(timerRunnable, 0);
         STOP_TIMER = false;
@@ -276,6 +285,7 @@ public class TrueFalsePlayModeFragment extends Fragment {
 
     private void stopTimer() {
         STOP_TIMER = true;
+        START_TIME = 0;
         tvTime.removeCallbacks(timerRunnable);
     }
 }
