@@ -33,7 +33,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline35"
         tools:itemCount="1"
-        tools:listitem="@layout/item_play_mode" />
+        tools:listitem="@layout/item_play_mode"
+        tools:visibility="visible" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_solution_flash_cards"
@@ -49,7 +50,8 @@
         app:layout_constraintStart_toStartOf="@+id/guideline38"
         app:layout_constraintTop_toTopOf="@+id/guideline35"
         tools:itemCount="4"
-        tools:listitem="@layout/item_play_mode" />
+        tools:listitem="@layout/item_play_mode"
+        tools:visibility="visible" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline37"
@@ -73,7 +75,8 @@
         android:layout_marginBottom="8dp"
         android:text=""
         app:layout_constraintBottom_toTopOf="@+id/guideline35"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        tools:visibility="visible" />
 
     <TextView
         android:id="@+id/text_time"
@@ -93,7 +96,8 @@
         android:text="Solutions"
         android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/guideline35"
-        app:layout_constraintEnd_toStartOf="@+id/guideline37" />
+        app:layout_constraintEnd_toStartOf="@+id/guideline37"
+        tools:visibility="visible" />
 
     <Button
         android:id="@+id/button_start_reverse_match"
