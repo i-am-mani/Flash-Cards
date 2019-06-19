@@ -62,10 +62,13 @@ public class SimpleFlashCardViewerAdapter extends RecyclerView.Adapter<SimpleFla
     }
 
     public FlashCards removeItemAtPos(int pos) {
-        FlashCards cardToReturn = dataSet.get(pos);
-        dataSet.remove(pos);
-        notifyItemRemoved(pos);
-        return cardToReturn;
+        if (pos < dataSet.size() && pos >= 0) {
+            FlashCards cardToReturn = dataSet.get(pos);
+            dataSet.remove(pos);
+            notifyItemRemoved(pos);
+            return cardToReturn;
+        }
+        return null;
     }
 
     public boolean isDataSetEmpty() {
