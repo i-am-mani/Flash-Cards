@@ -29,12 +29,16 @@ public class TrueFalseModePlayAdaptor extends SimpleFlashCardViewerAdapter {
             setRandomSolution(holder, position);
         }
 
+
     }
 
     private void setRandomSolution(PlayModeViewHolder holder, int pos) {
         Random random = new Random();
-        String title = dataSet.get(pos).getTitle();
         int randomSolutionIndex = random.nextInt(dataSet.size());
+        while (randomSolutionIndex == pos && dataSet.size() > 1) {
+            randomSolutionIndex = random.nextInt(dataSet.size());
+        }
+        String title = dataSet.get(pos).getTitle();
         String solution = dataSet.get(randomSolutionIndex).getContent();
         holder.onBind(title, solution);
     }
