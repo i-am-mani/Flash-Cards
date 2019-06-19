@@ -122,7 +122,7 @@ public class GroupsAdaptor extends RecyclerView.Adapter<GroupsAdaptor.GroupsView
             });
         }
 
-        @OnClick(R.id.image_button_start_play_mode)
+        @OnClick(R.id.image_button_edit_flashcards)
         public void goToPlayMode(View v) {
             v.animate().translationXBy(1500).setDuration(200).withEndAction(() -> {
                 itemListener.onPlayButtonClicked(v, tvGroupName.getText().toString());

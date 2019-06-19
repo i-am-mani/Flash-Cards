@@ -68,7 +68,6 @@ public class CheckoutFlashCardFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         flashCardViewModel = ViewModelProviders.of(this).get(FlashCardViewModel.class);
         flashCardViewModel.getAllGroups().observe(this, groups -> groupsAdaptor.setDataSet(groups));
-
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeCallback(new OnSwipeDeleteItem(groupsAdaptor, flashCardViewModel, getActivity())));
         itemTouchHelper.attachToRecyclerView(rvGroups);
     }
@@ -130,12 +129,12 @@ class GroupsItemImpl implements GroupsAdaptor.GroupsAdaptorListenerInterface {
 
     @Override
     public void onItemClick(View view, String groupName) {
-        switchToFragment.switchToCreateFlashCard(groupName);
+        switchToFragment.switchToPlayMode(groupName);
     }
 
     @Override
     public void onPlayButtonClicked(View view, String groupName) {
-        switchToFragment.switchToPlayMode(groupName);
+        switchToFragment.switchToCreateFlashCard(groupName);
     }
 }
 
