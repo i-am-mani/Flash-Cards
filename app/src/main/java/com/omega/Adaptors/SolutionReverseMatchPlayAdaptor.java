@@ -35,6 +35,10 @@ public class SolutionReverseMatchPlayAdaptor extends RecyclerView.Adapter<Soluti
         adaptorCallbacks = implSolutionAdaptorCallbacks;
     }
 
+    public void setAdaptorCallbacks(ReverseMatchPlayModeFragment.ImplSolutionAdaptorCallbacks callback) {
+        adaptorCallbacks = callback;
+    }
+
     @NonNull
     @Override
     public SolutionsAdaptor onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
