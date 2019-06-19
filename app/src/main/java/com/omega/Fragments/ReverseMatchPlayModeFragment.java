@@ -1,6 +1,7 @@
 package com.omega.Fragments;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSnapHelper;
@@ -34,12 +36,12 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class ReverseMatchPlayModeFragment extends Fragment {
-    static String GROUP_NAME;
     TitleReverseMatchPlayAdaptor titleAdaptor;
+    Context mContext = null;
+    static String GROUP_NAME;
     FlashCardViewModel flashCardViewModel = null;
     SolutionReverseMatchPlayAdaptor solutionAdaptor = null;
     private long START_TIME;
-
 
     @BindView(R.id.text_time)
     TextView tvTime;
@@ -90,15 +92,27 @@ public class ReverseMatchPlayModeFragment extends Fragment {
         flashCardViewModel = ViewModelProviders.of(this).get(FlashCardViewModel.class);
         flashCardViewModel.getAllFlashCardsOfGroup(GROUP_NAME).observe(this, flashCards -> {
             if (savedInstanceState != null) {
-                long time = savedInstanceState.getLong("StartTime");
-                START_TIME = time;
-                scoreHandler = flashCardViewModel.getReverseScore();
-                resetTitleAdaptor();
-                resetSolutionAdaptor();
+                // Initial Data set
+                useSavedInstanceState(savedInstanceState);
             } else {
                 titleAdaptor.setDataSet(flashCards);
+                // Initial Data set
+                setSolutionAdaptorDataSet(0);
             }
+
         });
+    }
+
+    private void useSavedInstanceState(@Nullable Bundle savedInstanceState) {
+        long time = savedInstanceState.getLong("StartTime");
+        btnStart.setVisibility(View.GONE);
+        START_TIME = time;
+        scoreHandler = flashCardViewModel.getReverseScore();
+        scoreHandler.setScoreView(tvScore);
+        resetTitleAdaptor();
+        resetSolutionAdaptor();
+        setSolutionAdaptorDataSet(0);
+        startTimer();
     }
 
     private void resetTitleAdaptor() {
@@ -108,6 +122,7 @@ public class ReverseMatchPlayModeFragment extends Fragment {
 
     private void resetSolutionAdaptor() {
         solutionAdaptor = flashCardViewModel.getSolutionReverseMatchPlayAdaptor();
+        solutionAdaptor.setAdaptorCallbacks(new ImplSolutionAdaptorCallbacks());
         rvSolutionFlashCards.setAdapter(solutionAdaptor);
     }
 
@@ -116,7 +131,9 @@ public class ReverseMatchPlayModeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View mainView = inflater.inflate(R.layout.fragment_play_mode_reverse_match, container, false);
         ButterKnife.bind(this, mainView);
-        hideViews();
+        if (savedInstanceState == null) {
+            hideViews();
+        }
         initializeVariables();
         return mainView;
     }
@@ -128,6 +145,18 @@ public class ReverseMatchPlayModeFragment extends Fragment {
         flashCardViewModel.setTitleReverseMatchPlayAdaptor(titleAdaptor);
         flashCardViewModel.setSolutionReverseMatchPlayAdaptor(solutionAdaptor);
         flashCardViewModel.setReverseScore(scoreHandler);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mContext = context;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mContext = null;
     }
 
     private void hideViews() {
@@ -185,13 +214,13 @@ public class ReverseMatchPlayModeFragment extends Fragment {
 
     @OnClick(R.id.button_start_reverse_match)
     public void startReverseMatch(View v) {
-        v.setVisibility(View.GONE);
+        btnStart.setVisibility(View.GONE);
         rvSolutionFlashCards.setVisibility(View.VISIBLE);
         rvTitleFlashCards.setVisibility(View.VISIBLE);
         tvSolution.setVisibility(View.VISIBLE);
         // init  timer
         startTimer();
-        setSolutionAdaptorDataSet(); // Initial Data set
+
     }
 
     private void startTimer() {
@@ -205,6 +234,12 @@ public class ReverseMatchPlayModeFragment extends Fragment {
         if (pos >= 0 && prePos != pos) {
             setSolutionDataSet(pos);
         }
+    }
+
+    public void setSolutionAdaptorDataSet(int pos) {
+
+        setSolutionDataSet(pos);
+
     }
 
     private void setSolutionDataSet(int pos) {
@@ -261,7 +296,8 @@ public class ReverseMatchPlayModeFragment extends Fragment {
         }
 
         private void showFinishedAlertDialog() {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            FragmentActivity activity = getActivity();
+            AlertDialog.Builder builder = new AlertDialog.Builder(activity);
             builder.setTitle("Result");
             builder.setMessage("Out of " + scoreHandler.getAttempted() + " you have scored " + scoreHandler.getCorrect());
 
