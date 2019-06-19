@@ -52,4 +52,8 @@ public class Score {
         ++wrongAnswer;
         updateScore();
     }
+
+    public void setScoreView(TextView view) {
+        scoreView = view;
+    }
 }
