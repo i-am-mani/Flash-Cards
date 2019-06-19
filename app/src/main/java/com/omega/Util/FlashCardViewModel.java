@@ -5,6 +5,9 @@ import android.app.Application;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
+import com.omega.Adaptors.SolutionReverseMatchPlayAdaptor;
+import com.omega.Adaptors.TitleReverseMatchPlayAdaptor;
+import com.omega.Adaptors.TrueFalseModePlayAdaptor;
 import com.omega.Database.FlashCards;
 import com.omega.Database.Groups;
 
@@ -19,23 +22,13 @@ public class FlashCardViewModel extends AndroidViewModel {
     private LiveData<List<Groups>> allGroups;
 
     private Score trueFalseScore;
-    private List<FlashCards> trueFalseAdaptorDataSet = null;
 
-    public List<FlashCards> getTrueFalseAdaptorDataSet() {
-        return trueFalseAdaptorDataSet;
-    }
 
-    public void setTrueFalseAdaptorDataSet(List<FlashCards> trueFalseAdaptorDataSet) {
-        this.trueFalseAdaptorDataSet = trueFalseAdaptorDataSet;
-    }
+    private TrueFalseModePlayAdaptor trueFalseAdaptorDataSet = null;
 
-    public Score getTrueFalseScore() {
-        return trueFalseScore;
-    }
-
-    public void setTrueFalseScore(Score scoreHandler) {
-        this.trueFalseScore = scoreHandler;
-    }
+    private Score reverseScore;
+    private SolutionReverseMatchPlayAdaptor solutionReverseMatchPlayAdaptor = null;
+    private TitleReverseMatchPlayAdaptor titleReverseMatchPlayAdaptor = null;
 
     public FlashCardViewModel(Application application) {
         super(application);
@@ -95,4 +88,51 @@ public class FlashCardViewModel extends AndroidViewModel {
     public void updateGroup(Groups group) {
         flashCardRepository.updateGroup(group);
     }
+
+    // Used for saving states in TrueFalseMode
+
+    public TrueFalseModePlayAdaptor getTrueFalseAdaptorDataSet() {
+        return trueFalseAdaptorDataSet;
+    }
+
+    public void setTrueFalseAdaptorDataSet(TrueFalseModePlayAdaptor trueFalseAdaptorDataSet) {
+        this.trueFalseAdaptorDataSet = trueFalseAdaptorDataSet;
+    }
+
+
+    public Score getTrueFalseScore() {
+        return trueFalseScore;
+    }
+
+    public void setTrueFalseScore(Score scoreHandler) {
+        this.trueFalseScore = scoreHandler;
+    }
+
+    // Used for Saving states in ReverseMatchMode
+
+    public Score getReverseScore() {
+        return reverseScore;
+    }
+
+    public void setReverseScore(Score reverseScore) {
+        this.reverseScore = reverseScore;
+    }
+
+    public SolutionReverseMatchPlayAdaptor getSolutionReverseMatchPlayAdaptor() {
+        return solutionReverseMatchPlayAdaptor;
+    }
+
+    public void setSolutionReverseMatchPlayAdaptor(SolutionReverseMatchPlayAdaptor solutionReverseMatchPlayAdaptor) {
+        this.solutionReverseMatchPlayAdaptor = solutionReverseMatchPlayAdaptor;
+    }
+
+    public TitleReverseMatchPlayAdaptor getTitleReverseMatchPlayAdaptor() {
+        return titleReverseMatchPlayAdaptor;
+    }
+
+    public void setTitleReverseMatchPlayAdaptor(TitleReverseMatchPlayAdaptor titleReverseMatchPlayAdaptor) {
+        this.titleReverseMatchPlayAdaptor = titleReverseMatchPlayAdaptor;
+    }
+
+
 }

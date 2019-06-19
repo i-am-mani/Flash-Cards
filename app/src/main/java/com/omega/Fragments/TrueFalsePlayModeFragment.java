@@ -105,14 +105,12 @@ public class TrueFalsePlayModeFragment extends Fragment {
 
         flashCardViewModel = ViewModelProviders.of(this).get(FlashCardViewModel.class);
         // No Previous DataSet found ( in case on Orientation change )
-        if (flashCardViewModel.getTrueFalseAdaptorDataSet() == null && savedInstanceState == null) {
+        if (savedInstanceState == null) {
             flashCardViewModel.getAllFlashCardsOfGroup(groupName).observe(this, flashCards -> {
                 trueFalseModePlayAdaptor.setDataSet(flashCards);
             });
         } else {
-            // Set previous DataSet and Score ( before orientation change)
-            trueFalseModePlayAdaptor.setDataSet(flashCardViewModel.getTrueFalseAdaptorDataSet());
-            scoreHandler = flashCardViewModel.getTrueFalseScore();
+            useSavedInstanceState(savedInstanceState); // Orientation change
         }
     }
 
@@ -124,7 +122,7 @@ public class TrueFalsePlayModeFragment extends Fragment {
         ButterKnife.bind(this, mainView);
 
         if (savedInstanceState != null) {
-            useSavedInstanceState(savedInstanceState); // Orientation change
+
         } else {
             hideAllViews(); // first time launch
         }
@@ -139,7 +137,7 @@ public class TrueFalsePlayModeFragment extends Fragment {
         outState.putString(GROUP_NAME_KEY, groupName);
         String time = String.valueOf(START_TIME);
         outState.putString(TIME_KEY, time);
-        flashCardViewModel.setTrueFalseAdaptorDataSet(trueFalseModePlayAdaptor.getDataSet());
+        flashCardViewModel.setTrueFalseAdaptorDataSet(trueFalseModePlayAdaptor);
         flashCardViewModel.setTrueFalseScore(scoreHandler);
     }
 
@@ -157,6 +155,17 @@ public class TrueFalsePlayModeFragment extends Fragment {
         groupName = savedInstanceState.getString(GROUP_NAME_KEY);
         String timeString = savedInstanceState.getString(TIME_KEY);
         START_TIME = Long.parseLong(timeString);
+
+        // Set previous DataSet and Score ( before orientation change)
+        trueFalseModePlayAdaptor = flashCardViewModel.getTrueFalseAdaptorDataSet();
+
+        scoreHandler = flashCardViewModel.getTrueFalseScore();
+        scoreHandler.setScoreView(tvScore);
+//
+//        if (trueFalseModePlayAdaptor.getItemCount() <= 0) {
+//            getActivity().onBackPressed();
+//        }
+
         btnStart.setVisibility(View.GONE);
         startTimer();
     }
@@ -241,7 +250,7 @@ public class TrueFalsePlayModeFragment extends Fragment {
 
     public void afterExhaustingDataSet() {
         stopTimer();
-        // Incase user wishes to attempt wrongly marked cards
+        // In case user wishes to attempt wrongly marked cards
         List<FlashCards> wrongAnswers = scoreHandler.getWrongAnswers();
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
