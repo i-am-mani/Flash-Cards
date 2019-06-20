@@ -22,6 +22,7 @@ import butterknife.OnClick;
 
 public class GroupsAdaptor extends RecyclerView.Adapter<GroupsAdaptor.GroupsViewHolder> {
 
+    private Context mContext;
     LayoutInflater layoutInflater;
     List<Groups> filterList;
     List<Groups> groupsList;
@@ -29,6 +30,7 @@ public class GroupsAdaptor extends RecyclerView.Adapter<GroupsAdaptor.GroupsView
     GroupsAdaptorListenerInterface itemListener;
 
     public GroupsAdaptor(Context context,GroupsAdaptorListenerInterface adaptorListenerInterface){
+        mContext = context;
         layoutInflater = LayoutInflater.from(context);
         itemListener = adaptorListenerInterface;
     }
@@ -45,8 +47,11 @@ public class GroupsAdaptor extends RecyclerView.Adapter<GroupsAdaptor.GroupsView
         if (filterList != null) {
             String name = filterList.get(position).getGroupName();
             String description = filterList.get(position).getGroupDescription();
+
             holder.tvGroupName.setText(name);
             holder.tvGroupDescription.setText(description);
+            itemListener.getNumberOfFlashCards(name, holder.tvNumberOfFlashCards);
+
         }
         else{
             holder.tvGroupDescription.setText("No Group Found!");
@@ -98,6 +103,8 @@ public class GroupsAdaptor extends RecyclerView.Adapter<GroupsAdaptor.GroupsView
         void onItemClick(View view, String groupName);
 
         void onPlayButtonClicked(View view, String groupName);
+
+        void getNumberOfFlashCards(String groupName, TextView textView);
     }
 
     public class GroupsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
@@ -105,6 +112,8 @@ public class GroupsAdaptor extends RecyclerView.Adapter<GroupsAdaptor.GroupsView
         TextView tvGroupName;
         @BindView(R.id.text_checkout_group_description)
         TextView tvGroupDescription;
+        @BindView(R.id.text_number_of_flashcards)
+        TextView tvNumberOfFlashCards;
 
         public GroupsViewHolder(View itemView) {
             super(itemView);

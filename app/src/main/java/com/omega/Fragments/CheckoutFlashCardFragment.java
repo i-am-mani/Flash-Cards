@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -22,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.omega.Adaptors.GroupsAdaptor;
+import com.omega.Database.FlashCards;
 import com.omega.Database.Groups;
 import com.omega.R;
 import com.omega.Util.EqualSpaceItemDecoration;
@@ -29,6 +31,8 @@ import com.omega.Util.FlashCardViewModel;
 import com.omega.Util.ISwitchToFragment;
 import com.omega.Util.SwipeCallback;
 import com.omega.Util.Utility;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -78,6 +82,7 @@ public class CheckoutFlashCardFragment extends Fragment {
         ButterKnife.bind(this, viewGroup);
         setActionBarTitle();
         initialize();
+        et_search.setHint("Search");
         return viewGroup;
     }
 
@@ -117,28 +122,48 @@ public class CheckoutFlashCardFragment extends Fragment {
         });
     }
 
+    /***
+     * Implementation of GroupsAdaptorListenerInterface, used by Adaptor to provided callbacks
+     */
+    class GroupsItemImpl implements GroupsAdaptor.GroupsAdaptorListenerInterface {
+
+        private ISwitchToFragment switchToFragment;
+
+
+        GroupsItemImpl(ISwitchToFragment implSwitchToFragment) {
+            switchToFragment = implSwitchToFragment;
+        }
+
+        @Override
+        public void onItemClick(View view, String groupName) {
+            switchToFragment.switchToPlayMode(groupName);
+        }
+
+        @Override
+        public void onPlayButtonClicked(View view, String groupName) {
+            switchToFragment.switchToCreateFlashCard(groupName);
+        }
+
+        @Override
+        public void getNumberOfFlashCards(String groupName, TextView textView) {
+            Log.d(TAG, "getNumberOfFlashCards: textView" + textView);
+            LiveData<List<FlashCards>> allFlashCardsOfGroup = flashCardViewModel.getAllFlashCardsOfGroup(groupName);
+            allFlashCardsOfGroup.observe(CheckoutFlashCardFragment.this, flashCards -> {
+                if (textView != null) {
+
+                    textView.setText(String.valueOf(flashCards.size()));
+                }
+
+            });
+        }
+    }
+
 }
 
-class GroupsItemImpl implements GroupsAdaptor.GroupsAdaptorListenerInterface {
 
-    private ISwitchToFragment switchToFragment;
-
-    GroupsItemImpl(ISwitchToFragment implSwitchToFragment) {
-        switchToFragment = implSwitchToFragment;
-    }
-
-    @Override
-    public void onItemClick(View view, String groupName) {
-        switchToFragment.switchToPlayMode(groupName);
-    }
-
-    @Override
-    public void onPlayButtonClicked(View view, String groupName) {
-        switchToFragment.switchToCreateFlashCard(groupName);
-    }
-}
-
-
+/**
+ * Implantation for OnSwiped, Provides callbacks for swipe.
+ */
 class OnSwipeDeleteItem implements SwipeCallback.OnSwiped {
 
     private GroupsAdaptor groupsAdaptor;
