@@ -299,7 +299,11 @@ public class ReverseMatchPlayModeFragment extends Fragment {
                 dialog.dismiss();
             });
 
-            builder.setOnDismissListener(dialog -> getActivity().onBackPressed());
+            builder.setOnDismissListener(dialog -> {
+                if (getActivity() != null) {
+                    getActivity().onBackPressed();
+                }
+            });
 
 
             AlertDialog alertDialog = builder.create();
