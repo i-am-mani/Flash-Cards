@@ -9,7 +9,6 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -33,7 +32,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 public class ReverseMatchPlayModeFragment extends Fragment {
     TitleReverseMatchPlayAdaptor titleAdaptor;
@@ -52,8 +50,6 @@ public class ReverseMatchPlayModeFragment extends Fragment {
     @BindView(R.id.recycler_view_solution_flash_cards)
     RecyclerView rvSolutionFlashCards;
 
-    @BindView(R.id.button_start_reverse_match)
-    Button btnStart;
 
     @BindView(R.id.text_score)
     TextView tvScore;
@@ -105,7 +101,6 @@ public class ReverseMatchPlayModeFragment extends Fragment {
 
     private void useSavedInstanceState(@Nullable Bundle savedInstanceState) {
         long time = savedInstanceState.getLong("StartTime");
-        btnStart.setVisibility(View.GONE);
         START_TIME = time;
         scoreHandler = flashCardViewModel.getReverseScore();
         scoreHandler.setScoreView(tvScore);
@@ -115,7 +110,7 @@ public class ReverseMatchPlayModeFragment extends Fragment {
         if (titleAdaptor.getItemCount() > 0) {
             setSolutionAdaptorDataSet(0);
         } else {
-//            getActivity().onBackPressed();
+            getActivity().onBackPressed();
         }
         startTimer();
     }
@@ -136,9 +131,6 @@ public class ReverseMatchPlayModeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View mainView = inflater.inflate(R.layout.fragment_play_mode_reverse_match, container, false);
         ButterKnife.bind(this, mainView);
-        if (savedInstanceState == null) {
-            hideViews();
-        }
         initializeVariables();
         return mainView;
     }
@@ -156,6 +148,12 @@ public class ReverseMatchPlayModeFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         mContext = context;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        startTimer();
     }
 
     @Override
@@ -215,17 +213,6 @@ public class ReverseMatchPlayModeFragment extends Fragment {
                 setSolutionAdaptorDataSet();
             }
         });
-    }
-
-    @OnClick(R.id.button_start_reverse_match)
-    public void startReverseMatch(View v) {
-        btnStart.setVisibility(View.GONE);
-        rvSolutionFlashCards.setVisibility(View.VISIBLE);
-        rvTitleFlashCards.setVisibility(View.VISIBLE);
-        tvSolution.setVisibility(View.VISIBLE);
-        // init  timer
-        startTimer();
-
     }
 
     private void startTimer() {
