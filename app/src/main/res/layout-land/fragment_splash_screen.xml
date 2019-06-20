@@ -23,7 +23,7 @@
         app:layout_constraintTop_toTopOf="@+id/guideline13">
 
         <TextView
-            android:id="@+id/button_check_out"
+            android:id="@+id/text_check_out"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fontFamily="monospace"
@@ -50,7 +50,7 @@
         app:layout_constraintTop_toTopOf="@+id/guideline13">
 
         <TextView
-            android:id="@+id/button_create"
+            android:id="@+id/text_create"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fontFamily="monospace"
