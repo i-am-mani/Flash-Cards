@@ -111,7 +111,12 @@ public class ReverseMatchPlayModeFragment extends Fragment {
         scoreHandler.setScoreView(tvScore);
         resetTitleAdaptor();
         resetSolutionAdaptor();
-        setSolutionAdaptorDataSet(0);
+        // On rotation if
+        if (titleAdaptor.getItemCount() > 0) {
+            setSolutionAdaptorDataSet(0);
+        } else {
+//            getActivity().onBackPressed();
+        }
         startTimer();
     }
 
@@ -304,9 +309,14 @@ public class ReverseMatchPlayModeFragment extends Fragment {
             builder.setPositiveButton("Exit", (dialog, which) -> getActivity().onBackPressed());
 
             builder.setOnCancelListener(dialog -> {
-                getActivity().onBackPressed();
+                dialog.dismiss();
             });
+
+            builder.setOnDismissListener(dialog -> getActivity().onBackPressed());
+
+
             AlertDialog alertDialog = builder.create();
+
             alertDialog.getWindow().setGravity(Gravity.CENTER_VERTICAL);
             alertDialog.getWindow().setBackgroundDrawableResource(R.color.DarkModePrimaryDarkColor);
             alertDialog.show();
