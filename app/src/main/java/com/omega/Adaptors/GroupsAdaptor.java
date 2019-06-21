@@ -82,6 +82,12 @@ public class GroupsAdaptor extends RecyclerView.Adapter<GroupsAdaptor.GroupsView
         notifyItemChanged(pos);
     }
 
+    public void removeItemFromDataSet(int pos) {
+        groupsList.remove(pos);
+        filterList.remove(pos);
+        notifyItemRemoved(pos);
+    }
+
     public void filter(String query) {
         if (groupsList != null) {
             if (filterList == null) {
