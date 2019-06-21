@@ -90,7 +90,7 @@ public class CreateFlashCardFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View viewGroup = inflater.inflate(R.layout.fragment_create_flash_card, container, false);
-        getActivity().setTitle("Create New Flash Card"); //set Fragment title
+        setActionBarTitle();
         initializeInstanceVariables(viewGroup);
         initializeCallbacks(viewGroup);
         ButterKnife.bind(this, viewGroup);
@@ -103,6 +103,14 @@ public class CreateFlashCardFragment extends Fragment {
         setHints();
 
         return viewGroup;
+    }
+
+    private void setActionBarTitle() {
+        if (GROUP_NAME == null) {
+            getActivity().setTitle("Create Group");
+        } else {
+            getActivity().setTitle("Create FlashCards");
+        }
     }
 
     private void setHints() {
@@ -188,6 +196,7 @@ public class CreateFlashCardFragment extends Fragment {
                     GROUP_NAME = group;
                     flashCardViewModel.createGroup(group,desc);
                     setHints();
+                    setActionBarTitle();
                     attachObserver();
                     dialog.dismiss();
                 }
