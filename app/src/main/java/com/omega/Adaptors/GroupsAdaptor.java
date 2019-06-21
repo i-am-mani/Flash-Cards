@@ -1,11 +1,14 @@
 package com.omega.Adaptors;
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -129,12 +132,37 @@ public class GroupsAdaptor extends RecyclerView.Adapter<GroupsAdaptor.GroupsView
 
 
         @Override
-        public void onClick(View v) {
+        public void onClick(View itemView) {
             Log.d(TAG, "onClick: " + getAdapterPosition());
+            int nItems = Integer.valueOf(tvNumberOfFlashCards.getText().toString());
 
-            v.animate().translationXBy(1500).setDuration(100).withEndAction(() -> {
-                itemListener.onItemClick(v, tvGroupName.getText().toString());
+            if (nItems > 0) {
+                onNonEmptyFlashCards(itemView);
+            } else {
+
+                onEmptyFlashCards(itemView);
+            }
+        }
+
+        private void onNonEmptyFlashCards(View itemView) {
+            itemView.animate().translationXBy(1500).setDuration(100).withEndAction(() -> {
+                itemListener.onItemClick(itemView, tvGroupName.getText().toString());
             });
+        }
+
+        private void onEmptyFlashCards(View itemView) {
+            ObjectAnimator rotateUp = ObjectAnimator.ofFloat(itemView, "rotation", 20);
+            ObjectAnimator rotateDown = ObjectAnimator.ofFloat(itemView, "rotation", -20);
+            ObjectAnimator rotateCenter = ObjectAnimator.ofFloat(itemView, "rotation", 0);
+
+            AnimatorSet animatorSet = new AnimatorSet();
+            animatorSet.play(rotateUp).before(rotateDown);
+            animatorSet.play(rotateDown).before(rotateCenter);
+            animatorSet.setDuration(200);
+            animatorSet.start();
+
+            Toast.makeText(mContext, "No FlashCards Found", Toast.LENGTH_SHORT).show();
+
         }
 
         @OnClick(R.id.image_button_edit_flashcards)
