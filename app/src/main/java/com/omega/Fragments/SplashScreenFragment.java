@@ -1,7 +1,10 @@
 package com.omega.Fragments;
 
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,7 +31,7 @@ public class SplashScreenFragment extends Fragment {
     @BindView(R.id.button_create)
     CardView btnCreate;
 
-    @BindView(R.id.text_create_flash_cards)
+    @BindView(R.id.text_create_flashcards)
     TextView tvCreate;
     @BindView(R.id.text_checkout_flashcards)
     TextView tvCheckout;
@@ -74,9 +77,27 @@ public class SplashScreenFragment extends Fragment {
     @OnClick({R.id.button_check_out, R.id.button_create})
     public void play(View view) {
         if (view.getId() == R.id.button_check_out) {
-            ImplSwitchToFragment.switchToCheckoutFlashCard();
+            if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                view.animate().translationZBy(400).setDuration(300).setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        super.onAnimationEnd(animation);
+                        ImplSwitchToFragment.switchToCheckoutFlashCard();
+                    }
+                });
+            }
+
         } else if (view.getId() == R.id.button_create) {
-            ImplSwitchToFragment.switchToCreateFlashCard(null);
+            if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                view.animate().translationZBy(400).setDuration(300).setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        super.onAnimationEnd(animation);
+                        ImplSwitchToFragment.switchToCreateFlashCard(null);
+                    }
+                });
+            }
+
         }
     }
 

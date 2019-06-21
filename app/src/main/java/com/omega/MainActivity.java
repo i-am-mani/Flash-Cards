@@ -5,7 +5,9 @@ import android.content.Context;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.transition.Explode;
+import android.transition.Slide;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -31,6 +33,7 @@ import com.omega.Util.ISwitchToFragment;
 public class MainActivity extends AppCompatActivity implements ISwitchToFragment {
 
 
+    private String TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements ISwitchToFragment
     @Override
     public void switchToCreateFlashCard(String groupName) {
         CreateFlashCardFragment createFlashCard = new CreateFlashCardFragment(groupName);
-        addExplodeTransactionToFragment(createFlashCard);
+//        addExplodeTransactionToFragment(createFlashCard);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.frame_main_area,createFlashCard);
         transaction.addToBackStack(null);
@@ -70,7 +73,8 @@ public class MainActivity extends AppCompatActivity implements ISwitchToFragment
     @Override
     public void switchToCheckoutFlashCard() {
         CheckoutFlashCardFragment checkoutFlashCard = new CheckoutFlashCardFragment();
-        addExplodeTransactionToFragment(checkoutFlashCard);
+        checkoutFlashCard.setEnterTransition(new Slide(Gravity.RIGHT));
+        checkoutFlashCard.setExitTransition(new Explode());
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.frame_main_area, checkoutFlashCard);
         transaction.addToBackStack(null);
@@ -91,6 +95,7 @@ public class MainActivity extends AppCompatActivity implements ISwitchToFragment
     @Override
     public void switchToPlayModeReverseMatch(String group) {
         ReverseMatchPlayModeFragment reverseMatchPlayModeFragment = new ReverseMatchPlayModeFragment(group);
+
         addExplodeTransactionToFragment(reverseMatchPlayModeFragment);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.frame_main_area, reverseMatchPlayModeFragment);
@@ -101,6 +106,7 @@ public class MainActivity extends AppCompatActivity implements ISwitchToFragment
 
     @Override
     public void switchToPlayModeTrueFalse(String group) {
+        Log.d(TAG, "switchToPlayModeTrueFalse:");
         TrueFalsePlayModeFragment trueFalsePlayModeFragment = new TrueFalsePlayModeFragment(group);
         addExplodeTransactionToFragment(trueFalsePlayModeFragment);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -155,6 +161,4 @@ public class MainActivity extends AppCompatActivity implements ISwitchToFragment
         }
         return super.dispatchTouchEvent(event);
     }
-
-
 }
