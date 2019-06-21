@@ -27,9 +27,13 @@ public class CasualPlayModeFragment extends Fragment {
 
     @BindView(R.id.recycler_view_casual_mode_flash_cards)
     RecyclerView rvCasualPlay;
-    private String GROUP_NAME;
+    private static String GROUP_NAME;
     private CasualModePlayAdaptor casualModePlayAdaptor;
     private FlashCardViewModel flashCardViewModel;
+
+    public CasualPlayModeFragment() {
+        //No-arg constructor
+    }
 
     public CasualPlayModeFragment(String group) {
         GROUP_NAME = group;
@@ -40,12 +44,17 @@ public class CasualPlayModeFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         flashCardViewModel = ViewModelProviders.of(this).get(FlashCardViewModel.class);
         flashCardViewModel.getAllFlashCardsOfGroup(GROUP_NAME).observe(this, flashCards -> {
+//            if (savedInstanceState != null) {
+//                useSavedInstanceState();
+//            } else {
             casualModePlayAdaptor.setDataSet(flashCards);
-//            if (flashCards.size() > 0) {
-//                tvHint.setVisibility(View.GONE);
 //            }
         });
     }
+//
+//    private void useSavedInstanceState() {
+//        casualModePlayAdaptor.set
+//    }
 
     @Nullable
     @Override
@@ -53,7 +62,14 @@ public class CasualPlayModeFragment extends Fragment {
         View mainView = inflater.inflate(R.layout.fragment_play_mode_casual, container, false);
         ButterKnife.bind(this, mainView);
         initializeVariables();
+        getActivity().setTitle("Casual Mode");
         return mainView;
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("GroupName", GROUP_NAME);
     }
 
     private void initializeVariables() {
@@ -73,7 +89,6 @@ public class CasualPlayModeFragment extends Fragment {
 
         SnapHelper snapHelper = new LinearSnapHelper();
         snapHelper.attachToRecyclerView(rvCasualPlay);
-
     }
 }
 

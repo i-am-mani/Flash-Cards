@@ -132,6 +132,7 @@ public class ReverseMatchPlayModeFragment extends Fragment {
         View mainView = inflater.inflate(R.layout.fragment_play_mode_reverse_match, container, false);
         ButterKnife.bind(this, mainView);
         initializeVariables();
+        getActivity().setTitle("Reverse-Match Mode");
         return mainView;
     }
 

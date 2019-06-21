@@ -54,6 +54,7 @@ public class SplashScreenPlayModeFragment extends Fragment {
         if (savedInstanceState != null) {
             GROUP_NAME = savedInstanceState.getString(KEY);
         }
+        getActivity().setTitle("Play Mode");
         return mainView;
     }
 
