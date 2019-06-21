@@ -9,7 +9,6 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -65,9 +64,6 @@ public class TrueFalsePlayModeFragment extends Fragment {
     @BindView(R.id.button_wrong)
     ImageButton btnWrong;
 
-    @BindView(R.id.button_start_true_false)
-    Button btnStart;
-
     private Score scoreHandler;
 
     Runnable timerRunnable = new Runnable() {
@@ -120,13 +116,8 @@ public class TrueFalsePlayModeFragment extends Fragment {
 
         View mainView = inflater.inflate(R.layout.fragment_play_mode_true_false, container, false);
         ButterKnife.bind(this, mainView);
-
-        if (savedInstanceState != null) {
-
-        } else {
-            hideAllViews(); // first time launch
-        }
         init();
+        getActivity().setTitle("True-False Mode");
         return mainView;
     }
 
@@ -159,21 +150,13 @@ public class TrueFalsePlayModeFragment extends Fragment {
         // Set previous DataSet and Score ( before orientation change)
         trueFalseModePlayAdaptor = flashCardViewModel.getTrueFalseAdaptorDataSet();
 
+        if (trueFalseModePlayAdaptor.getItemCount() == 0) {
+            getActivity().onBackPressed();
+        }
         scoreHandler = flashCardViewModel.getTrueFalseScore();
         scoreHandler.setScoreView(tvScore);
-//
-//        if (trueFalseModePlayAdaptor.getItemCount() <= 0) {
-//            getActivity().onBackPressed();
-//        }
 
-        btnStart.setVisibility(View.GONE);
         startTimer();
-    }
-
-    private void hideAllViews() {
-        rvPlayCard.setVisibility(View.GONE);
-        btnCorrect.setVisibility(View.GONE);
-        btnWrong.setVisibility(View.GONE);
     }
 
 
@@ -236,17 +219,6 @@ public class TrueFalsePlayModeFragment extends Fragment {
         }
     }
 
-    @OnClick(R.id.button_start_true_false)
-    public void startTrueFalse(View view) {
-        btnStart.setVisibility(View.GONE);
-
-        btnCorrect.setVisibility(View.VISIBLE);
-        btnWrong.setVisibility(View.VISIBLE);
-        rvPlayCard.setVisibility(View.VISIBLE);
-        Log.d(TAG, "startTrueFalse: start_timer value = " + START_TIME);
-        startTimer();
-    }
-
 
     public void afterExhaustingDataSet() {
         stopTimer();
@@ -282,13 +254,12 @@ public class TrueFalsePlayModeFragment extends Fragment {
             });
             resetScoreAndTime();
         });
-        builder.setOnCancelListener(dialog -> {
-            getActivity().onBackPressed();
-        });
     }
 
     private AlertDialog setWindowProperties(AlertDialog.Builder builder) {
         AlertDialog alertDialog = builder.create();
+        alertDialog.setOnCancelListener(dialog -> alertDialog.dismiss());
+        alertDialog.setOnDismissListener(dialog -> getActivity().onBackPressed());
         alertDialog.getWindow().setGravity(Gravity.CENTER_VERTICAL);
         alertDialog.getWindow().setBackgroundDrawableResource(R.color.DarkModePrimaryDarkColor);
         return alertDialog;
