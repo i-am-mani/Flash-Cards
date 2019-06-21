@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.omega.Adaptors.GroupsAdaptor;
 import com.omega.Database.FlashCards;
 import com.omega.Database.Groups;
@@ -53,6 +54,15 @@ public class CheckoutFlashCardFragment extends Fragment {
     @BindView(R.id.recycler_view_group)
     RecyclerView rvGroups;
 
+    @BindView(R.id.text_checkout_flashcards_hint)
+    TextView tvHint;
+
+    @BindView(R.id.divider_checkout_flashcards)
+    View divider;
+
+    @BindView(R.id.text_input_layout_checkout)
+    TextInputLayout textInputLayout;
+
     public CheckoutFlashCardFragment(){
 
     }
@@ -71,7 +81,14 @@ public class CheckoutFlashCardFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         flashCardViewModel = ViewModelProviders.of(this).get(FlashCardViewModel.class);
-        flashCardViewModel.getAllGroups().observe(this, groups -> groupsAdaptor.setDataSet(groups));
+        flashCardViewModel.getAllGroups().observe(this, groups -> {
+            if (groups.size() > 0) {
+                groupsAdaptor.setDataSet(groups);
+                tvHint.setVisibility(View.GONE);
+            } else {
+                actionOnNoGroup();
+            }
+        });
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeCallback(new OnSwipeDeleteItem(groupsAdaptor, flashCardViewModel, getActivity())));
         itemTouchHelper.attachToRecyclerView(rvGroups);
     }
@@ -82,8 +99,20 @@ public class CheckoutFlashCardFragment extends Fragment {
         ButterKnife.bind(this, viewGroup);
         setActionBarTitle();
         initialize();
-        et_search.setHint("Search");
+        setHints();
         return viewGroup;
+    }
+
+    private void setHints() {
+        et_search.setHint("Search");
+    }
+
+    private void actionOnNoGroup() {
+        tvHint.setVisibility(View.VISIBLE);
+        tvHint.setText("No Groups Found");
+        et_search.setVisibility(View.INVISIBLE);
+        divider.setVisibility(View.INVISIBLE);
+        textInputLayout.setVisibility(View.INVISIBLE);
     }
 
     private void initialize() {
@@ -189,6 +218,7 @@ class OnSwipeDeleteItem implements SwipeCallback.OnSwiped {
 
         alertDialog.setPositiveButton("Yes", (dialog, which) -> {
             flashCardViewModel.deleteGroup(group);
+            groupsAdaptor.removeItemFromDataSet(adapterPosition);
         });
         alertDialog.setNegativeButton("Undo", (dialog, which) -> {
             groupsAdaptor.refresh(adapterPosition);
