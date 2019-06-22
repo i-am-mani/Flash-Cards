@@ -3,16 +3,18 @@ package com.omega.Fragments;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
@@ -63,6 +65,8 @@ public class CheckoutFlashCardFragment extends Fragment {
     @BindView(R.id.text_input_layout_checkout)
     TextInputLayout textInputLayout;
 
+    OnSwipeDeleteItem onSwipeDeleteItem;
+
     public CheckoutFlashCardFragment(){
 
     }
@@ -89,7 +93,9 @@ public class CheckoutFlashCardFragment extends Fragment {
                 actionOnNoGroup();
             }
         });
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeCallback(new OnSwipeDeleteItem(groupsAdaptor, flashCardViewModel, getActivity())));
+        ItemTouchHelper itemTouchHelper;
+        onSwipeDeleteItem = new OnSwipeDeleteItem(groupsAdaptor, flashCardViewModel, getActivity());
+        itemTouchHelper = new ItemTouchHelper(new SwipeCallback(onSwipeDeleteItem));
         itemTouchHelper.attachToRecyclerView(rvGroups);
     }
 
@@ -112,7 +118,7 @@ public class CheckoutFlashCardFragment extends Fragment {
         tvHint.setText("No Groups Found");
         et_search.setVisibility(View.INVISIBLE);
         divider.setVisibility(View.INVISIBLE);
-        textInputLayout.setVisibility(View.INVISIBLE);
+//        textInputLayout.setVisibility(View.INVISIBLE);
     }
 
     private void initialize() {
@@ -139,16 +145,7 @@ public class CheckoutFlashCardFragment extends Fragment {
     }
 
     private void setEditTextListeners() {
-        et_search.setOnKeyListener((v, keyCode, event) -> {
-            Log.d(TAG, "initialize: " + keyCode);
-            if (keyCode == KeyEvent.KEYCODE_ENTER) {
-                Utility.hideKeyboard(et_search, getActivity());
-                et_search.setFocusable(false);
-                et_search.setFocusableInTouchMode(true);
-                return true;
-            }
-            return false;
-        });
+        Utility.onReturnKeyEditText(et_search, getActivity());
     }
 
     /***
@@ -184,6 +181,83 @@ public class CheckoutFlashCardFragment extends Fragment {
                 }
 
             });
+        }
+
+        @Override
+        public void deleteGroup(int pos) {
+            onSwipeDeleteItem.deleteItem(pos);
+        }
+
+        @Override
+        public void editGroup(int pos) {
+            onSwipeDeleteItem.editItem(pos);
+        }
+
+        @Override
+        public void exportFlashCardsOfGroup(int pos) {
+            LiveData<List<FlashCards>> cards = flashCardViewModel.getAllFlashCardsOfGroup(groupsAdaptor.getItemAtPosition(pos).getGroupName());
+            cards.observe(CheckoutFlashCardFragment.this, flashCards -> {
+
+                Dialog dialog = new Dialog(getActivity());
+
+                dialog.requestWindowFeature(Window.FEATURE_SWIPE_TO_DISMISS);
+                dialog.setCanceledOnTouchOutside(true);
+                dialog.setContentView(R.layout.dialog_export_flashcards);
+                dialog.getWindow().setBackgroundDrawableResource(R.color.DarkModePrimaryDarkColor);
+                dialog.getWindow().setBackgroundDrawableResource(R.color.DarkModePrimaryColor);
+                dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+
+                TextInputEditText etTitleSeparator = dialog.findViewById(R.id.edit_text_title_separator);
+                TextInputEditText etFlashCardsSeparator = dialog.findViewById(R.id.edit_text_flashcards_separator);
+                TextView tvContent = dialog.findViewById(R.id.text_export_content);
+                Button btnCopy = dialog.findViewById(R.id.button_export_copy);
+                Button btnGenerate = dialog.findViewById(R.id.button_export_generate);
+
+                btnCopy.setOnClickListener(v -> copyToSystemClipboard(tvContent.getText().toString()));
+                btnGenerate.setOnClickListener(v -> {
+                    String titleSep = etTitleSeparator.getEditableText().toString();
+                    String cardSep = etFlashCardsSeparator.getText().toString();
+                    Log.d(TAG, "exportFlashCardsOfGroup: titleSep = " + titleSep + " cardSep = " + cardSep);
+                    if (etTitleSeparator.length() == 0 || etFlashCardsSeparator.length() == 0) {
+                        Toast.makeText(getActivity(), "Enter Proper Separator", Toast.LENGTH_SHORT);
+                    }
+                    if (titleSep.length() > 0 && cardSep.length() > 0) {
+                        String content = getFlashCardExportableContent(flashCards, titleSep, cardSep);
+                        tvContent.setText(content);
+                    }
+                });
+                Utility.onReturnKeyEditText(etFlashCardsSeparator, getActivity());
+                Utility.onReturnKeyEditText(etTitleSeparator, getActivity());
+
+                String content = getFlashCardExportableContent(flashCards, "-", "\n\n");
+                tvContent.setText(content);
+                dialog.show();
+
+            });
+
+        }
+
+        private void copyToSystemClipboard(String content) {
+            ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+            ClipData clip = ClipData.newPlainText("FlashCart content", content);
+            clipboard.setPrimaryClip(clip);
+        }
+
+        public String getFlashCardExportableContent(List<FlashCards> flashCards, String titleSeparator, String flashCardSeparator) {
+            StringBuilder builder = new StringBuilder();
+            titleSeparator = titleSeparator.replaceAll("\\\\n", "\n");
+            flashCardSeparator = flashCardSeparator.replaceAll("\\\\n", "\n");
+            Log.d(TAG, "getFlashCardExportableContent: " + titleSeparator + "  " + flashCardSeparator);
+            for (FlashCards flashCard : flashCards) {
+                String title = flashCard.getTitle();
+                String solution = flashCard.getContent();
+                builder.append(title);
+                builder.append(titleSeparator);
+                builder.append(solution);
+                builder.append(flashCardSeparator);
+            }
+            return builder.toString();
         }
     }
 
