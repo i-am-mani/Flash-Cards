@@ -3,6 +3,7 @@ package com.omega.Adaptors;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
+import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.util.Log;
@@ -113,14 +114,11 @@ public class SolutionReverseMatchPlayAdaptor extends RecyclerView.Adapter<Soluti
         }
 
         private void animateChangeColorFailure() {
+
             ObjectAnimator changeColor = ObjectAnimator.ofArgb(cardView, "backgroundColor",
-                    context.getResources().getColor(R.color.R1),
-                    context.getResources().getColor(R.color.R2),
-                    context.getResources().getColor(R.color.R3),
-                    context.getResources().getColor(R.color.R4),
                     context.getResources().getColor(R.color.R5));
-//            changeColor.setDuration(400);
-//            changeColor.start();
+            changeColor.setEvaluator(new ArgbEvaluator());
+            changeColor.setDuration(50);
             ObjectAnimator rotateUp = ObjectAnimator.ofFloat(itemView, "rotation", 20);
             ObjectAnimator rotateDown = ObjectAnimator.ofFloat(itemView, "rotation", -20);
             ObjectAnimator rotateCenter = ObjectAnimator.ofFloat(itemView, "rotation", 0);
@@ -135,12 +133,9 @@ public class SolutionReverseMatchPlayAdaptor extends RecyclerView.Adapter<Soluti
 
         private void animateColorChangeSuccess() {
             ObjectAnimator changeColor = ObjectAnimator.ofArgb(cardView, "backgroundColor",
-                    context.getResources().getColor(R.color.G1),
-                    context.getResources().getColor(R.color.G2),
-                    context.getResources().getColor(R.color.G3),
-                    context.getResources().getColor(R.color.G4),
                     context.getResources().getColor(R.color.G5));
-
+            changeColor.setEvaluator(new ArgbEvaluator());
+            changeColor.setDuration(50);
             ObjectAnimator moveRight = ObjectAnimator.ofFloat(cardView, "translationX", context.getResources().getDisplayMetrics().widthPixels);
 
             moveRight.addListener(new AnimatorListenerAdapter() {
@@ -161,7 +156,7 @@ public class SolutionReverseMatchPlayAdaptor extends RecyclerView.Adapter<Soluti
             });
 
             AnimatorSet animatorSet = new AnimatorSet();
-            animatorSet.setDuration(600);
+            animatorSet.setDuration(500);
             animatorSet.play(moveRight).with(changeColor);
             animatorSet.start();
         }
