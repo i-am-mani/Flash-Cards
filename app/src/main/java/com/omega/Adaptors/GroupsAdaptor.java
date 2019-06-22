@@ -5,8 +5,11 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,6 +34,7 @@ public class GroupsAdaptor extends RecyclerView.Adapter<GroupsAdaptor.GroupsView
     List<Groups> groupsList;
     String TAG = GroupsAdaptor.class.getSimpleName();
     GroupsAdaptorListenerInterface itemListener;
+    private int mPosition;
 
     public GroupsAdaptor(Context context,GroupsAdaptorListenerInterface adaptorListenerInterface){
         mContext = context;
@@ -48,18 +52,14 @@ public class GroupsAdaptor extends RecyclerView.Adapter<GroupsAdaptor.GroupsView
     @Override
     public void onBindViewHolder(GroupsViewHolder holder, int position) {
         if (filterList != null) {
-            String name = filterList.get(position).getGroupName();
-            String description = filterList.get(position).getGroupDescription();
-
-            holder.tvGroupName.setText(name);
-            holder.tvGroupDescription.setText(description);
-            itemListener.getNumberOfFlashCards(name, holder.tvNumberOfFlashCards);
+            holder.onBind(holder, position);
 
         }
         else{
             holder.tvGroupDescription.setText("No Group Found!");
         }
     }
+
 
     @Override
     public int getItemCount() {
@@ -114,6 +114,12 @@ public class GroupsAdaptor extends RecyclerView.Adapter<GroupsAdaptor.GroupsView
         void onPlayButtonClicked(View view, String groupName);
 
         void getNumberOfFlashCards(String groupName, TextView textView);
+
+        void deleteGroup(int pos);
+
+        void editGroup(int pos);
+
+        void exportFlashCardsOfGroup(int pos);
     }
 
     public class GroupsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
@@ -123,11 +129,23 @@ public class GroupsAdaptor extends RecyclerView.Adapter<GroupsAdaptor.GroupsView
         TextView tvGroupDescription;
         @BindView(R.id.text_number_of_flashcards)
         TextView tvNumberOfFlashCards;
+        @BindView(R.id.button_options)
+        ImageButton btnOptions;
 
         public GroupsViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(this);
+        }
+
+        private void onBind(GroupsViewHolder holder, int position) {
+            String name = filterList.get(position).getGroupName();
+            String description = filterList.get(position).getGroupDescription();
+
+            holder.tvGroupName.setText(name);
+            holder.tvGroupDescription.setText(description);
+            itemListener.getNumberOfFlashCards(name, holder.tvNumberOfFlashCards);
+            mPosition = position;
         }
 
 
@@ -169,6 +187,32 @@ public class GroupsAdaptor extends RecyclerView.Adapter<GroupsAdaptor.GroupsView
         public void goToPlayMode(View v) {
             v.animate().translationXBy(1500).setDuration(200).withEndAction(() -> {
                 itemListener.onPlayButtonClicked(v, tvGroupName.getText().toString());
+            });
+        }
+
+        @OnClick(R.id.button_options)
+        public void showPopMenu(View view) {
+            PopupMenu popupMenu = new PopupMenu(mContext, btnOptions);
+            popupMenu.inflate(R.menu.menu_checkout_fragment);
+            popupMenu.show();
+            popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+
+                    switch (item.getItemId()) {
+                        case R.id.menu_item_delete:
+                            itemListener.deleteGroup(getAdapterPosition());
+                            return true;
+                        case R.id.menu_item_export:
+                            itemListener.exportFlashCardsOfGroup(getAdapterPosition());
+                            return true;
+                        case R.id.menu_item_edit_group:
+                            itemListener.editGroup(getAdapterPosition());
+                            return true;
+                    }
+
+                    return false;
+                }
             });
         }
     }
