@@ -6,12 +6,15 @@ import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -30,6 +33,7 @@ import com.omega.Util.EqualSpaceItemDecoration;
 import com.omega.Util.FlashCardViewModel;
 import com.omega.Util.ISwitchToFragment;
 import com.omega.Util.SwipeCallback;
+import com.omega.Util.Utility;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -64,6 +68,63 @@ public class CreateFlashCardFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_create_fragment, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        super.onOptionsItemSelected(item);
+        if (item.getItemId() == R.id.menu_item_import) {
+            Dialog dialog = Utility.getDialog(getActivity());
+
+            dialog.setContentView(R.layout.dialog_import_flashcards);
+            EditText etTitleSep = dialog.findViewById(R.id.edit_text_import_title_separator);
+            EditText etCardsSep = dialog.findViewById(R.id.edit_text_import_flashcards_separator);
+            EditText etContent = dialog.findViewById(R.id.edit_text_import_content);
+            Button btnImport = dialog.findViewById(R.id.button_import);
+
+            btnImport.setOnClickListener(v -> {
+                String titleSep = etTitleSep.getText().toString();
+                String cardsSep = etCardsSep.getText().toString();
+                String content = etContent.getText().toString();
+
+                if (titleSep.length() == 0 || content.length() == 0) {
+                    Toast.makeText(getActivity(), "Empty separator details", Toast.LENGTH_SHORT).show();
+                } else if (content.length() == 0) {
+                    Toast.makeText(getActivity(), "Empty Content", Toast.LENGTH_SHORT).show();
+                } else {
+                    createFlashCardsFromContent(content, titleSep, cardsSep);
+                }
+            });
+
+            dialog.show();
+            return true;
+        }
+        return false;
+    }
+
+
+    private void createFlashCardsFromContent(String content, String titleSep, String cardSep) {
+        String[] split = content.split(cardSep);
+        int nAddedFlashcards = 0;
+
+        for (String s : split) {
+            String[] titleSolution = s.split(titleSep);
+
+            if (titleSolution.length == 2) {
+                String title = titleSolution[0];
+                String solution = titleSolution[1];
+
+                flashCardViewModel.createFlashCard(title, solution, GROUP_NAME);
+                nAddedFlashcards++;
+            }
+        }
+        Toast.makeText(getActivity(), nAddedFlashcards + " Flashcard Created", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -153,16 +214,8 @@ public class CreateFlashCardFragment extends Fragment {
     }
 
     private void initializeFlashCardDialog() {
-        Dialog dialog = new Dialog(getActivity());
-//        dialog.setTitle("Create new Flash Card");
-        dialog.requestWindowFeature(Window.FEATURE_SWIPE_TO_DISMISS);
-        dialog.setCanceledOnTouchOutside(true);
+        Dialog dialog = Utility.getDialog(getActivity());
         dialog.setContentView(R.layout.dailog_create_flash_card);
-
-        dialog.getWindow().setBackgroundDrawableResource(R.color.DarkModePrimaryColor);
-
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-
         dialog.setOnShowListener(dialog1 -> {
             Button btnCreateFlashCard = dialog.findViewById(R.id.button_create_flash_card);
             btnCreateFlashCard.setOnClickListener(v1 -> {
@@ -177,14 +230,10 @@ public class CreateFlashCardFragment extends Fragment {
     }
 
     private void initializeGroupDialog() {
-        Dialog dialog = new Dialog(getActivity());
-        dialog.requestWindowFeature(Window.FEATURE_SWIPE_TO_DISMISS);
+        Dialog dialog = Utility.getDialog(getActivity());
+
         dialog.setContentView(R.layout.dialog_create_group);
         Button btnCreateGroup = dialog.findViewById(R.id.button_create_group);
-        dialog.getWindow().setBackgroundDrawableResource(R.color.DarkModePrimaryColor);
-
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-
         dialog.setOnShowListener(dialog1 -> {
             Log.d(TAG, "initializeDialog: onShow fired");
             btnCreateGroup.setOnClickListener(v -> {
@@ -254,11 +303,9 @@ public class CreateFlashCardFragment extends Fragment {
         public void editItem(int adapterPosition) {
             FlashCards flashCard = rvAdaptor.getItemAtPosition(adapterPosition);
 
-            Dialog dialog = new Dialog(getActivity());
-            dialog.requestWindowFeature(Window.FEATURE_SWIPE_TO_DISMISS);
-            dialog.setCanceledOnTouchOutside(true);
-            dialog.setContentView(R.layout.dialog_edit);
+            Dialog dialog = Utility.getDialog(getActivity());
 
+            dialog.setContentView(R.layout.dialog_edit);
             ((TextView) (dialog.findViewById(R.id.text_dialog_title))).setText("Edit FlashCard");
             TextInputEditText etContent = dialog.findViewById(R.id.edit_text_new_description);
             TextInputEditText etTitle = dialog.findViewById(R.id.edit_text_new_group_name);
@@ -266,10 +313,6 @@ public class CreateFlashCardFragment extends Fragment {
             //set et text
             etTitle.setText(flashCard.getTitle());
             etContent.setText(flashCard.getContent());
-
-
-            dialog.getWindow().setBackgroundDrawableResource(R.color.DarkModePrimaryColor);
-            dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
             Button btnConfirmEdit = dialog.findViewById(R.id.button_confirm_edit);
             btnConfirmEdit.setOnClickListener(v -> {
