@@ -80,7 +80,7 @@ public class CreateFlashCardFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         super.onOptionsItemSelected(item);
         if (item.getItemId() == R.id.menu_item_import) {
-            Dialog dialog = Utility.getDialog(getActivity());
+            Dialog dialog = Utility.getDialog(getActivity(), R.layout.dialog_import_flashcards);
 
             dialog.setContentView(R.layout.dialog_import_flashcards);
             EditText etTitleSep = dialog.findViewById(R.id.edit_text_import_title_separator);
@@ -214,7 +214,7 @@ public class CreateFlashCardFragment extends Fragment {
     }
 
     private void initializeFlashCardDialog() {
-        Dialog dialog = Utility.getDialog(getActivity());
+        Dialog dialog = Utility.getDialog(getActivity(), R.layout.dailog_create_flash_card);
         dialog.setContentView(R.layout.dailog_create_flash_card);
         dialog.setOnShowListener(dialog1 -> {
             Button btnCreateFlashCard = dialog.findViewById(R.id.button_create_flash_card);
@@ -230,7 +230,7 @@ public class CreateFlashCardFragment extends Fragment {
     }
 
     private void initializeGroupDialog() {
-        Dialog dialog = Utility.getDialog(getActivity());
+        Dialog dialog = Utility.getDialog(getActivity(), R.layout.dialog_create_group);
 
         dialog.setContentView(R.layout.dialog_create_group);
         Button btnCreateGroup = dialog.findViewById(R.id.button_create_group);
@@ -303,7 +303,7 @@ public class CreateFlashCardFragment extends Fragment {
         public void editItem(int adapterPosition) {
             FlashCards flashCard = rvAdaptor.getItemAtPosition(adapterPosition);
 
-            Dialog dialog = Utility.getDialog(getActivity());
+            Dialog dialog = Utility.getDialog(getActivity(), R.layout.dialog_edit);
 
             dialog.setContentView(R.layout.dialog_edit);
             ((TextView) (dialog.findViewById(R.id.text_dialog_title))).setText("Edit FlashCard");

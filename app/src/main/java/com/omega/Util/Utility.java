@@ -30,14 +30,14 @@ public class Utility {
         });
     }
 
-    public static Dialog getDialog(Activity activity) {
+    public static Dialog getDialog(Activity activity, int resID) {
         Dialog dialog = new Dialog(activity);
 
         dialog.requestWindowFeature(Window.FEATURE_SWIPE_TO_DISMISS);
         dialog.setCanceledOnTouchOutside(true);
         dialog.getWindow().setBackgroundDrawableResource(R.color.DarkModePrimaryDarkColor);
         dialog.getWindow().setBackgroundDrawableResource(R.color.DarkModePrimaryColor);
-
+        dialog.setContentView(resID);
         if (activity.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
             dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         } else {

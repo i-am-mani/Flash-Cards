@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProviders;
@@ -69,6 +70,11 @@ public class CheckoutFlashCardFragment extends Fragment {
 
     public CheckoutFlashCardFragment(){
 
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
     }
 
     @Override
@@ -198,14 +204,7 @@ public class CheckoutFlashCardFragment extends Fragment {
             LiveData<List<FlashCards>> cards = flashCardViewModel.getAllFlashCardsOfGroup(groupsAdaptor.getItemAtPosition(pos).getGroupName());
             cards.observe(CheckoutFlashCardFragment.this, flashCards -> {
 
-                Dialog dialog = new Dialog(getActivity());
-
-                dialog.requestWindowFeature(Window.FEATURE_SWIPE_TO_DISMISS);
-                dialog.setCanceledOnTouchOutside(true);
-                dialog.setContentView(R.layout.dialog_export_flashcards);
-                dialog.getWindow().setBackgroundDrawableResource(R.color.DarkModePrimaryDarkColor);
-                dialog.getWindow().setBackgroundDrawableResource(R.color.DarkModePrimaryColor);
-                dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                Dialog dialog = Utility.getDialog(getActivity(), R.layout.dialog_export_flashcards);
 
 
                 TextInputEditText etTitleSeparator = dialog.findViewById(R.id.edit_text_title_separator);
