@@ -34,7 +34,6 @@ public class GroupsAdaptor extends RecyclerView.Adapter<GroupsAdaptor.GroupsView
     List<Groups> groupsList;
     String TAG = GroupsAdaptor.class.getSimpleName();
     GroupsAdaptorListenerInterface itemListener;
-    private int mPosition;
 
     public GroupsAdaptor(Context context,GroupsAdaptorListenerInterface adaptorListenerInterface){
         mContext = context;
@@ -45,8 +44,7 @@ public class GroupsAdaptor extends RecyclerView.Adapter<GroupsAdaptor.GroupsView
     @Override
     public GroupsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View mainView = layoutInflater.inflate(R.layout.item_checkout_groups, parent, false);
-        GroupsViewHolder groupsViewHolder = new GroupsViewHolder(mainView);
-        return groupsViewHolder;
+        return new GroupsViewHolder(mainView);
     }
 
     @Override
@@ -145,7 +143,7 @@ public class GroupsAdaptor extends RecyclerView.Adapter<GroupsAdaptor.GroupsView
             holder.tvGroupName.setText(name);
             holder.tvGroupDescription.setText(description);
             itemListener.getNumberOfFlashCards(name, holder.tvNumberOfFlashCards);
-            mPosition = position;
+            int mPosition = position;
         }
 
 
@@ -183,12 +181,6 @@ public class GroupsAdaptor extends RecyclerView.Adapter<GroupsAdaptor.GroupsView
 
         }
 
-        @OnClick(R.id.image_button_edit_flashcards)
-        public void goToPlayMode(View v) {
-            v.animate().translationXBy(1500).setDuration(200).withEndAction(() -> {
-                itemListener.onPlayButtonClicked(v, tvGroupName.getText().toString());
-            });
-        }
 
         @OnClick(R.id.button_options)
         public void showPopMenu(View view) {
@@ -209,6 +201,8 @@ public class GroupsAdaptor extends RecyclerView.Adapter<GroupsAdaptor.GroupsView
                         case R.id.menu_item_edit_group:
                             itemListener.editGroup(getAdapterPosition());
                             return true;
+                        case R.id.menu_item_edit_flashcards:
+                            itemListener.onPlayButtonClicked(itemView, tvGroupName.getText().toString());
                     }
 
                     return false;
