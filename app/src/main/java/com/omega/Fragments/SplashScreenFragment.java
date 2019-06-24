@@ -4,7 +4,6 @@ package com.omega.Fragments;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,7 +50,7 @@ public class SplashScreenFragment extends Fragment {
         super.onAttach(context);
         try {
             ImplSwitchToFragment = (ISwitchToFragment) context;
-        } catch (ClassCastException c ) {
+        } catch (ClassCastException c) {
             throw new ClassCastException();
         }
     }
@@ -77,26 +76,27 @@ public class SplashScreenFragment extends Fragment {
     @OnClick({R.id.button_check_out, R.id.button_create})
     public void play(View view) {
         if (view.getId() == R.id.button_check_out) {
-            if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-                view.animate().translationZBy(400).setDuration(300).setListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        super.onAnimationEnd(animation);
-                        ImplSwitchToFragment.switchToCheckoutFlashCard();
-                    }
-                });
-            }
+
+            view.animate().translationZBy(400).setDuration(300)
+                    .rotation(0).setDuration(500)
+                    .setListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            super.onAnimationEnd(animation);
+                            ImplSwitchToFragment.switchToCheckoutFlashCard();
+                        }
+                    });
 
         } else if (view.getId() == R.id.button_create) {
-            if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-                view.animate().translationZBy(400).setDuration(300).setListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        super.onAnimationEnd(animation);
-                        ImplSwitchToFragment.switchToCreateFlashCard(null);
-                    }
-                });
-            }
+            view.animate().translationZBy(400).setDuration(300)
+                    .rotation(0).setDuration(500)
+                    .setListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            super.onAnimationEnd(animation);
+                            ImplSwitchToFragment.switchToCreateFlashCard(null);
+                        }
+                    });
 
         }
     }
