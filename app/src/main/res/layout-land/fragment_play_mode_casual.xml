@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <EditText
-        android:id="@+id/edit_text_flashcard_number2"
+        android:id="@+id/edit_text_flashcard_number"
         style="@style/InputEditText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -30,7 +30,7 @@
         app:layout_constraintTop_toTopOf="@+id/guideline33" />
 
     <ImageButton
-        android:id="@+id/button_shuffle2"
+        android:id="@+id/button_shuffle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
