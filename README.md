@@ -11,16 +11,15 @@ Groups are used to organize flash cards in categories.
 
 Screenshots : - 
 
-![Flash Screen](https://github.com/llGOKUll/Flash-Cards/blob/master/Images/Flash%20Screen.png)
+<p float="left">
+<img src="https://github.com/llGOKUll/Flash-Cards/blob/master/Images/Flash%20Screen.png" width="400" height="790">
 
-![Checkout Screen](https://github.com/llGOKUll/Flash-Cards/blob/master/Images/Checkout.png)
+<img src="https://github.com/llGOKUll/Flash-Cards/blob/master/Images/Checkout.png" width="400" height="790">
 
-![Play Mode](https://github.com/llGOKUll/Flash-Cards/blob/master/Images/Play%20mode.png)
+<img src="https://github.com/llGOKUll/Flash-Cards/blob/master/Images/Play%20mode.png" width="400" height="790">
 
-![Casual Play](https://github.com/llGOKUll/Flash-Cards/blob/master/Images/casual.gif)
+<img src="https://github.com/llGOKUll/Flash-Cards/blob/master/Images/casual.gif" width="400" height="790">
 
-![Creation](https://github.com/llGOKUll/Flash-Cards/blob/master/Images/group_fc_creation.gif)
-
-
-
+<img src="https://github.com/llGOKUll/Flash-Cards/blob/master/Images/group_fc_creation.gif" width="400" height="790">
+</p>
 
