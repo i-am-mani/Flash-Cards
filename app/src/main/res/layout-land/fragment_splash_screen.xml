@@ -36,15 +36,22 @@
         app:layout_constraintStart_toStartOf="@+id/guideline53"
         app:layout_constraintTop_toTopOf="@+id/guideline13">
 
-        <TextView
-            android:id="@+id/text_checkout_flashcards"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:fontFamily="monospace"
-            android:gravity="center"
-            android:text="Checkout"
-            android:textAppearance="@style/TextAppearance.AppCompat.Title"
-            android:textColor="@color/DarkModeSecondaryLightColor" />
+            android:background="@drawable/ic_create_fc">
+
+            <TextView
+                android:id="@+id/text_checkout_flashcards"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="monospace"
+                android:gravity="center"
+                android:text="Checkout"
+                android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                android:textColor="#558B2F" />
+
+        </LinearLayout>
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
@@ -64,15 +71,22 @@
         app:layout_constraintStart_toStartOf="@+id/guideline14"
         app:layout_constraintTop_toTopOf="@+id/guideline13">
 
-        <TextView
-            android:id="@+id/text_create_flashcards"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:fontFamily="monospace"
-            android:gravity="center"
-            android:text="Create"
-            android:textAppearance="@style/TextAppearance.AppCompat.Title"
-            android:textColor="@color/DarkModeSecondaryLightColor" />
+            android:background="@drawable/ic_checkout_fx">
+
+            <TextView
+                android:id="@+id/text_create_flashcards"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="monospace"
+                android:gravity="center"
+                android:text="Create"
+                android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                android:textColor="#EDE7F6" />
+
+        </LinearLayout>
     </androidx.cardview.widget.CardView>
 
     <androidx.constraintlayout.widget.Guideline

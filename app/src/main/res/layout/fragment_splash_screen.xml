@@ -24,15 +24,22 @@
         app:layout_constraintStart_toStartOf="@+id/guideline5"
         app:layout_constraintTop_toTopOf="@+id/guideline48">
 
-        <TextView
-            android:id="@+id/text_create_flashcards"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:fontFamily="monospace"
-            android:gravity="center"
-            android:text="Create"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textColor="#EA80FC" />
+            android:background="@drawable/ic_checkout_fx">
+
+            <TextView
+                android:id="@+id/text_create_flashcards"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="monospace"
+                android:gravity="center"
+                android:text="Create"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textColor="#EA80FC" />
+        </LinearLayout>
+
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
@@ -52,16 +59,22 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline48">
 
-        <TextView
-            android:id="@+id/text_checkout_flashcards"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:fontFamily="monospace"
-            android:gravity="center"
-            android:rotation="-8"
-            android:text="@string/splash_screen_option_check_out"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textColor="#CCFF90" />
+            android:background="@drawable/ic_create_fc">
+
+            <TextView
+                android:id="@+id/text_checkout_flashcards"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="monospace"
+                android:gravity="center"
+                android:rotation="-8"
+                android:text="@string/splash_screen_option_check_out"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textColor="#558B2F" />
+        </LinearLayout>
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
@@ -72,23 +85,31 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        android:alpha="0.8"
-        android:rotation="-8"
-        app:cardBackgroundColor="#9FA8DA"
+        android:alpha="1"
+        android:rotation="-5"
+        app:cardBackgroundColor="@color/DarkModePrimaryColor"
         app:layout_constraintBottom_toTopOf="@+id/guideline49"
         app:layout_constraintEnd_toStartOf="@+id/guideline51"
         app:layout_constraintStart_toStartOf="@+id/guideline56"
         app:layout_constraintTop_toTopOf="@+id/guideline50">
 
-        <TextView
-            android:id="@+id/text_splash_screen_title"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="116dp"
-            android:gravity="bottom"
-            android:paddingStart="16dp"
-            android:text="@string/splash_screen_title"
-            android:textColor="#35363C"
-            android:textSize="34dp" />
+            android:layout_height="match_parent"
+            android:background="@drawable/ic_deck">
+
+            <TextView
+                android:id="@+id/text_splash_screen_title"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:paddingStart="24dp"
+                android:text="@string/splash_screen_title"
+                android:textColor="#787B85"
+                android:textSize="34dp" />
+        </LinearLayout>
+
     </androidx.cardview.widget.CardView>
 
 
